@@ -1,5 +1,5 @@
 packages:
-  - 'packages/*'
-  - 'packages/**'
-  - '!packages/**/dist/**'
+  - 'packages/components/ui'
+  - 'packages/core/icons'
+  - 'packages/core/tokens'
   - 'apps/*'

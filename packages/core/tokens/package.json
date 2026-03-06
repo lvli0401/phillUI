@@ -1,5 +1,5 @@
 {
-  "name": "@phillui/tokens",
+  "name": "@phillUI/tokens",
   "version": "0.0.0",
   "description": "Design tokens for uview-ultra components",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "release-core-tokens": "node ../../../scripts/publish-tokens.js"
   },
   "bin": {
-    "phillui-tokens": "scripts/install.js"
+    "phillUI-tokens": "scripts/install.js"
   },
   "keywords": [
     "tokens",

@@ -42,10 +42,10 @@
 </template>
 
 <script setup lang="uts">
-	import customIcons from '../../../@phillui/icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '../../../@phillui/icons/dist/uniapp/icons-multicolor.json'
-	import iconsSvg from '../../../@phillui/icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '../../../@phillui/icons/dist/uniapp/icons-generated.uts'
+	import customIcons from '../../../@phillUI/icons/dist/uniapp/icons-custom.json'
+	import multiColorIcons from '../../../@phillUI/icons/dist/uniapp/icons-multicolor.json'
+	import iconsSvg from '../../../@phillUI/icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '../../../@phillUI/icons/dist/uniapp/icons-generated.uts'
 	import { addUnit, addStyle } from '../../libs/function/index'
 	import { commonProps, useUltraUI } from '../../libs/composable/useUltraUI'
 	import config from '../../libs/config/config';
@@ -229,7 +229,7 @@
 
 	const imgSrc = computed(() : string => {
 		// 使用 uni_modules 绝对路径确保在各端加载正常
-		return `uni_modules/@phillui/icons/dist/uniapp/images/${props.name}.svg`
+		return `uni_modules/@phillUI/icons/dist/uniapp/images/${props.name}.svg`
 	})
 	
 	// 方法
@@ -258,9 +258,9 @@
 
 		@font-face {
 			font-family: 'upicon-custom';
-			src: url('../../../@phillui/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-				 url('../../../@phillui/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-				 url('../../../@phillui/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
+			src: url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
+				 url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff') format('woff'),
+				 url('../../../@phillUI/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
 			font-weight: normal;
 			font-style: normal;
 		}

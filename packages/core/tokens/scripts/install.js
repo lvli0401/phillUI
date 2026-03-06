@@ -35,7 +35,7 @@ function main() {
   const uniModulesBase = fs.existsSync(srcDir)
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
-  const targetPkgDir = path.join(uniModulesBase, '@phillui', 'tokens');
+  const targetPkgDir = path.join(uniModulesBase, '@phillUI', 'tokens');
 
   const pkgRoot = path.resolve(__dirname, '..');
   const tokensDir = path.join(pkgRoot, 'tokens');
@@ -52,13 +52,13 @@ function main() {
       fs.copyFileSync(indexFile, path.join(targetPkgDir, 'index.js'));
     }
     const lightPkgJson = {
-      name: '@phillui/tokens',
-      description: 'Design tokens for phillui in UniApp uni_modules'
+      name: '@phillUI/tokens',
+      description: 'Design tokens for phillUI in UniApp uni_modules'
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
-    console.log(`[phillui-tokens] Installed to ${targetPkgDir}`);
+    console.log(`[phillUI-tokens] Installed to ${targetPkgDir}`);
   } catch (e) {
-    console.error('[phillui-tokens] Installation failed:', e.message);
+    console.error('[phillUI-tokens] Installation failed:', e.message);
     process.exit(1);
   }
 }

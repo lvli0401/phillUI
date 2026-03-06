@@ -1,5 +1,5 @@
 {
-  "name": "@phillui/icons",
+  "name": "@phillUI/icons",
   "version": "0.0.0",
   "description": "Unified icons for uview-ultra mobile and pc libraries",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
     "scripts"
   ],
   "bin": {
-    "phillui-icons": "scripts/install.js"
+    "phillUI-icons": "scripts/install.js"
   },
   "scripts": {
     "build": "node scripts/build.js",
