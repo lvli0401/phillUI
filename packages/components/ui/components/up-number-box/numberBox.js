@@ -5,7 +5,6 @@
  * @Date         : 2021-08-20 16:44:21
  * @LastAuthor   : jry
  * @lastTime     : 2021-08-20 17:11:46
- * @FilePath     : /uview-ultra/libs/config/props/numberBox.js
  */
 export default {
     // 步进器组件

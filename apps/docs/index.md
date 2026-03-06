@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: 'uview-ultra-plus'
+  name: 'phillUI'
   text: '高颜值、极致体验的组件库'
   tagline: '全面兼容 UniApp & UniApp X (Vue 3)'
   actions:

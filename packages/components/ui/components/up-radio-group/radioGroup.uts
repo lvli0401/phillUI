@@ -5,7 +5,6 @@
  * @Date         : 2024-08-30 23:26:58
  * @LastAuthor   : jry
  * @lastTime     : 2024-08-30 23:26:58
- * @FilePath     : /uview-ultra/libs/config/props/radioGroup
  */
 export default {
     // radio-group组件

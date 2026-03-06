@@ -5,7 +5,6 @@
  * @Date         : 2025-11-18 09:30:08
  * @LastAuthor   : jry
  * @lastTime     : 2025-11-18 09:30:08
- * @FilePath     : /uview-ultra/components/up-dropdown/props.uts
  */
 import { defineMixin } from '../../libs/vue.uts'
 import defProps from './dropdown.uts'

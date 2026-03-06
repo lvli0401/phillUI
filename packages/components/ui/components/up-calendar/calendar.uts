@@ -5,7 +5,6 @@
  * @Date         : 2025-01-18 13:11:20
  * @LastAuthor   : jry
  * @lastTime     : 2025-01-18 13:11:20
- * @FilePath     : /uview-ultra/libs/config/props/calendar
  */
 export default {
     // calendar 组件

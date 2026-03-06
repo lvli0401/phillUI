@@ -1,7 +1,7 @@
 <template>
   <div class="icon-manager">
     <header class="header">
-      <h1>uView Ultra Icons-Manager</h1>
+      <h1>phillUI Icons Manager</h1>
       <div class="actions">
         <button @click="syncToGit" :disabled="syncing" class="btn-sync">
           {{ syncing ? 'Syncing...' : 'Sync to Git' }}

@@ -5,7 +5,6 @@
  * @Date         : 2025-11-05 21:49:08
  * @LastAuthor   : jry
  * @lastTime     : 2025-11-05 21:49:08
- * @FilePath     : /uview-ultra/libs/config/props/collapseItem
  */
 export default {
     // columnNotice 组件

@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 /**
- * Build script for uview-ultra (subpackage)
+ * Build script for phillUI (subpackage)
  * 1. Clean dist
  * 2. Sync package sources to dist (exclude node_modules, scripts, dist)
  * 3. Bundle vendors into dist/vendor via rollup
@@ -14,7 +14,7 @@ const { execSync } = require('child_process');
 const packageRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(packageRoot, '../..');
 const distPath = path.join(packageRoot, 'dist');
-const distUView = path.join(distPath, 'uview-ultra');
+const distUView = path.join(distPath, 'phillui');
 const utsLibsSrc = path.join(packageRoot, 'uts-libs');
 
 function clean() {
@@ -25,7 +25,7 @@ function clean() {
 }
 
 function syncSourceToDist() {
-  console.log('[Build] Sync sources to dist/uview-ultra...');
+  console.log('[Build] Sync sources to dist/phillui...');
   fs.mkdirSync(distUView, { recursive: true });
   execSync(
     `rsync -aq --exclude='node_modules' --exclude='dist' --exclude='scripts' --exclude='rollup.config.mjs' --exclude='uts-libs' "${packageRoot}/" "${distUView}/"`
@@ -50,10 +50,37 @@ function patchImports() {
   require('./patch-imports.js');
 }
 
+function scrubDist() {
+  function walk(dir, fn) {
+    fs.readdirSync(dir).forEach(f => {
+      const p = path.join(dir, f);
+      const stat = fs.statSync(p);
+      if (stat.isDirectory()) walk(p, fn);
+      else fn(p);
+    });
+  }
+  const reFilePath = /@FilePath/;
+  const reReadmeLinks = /(uview-ultra\.lingyun\.net|uview-ultra-plus|uview-ultra)/i;
+  walk(distUView, (fp) => {
+    if (!/\.(js|ts|vue|uvue|uts|scss|css|md)$/.test(fp)) return;
+    let content = fs.readFileSync(fp, 'utf8');
+    const original = content;
+    content = content.split('\n').filter(line => !reFilePath.test(line)).join('\n');
+    // clean README external links
+    if (path.basename(fp).toLowerCase() === 'readme.md') {
+      content = content.split('\n').filter(line => !reReadmeLinks.test(line)).join('\n');
+    }
+    if (content !== original) {
+      fs.writeFileSync(fp, content, 'utf8');
+      console.log('[Scrub]', path.relative(distPath, fp));
+    }
+  });
+}
+
 function syncPlayground() {
   const uiTargets = [
-    path.join(repoRoot, 'apps/playground/uniapp/src/uni_modules/uview-ultra'),
-    path.join(repoRoot, 'apps/playground/uniapp-x/uni_modules/uview-ultra')
+    path.join(repoRoot, 'apps/playground/uniapp/src/uni_modules/@phillUI/ui'),
+    path.join(repoRoot, 'apps/playground/uniapp-x/uni_modules/@phillUI/ui')
   ];
   uiTargets.forEach(target => {
     if (fs.existsSync(path.dirname(target))) {
@@ -62,7 +89,7 @@ function syncPlayground() {
       execSync(`rsync -aq "${distUView}/" "${target}/"`);
     }
   });
-  const extraLibs = fs.existsSync(distPath) ? fs.readdirSync(distPath).filter(n => n !== 'uview-ultra') : [];
+  const extraLibs = fs.existsSync(distPath) ? fs.readdirSync(distPath).filter(n => n !== 'phillui') : [];
   extraLibs.forEach(lib => {
     const src = path.join(distPath, lib);
     if (!fs.statSync(src).isDirectory()) return;
@@ -78,6 +105,7 @@ function syncPlayground() {
 function main() {
   clean();
   syncSourceToDist();
+  scrubDist();
   runRollup();
   patchImports();
   // Dev convenience

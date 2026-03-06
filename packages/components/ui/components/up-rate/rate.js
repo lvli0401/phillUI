@@ -5,7 +5,6 @@
  * @Date         : 2021-08-20 16:44:21
  * @LastAuthor   : jry
  * @lastTime     : 2025-12-18 22:43:09
- * @FilePath     : /uview-ultra/libs/config/props/rate.js
  */
 export default {
     // rate组件

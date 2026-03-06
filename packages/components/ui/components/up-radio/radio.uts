@@ -5,7 +5,6 @@
  * @Date         : 2021-08-30 23:14:21
  * @LastAuthor   : jry
  * @lastTime     : 2024-08-30 23:20:58
- * @FilePath     : /uview-ultra/libs/config/props/radio
  */
 export default {
     // radio组件

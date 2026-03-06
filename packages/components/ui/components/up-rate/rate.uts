@@ -5,7 +5,6 @@
  * @Date         : 2024-12-19 08:12:13
  * @LastAuthor   : LQ
  * @lastTime     : 2024-12-19 08:12:13
- * @FilePath     : /uview-ultra/components/up-rate/rate.uts
  */
 export default {
     // rate组件

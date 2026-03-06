@@ -5,7 +5,6 @@
  * @Date         : 2024-08-28 22:58:58
  * @LastAuthor   : jry
  * @lastTime     : 2024-08-28 22:58:58
- * @FilePath     : /uview-ultra/libs/config/props/input.js
  */
 export default {
 	// index 组件

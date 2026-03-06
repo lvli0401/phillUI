@@ -1,17 +1,12 @@
 <p align="center">
     <img alt="logo" src="https://uview-plus.jiangruyi.com/common/logo.png" width="120" height="120" style="margin-bottom: 10px;">
 </p>
-<h3 align="center" style="margin: 30px 0 30px;font-weight: bold;font-size:40px;">uview-ultra 4.0</h3>
+<h3 align="center" style="margin: 30px 0 30px;font-weight: bold;font-size:40px;">phillUI 4.0</h3>
 <h3 align="center">多平台快速开发的UI框架（组合式API全新重构进行中）</h3>
 
-[![Website](https://img.shields.io/badge/uvue-compatible-green)](https://uview-ultra.lingyun.net/)
-[![Website](https://img.shields.io/badge/nvue-compatible-green)](https://uview-ultra.lingyun.net/)
-[![Website](https://img.shields.io/badge/vue-compatible-green)](https://uview-ultra.lingyun.net/)
-[![Website](https://img.shields.io/badge/build-passing-green)](https://uview-ultra.lingyun.net/)
 
 
 
-![image](https://uview-ultra.lingyun.net/UltraUI/slider.jpg)
 
 
 ## 说明
@@ -22,7 +17,6 @@
 
 全面兼容uni-app/uni-app-x/nvue/鸿蒙的uni-app生态框架，丰富的组件和便捷的工具以及兼容的API会让您轻松升级，事半功倍。
 
-## [官方文档：https://uview-ultra.lingyun.net/](https://uview-ultra.lingyun.net/)
 
 ## 特性
 
@@ -40,17 +34,10 @@
 您可以通过**微信**扫码，查看最佳的演示效果。
 <br>
 <br>
-![image](https://uview-ultra.lingyun.net/common/h5_qrcode.png)
-![image](https://uview-ultra.lingyun.net/common/android_qrcode.png)
 
 
 ## 链接
 
-- [官方文档](https://uview-ultra.lingyun.net/)
-- [问答交流](https://uview-ultra.lingyun.net/forum/))
-- [更新日志](https://uview-ultra.lingyun.net/components/changelog.html)
-- [升级指南](https://uview-ultra.lingyun.net/components/changeGuide.html)
-- [关于我们](https://uview-ultra.lingyun.net/cooperation/about.html)
 
 ## 关于PR
 
@@ -59,11 +46,9 @@
 
 ## 安装
 
-#### **uni-app插件市场链接** —— [https://ext.dcloud.net.cn/plugin?name=uview-ultra](https://ext.dcloud.net.cn/plugin?name=uview-ultra)
 
 ## 快速上手
 
-请通过[快速上手](https://uview-ultra.lingyun.net/components/quickstart.html)了解更详细的内容
 
 ## 使用方法
 配置easycom规则后，自动按需引入，无需`import`组件，直接引用即可。
@@ -73,4 +58,3 @@
 	<up-button text="按钮"></up-button>
 </template>
 ```
-

@@ -5,7 +5,6 @@
  * @Date         : 2024-12-18 17:06:10
  * @LastAuthor   : jry
  * @lastTime     : 2024-12-18 17:06:10
- * @FilePath     : /uview-ultra/libs/config/props/notify.uts
  */
 export default {
     // notify组件

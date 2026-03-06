@@ -9,7 +9,7 @@ const path = require('path');
  */
 
 const distRoot = path.resolve(__dirname, '../dist');
-const distUViewPath = path.join(distRoot, 'uview-ultra');
+const distUViewPath = path.join(distRoot, 'phillui');
 
 function walk(dir, callback) {
   fs.readdirSync(dir).forEach(f => {
@@ -64,5 +64,5 @@ if (fs.existsSync(distUViewPath)) {
   walk(distUViewPath, patchFile);
   console.log('[Patch] Complete.');
 } else {
-  console.warn('[Patch] dist/uview-ultra not found, skip.');
+  console.warn('[Patch] dist/phillui not found, skip.');
 }

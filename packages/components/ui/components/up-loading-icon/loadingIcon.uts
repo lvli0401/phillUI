@@ -5,7 +5,6 @@
  * @Date         : 2024-04-22 16:44:21
  * @LastAuthor   : jry
  * @lastTime     : 2024-08-28 11:45:47
- * @FilePath     : /uview-ultra/libs/config/props/loadingIcon.js
  */
 import config from '../../libs/config/config.uts'
 // let color = config['color'] as UTSJSONObject

@@ -1,6 +1,6 @@
 # 安装
 
-`uview-ultra-plus` 是一款基于 UniApp 的优秀 UI 框架，支持 UniApp X 和普通 UniApp。
+`phillUI` 是一款基于 UniApp 的优秀 UI 框架，支持 UniApp X 和普通 UniApp。
 
 ## NPM 安装
 
@@ -8,7 +8,7 @@
 
 ```bash
 # 如果是在 npm 环境下
-npm install uview-ultra-plus
+npm install @phillUI/ui
 ```
 
 ## 引入方式
@@ -22,7 +22,7 @@ npm install uview-ultra-plus
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^up-(.*)": "uview-ultra-plus/components/up-$1/up-$1.vue"
+      "^up-(.*)": "@phillUI/ui/components/up-$1/up-$1.vue"
     }
   },
   "pages": [

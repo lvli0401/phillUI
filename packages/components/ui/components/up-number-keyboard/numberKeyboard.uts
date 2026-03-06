@@ -5,7 +5,6 @@
  * @Date         : 2025-12-17 08:48:26
  * @LastAuthor   : jry
  * @lastTime     : 2025-12-17 08:48:26
- * @FilePath     : /uview-ultra/libs/config/props/numberKeyboard.js
  */
 export default {
 	// numberKeyboard组件
