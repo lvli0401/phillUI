@@ -4,9 +4,10 @@ const cp = require('child_process');
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check');
+  const doPublish = process.env.PHILLUI_PUBLISH === '1';
 
-  if (checkOnly) {
-    console.log('[publish-icons] 校验通过（未执行发布）。');
+  if (checkOnly || !doPublish) {
+    console.log('[publish-icons] 校验通过。未执行发布（设置 PHILLUI_PUBLISH=1 才会发布）。');
     process.exit(0);
   }
 
@@ -21,4 +22,3 @@ function main() {
 }
 
 main();
-

@@ -10,6 +10,7 @@ function readJSON(p) {
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check');
+  const doPublish = process.env.PHILLUI_PUBLISH === '1';
 
   const pkgDir = process.cwd();
   const tokensPkgPath = path.join(pkgDir, 'package.json');
@@ -21,8 +22,8 @@ function main() {
 
   // 不再强制 tokens 与 ui 版本一致，仅在 tokens 发布后联动 UI 发布
 
-  if (checkOnly) {
-    console.log('[publish-tokens] 校验通过（未执行发布）。');
+  if (checkOnly || !doPublish) {
+    console.log('[publish-tokens] 校验通过。未执行发布（设置 PHILLUI_PUBLISH=1 才会发布）。');
     process.exit(0);
   }
 

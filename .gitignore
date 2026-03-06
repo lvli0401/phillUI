@@ -4,3 +4,4 @@ unpackage
 .vscode
 .hbuilderx
 apps/docs/.vitepress/cache
+.turbo
