@@ -60,7 +60,7 @@ function scrubDist() {
     });
   }
   const reFilePath = /@FilePath/;
-  const reReadmeLinks = /(uview-ultra\.lingyun\.net|uview-ultra-plus|uview-ultra)/i;
+  const reReadmeLinks = /(uview[- ]?ultra(?:-plus)?|uview[- ]?plus|uviewui|uview|ext\.dcloud\.net\.cn)/i;
   walk(distUView, (fp) => {
     if (!/\.(js|ts|vue|uvue|uts|scss|css|md)$/.test(fp)) return;
     let content = fs.readFileSync(fp, 'utf8');

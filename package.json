@@ -18,7 +18,7 @@
   },
   "keywords": [
     "uniapp",
-    "uview",
+    "phillui",
     "component",
     "vue3"
   ],
@@ -26,7 +26,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lvli0401/uview-ultra-plus.git"
+    "url": "https://github.com/lvli0401/phillUI.git"
   },
   "uni_modules": {
     "platforms": {

@@ -10,7 +10,7 @@ const path = require('path');
 
 function resolvePackageRoot() {
   // When executed from node_modules: __dirname -> <pkg>/scripts
-  // In workspace/dev: __dirname -> repo/packages/uview-ultra-icons/scripts
+  // In workspace/dev: __dirname -> repo/packages/core/icons/scripts
   const scriptsDir = __dirname;
   const candidate = path.resolve(scriptsDir, '..'); // <pkg>
   if (fs.existsSync(path.join(candidate, 'dist'))) return candidate;
@@ -68,16 +68,16 @@ function main() {
     // Lightweight package.json for uni_modules (optional but helps tooling)
     const lightPkgJson = {
       name: '@phillUI/icons',
-      description: 'Icons assets for uview-ultra in UniApp uni_modules',
+      description: 'Icons assets for phillUI in UniApp uni_modules',
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
-    console.log(`[uview-ultra-icons] Installed to ${targetDistDir}`);
+    console.log(`[phillUI/icons] Installed to ${targetDistDir}`);
 
     // Optional: Patch vite alias to map @phillUI/icons -> src/uni_modules/@phillUI/icons
     // Not strictly required after switching to relative imports, but helpful for direct imports.
     patchViteAlias(projectRoot, !!fs.existsSync(srcDir));
   } catch (e) {
-    console.error('[uview-ultra-icons] Installation failed:', e.message);
+    console.error('[phillUI/icons] Installation failed:', e.message);
     process.exit(1);
   }
 }
@@ -88,7 +88,7 @@ function patchViteAlias(projectRoot, hasSrc) {
   if (!vitePath) return;
   try {
     let code = fs.readFileSync(vitePath, 'utf8');
-    if (code.includes('/* uview-ultra-icons-alias */') || code.includes('@phillUI/icons')) {
+    if (code.includes('/* phillUI-icons-alias */') || code.includes('@phillUI/icons')) {
       return; // already patched
     }
     const replacementPath = hasSrc ? 'path.resolve(__dirname, \'src/uni_modules/@phillUI/icons\')'
@@ -99,17 +99,17 @@ function patchViteAlias(projectRoot, hasSrc) {
     }
     // Insert alias entry
     if (/alias\s*:\s*\[/.test(code)) {
-      code = code.replace(/alias\s*:\s*\[/, (m) => `${m}\n        /* uview-ultra-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} },`);
+      code = code.replace(/alias\s*:\s*\[/, (m) => `${m}\n        /* phillUI-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} },`);
     } else if (/resolve\s*:\s*\{/.test(code)) {
-      code = code.replace(/resolve\s*:\s*\{/, (m) => `${m}\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} }\n      ],`);
+      code = code.replace(/resolve\s*:\s*\{/, (m) => `${m}\n      alias: [\n        /* phillUI-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} }\n      ],`);
     } else {
       // Fallback: inject a resolve block after plugins
-      code = code.replace(/plugins\s*:\s*\[[\s\S]*?\],/, (m) => `${m}\n    resolve: {\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} }\n      ]\n    },`);
+      code = code.replace(/plugins\s*:\s*\[[\s\S]*?\],/, (m) => `${m}\n    resolve: {\n      alias: [\n        /* phillUI-icons-alias */ { find: /^@phillUI\\/icons/, replacement: ${replacementPath} }\n      ]\n    },`);
     }
     fs.writeFileSync(vitePath, code, 'utf8');
-    console.log('[uview-ultra-icons] Patched Vite alias for @phillUI/icons.');
+    console.log('[phillUI/icons] Patched Vite alias for @phillUI/icons.');
   } catch (e) {
-    console.warn('[uview-ultra-icons] Skip patching Vite alias:', e.message);
+    console.warn('[phillUI/icons] Skip patching Vite alias:', e.message);
   }
 }
 

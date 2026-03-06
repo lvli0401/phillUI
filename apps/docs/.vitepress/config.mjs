@@ -6,16 +6,16 @@ export default defineConfig({
       port: 5176
     },
     define: {
-      __DEMO_URL__: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://lvli0401.github.io/uview-ultra-plus/h5/' : 'http://localhost:5175/')
+      __DEMO_URL__: JSON.stringify(process.env.NODE_ENV === 'production' ? 'https://lvli0401.github.io/phillUI/h5/' : 'http://localhost:5175/')
     }
   },
-  title: "uview-ultra-plus",
+  title: "phillUI",
   description: "A uView-like component library for UniApp & UniApp X",
   themeConfig: {
     nav: [
       { text: '指南', link: '/guide/install' },
       { text: '组件', link: '/components/calendar' },
-      { text: 'GitHub', link: 'https://github.com/lvli0401/uview-ultra-plus' }
+      { text: 'GitHub', link: 'https://github.com/lvli0401/phillUI' }
     ],
     sidebar: {
       '/guide/': [
@@ -37,7 +37,7 @@ export default defineConfig({
       ]
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/lvli0401/uview-ultra-plus' }
+      { icon: 'github', link: 'https://github.com/lvli0401/phillUI' }
     ],
     footer: {
       message: 'Released under the MIT License.',

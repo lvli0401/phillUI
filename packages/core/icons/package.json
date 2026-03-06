@@ -1,7 +1,7 @@
 {
   "name": "@phillUI/icons",
   "version": "0.0.0",
-  "description": "Unified icons for uview-ultra mobile and pc libraries",
+  "description": "Unified icons for phillUI mobile and pc libraries",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [

@@ -1,7 +1,7 @@
 {
   "name": "@phillUI/tokens",
   "version": "0.0.0",
-  "description": "Design tokens for uview-ultra components",
+  "description": "Design tokens for phillUI components",
   "main": "index.js",
   "files": [
     "index.js",
@@ -18,7 +18,7 @@
   "keywords": [
     "tokens",
     "design-tokens",
-    "uview-ultra"
+    "phillUI"
   ],
   "author": "",
   "license": "MIT",

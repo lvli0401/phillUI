@@ -11,7 +11,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const rootDir = path.resolve(__dirname, '..')
-const svgDir = path.resolve(rootDir, 'uview-ultra-icons', 'svg')
+const repoRoot = path.resolve(rootDir, '..')
+const svgDir = path.resolve(repoRoot, 'packages/core/icons/svg')
 
 export default defineConfig({
   plugins: [
@@ -46,8 +47,7 @@ export default defineConfig({
               
               // Trigger build
               try {
-                // Return to uview-ultra-icons to build
-                execSync('pnpm run build', { cwd: path.resolve(rootDir, 'uview-ultra-icons') })
+                execSync('pnpm run build', { cwd: path.resolve(repoRoot, 'packages/core/icons') })
                 res.end(JSON.stringify({ success: true }))
               } catch (buildErr) {
                 res.statusCode = 500
@@ -71,8 +71,8 @@ export default defineConfig({
               await git.checkoutLocalBranch(branchName)
               
               await git.add([
-                path.join(repoRoot, 'packages/uview-ultra-icons/svg'),
-                path.join(repoRoot, 'packages/uview-ultra-icons/dist')
+                path.join(repoRoot, 'packages/core/icons/svg'),
+                path.join(repoRoot, 'packages/core/icons/dist')
               ])
               await git.commit('chore(icons): update SVG assets via manager')
               

@@ -6,4 +6,4 @@ A lightweight, high-performance component library for UniApp (Vue 3).
 
 ### Via npm (for custom build)
 ```bash
-npm install uview-ultra-plus
+npm install @phillUI/ui
