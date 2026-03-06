@@ -1,6 +1,6 @@
 {
   "id": "uview-ultra",
-  "name": "uview-ultra",
+  "name": "@phillui/ui",
   "displayName": "uview-ultra全面兼容uniapp-x、uniapp鸿蒙组件库。",
   "version": "1.14.1",
   "description": "uview-ultra全面兼容uni-app/uni-app-x/鸿蒙/nvue，全面的组件和便捷的工具会让您信手拈来，如鱼得水",
@@ -18,7 +18,7 @@
     "uni-app-x": "^4.87"
   },
   "bin": {
-    "uview-ultra": "scripts/install.js"
+    "phillui-ui": "scripts/install.js"
   },
   "files": [
     "dist",
@@ -110,7 +110,7 @@
   "dependencies": {
     "clipboard": "^2.0.11",
     "dayjs": "^1.11.3",
-    "@uview-ultra/icons": "workspace:*"
+    "@phillui/icons": "workspace:*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
@@ -118,7 +118,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "rollup": "rollup -c rollup.config.mjs",
-    "release": "release-it"
+    "release-components-ui": "node ../../../scripts/publish-ui.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",

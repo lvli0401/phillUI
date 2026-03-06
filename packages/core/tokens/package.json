@@ -1,0 +1,28 @@
+{
+  "name": "@phillui/tokens",
+  "version": "0.0.0",
+  "description": "Design tokens for uview-ultra components",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "tokens",
+    "scripts"
+  ],
+  "scripts": {
+    "build": "node -e \"\"",
+    "release-core-tokens": "node ../../../scripts/publish-tokens.js"
+  },
+  "bin": {
+    "phillui-tokens": "scripts/install.js"
+  },
+  "keywords": [
+    "tokens",
+    "design-tokens",
+    "uview-ultra"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+}

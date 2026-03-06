@@ -1,15 +1,19 @@
 {
-  "name": "@uview-ultra/icons",
+  "name": "@phillui/icons",
   "version": "0.0.0",
   "description": "Unified icons for uview-ultra mobile and pc libraries",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "scripts"
   ],
+  "bin": {
+    "phillui-icons": "scripts/install.js"
+  },
   "scripts": {
     "build": "node scripts/build.js",
-    "release": "release-it"
+    "release-core-icons": "node ../../../scripts/publish-icons.js"
   },
   "keywords": [
     "icons",

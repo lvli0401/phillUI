@@ -1,0 +1,55 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": ["packages/**/dist/**"],
+      "inputs": [
+        "packages/**/src/**/*",
+        "packages/**/package.json",
+        "packages/**/tsconfig.json",
+        "packages/**/rollup.config.*"
+      ]
+    },
+    "release-components-ui": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "env": ["GITHUB_TOKEN"],
+      "inputs": [
+        "packages/components/ui/**/*",
+        "pnpm-lock.yaml",
+        "packages/core/tokens/**/*",
+        "packages/core/hooks/**/*"
+      ],
+      "cache": false
+    },
+    "release-core-icons": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "env": ["GITHUB_TOKEN"],
+      "inputs": ["packages/core/icons/**/*", "pnpm-lock.yaml"],
+      "cache": false
+    },
+    "release-core-tokens": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "env": ["GITHUB_TOKEN"],
+      "inputs": ["packages/core/tokens/**/*", "pnpm-lock.yaml"],
+      "cache": false
+    },
+"release": {
+  "dependsOn": ["release-components-ui", "release-core-icons", "release-core-tokens"],
+  "outputs": [],
+  "env": ["GITHUB_TOKEN"],
+  "inputs": [
+    "packages/components/ui/dist/**/*",
+    "packages/core/icons/dist/**/*",
+    "packages/core/tokens/**/*"
+  ],
+  "cache": false
+}
+  },
+  "globalDependencies": [
+    "packages/core/tokens/**/*",
+    "packages/core/hooks/**/*"
+  ]
+}

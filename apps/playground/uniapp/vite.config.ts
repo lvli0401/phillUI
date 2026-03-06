@@ -11,7 +11,7 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: [
-        /* uview-ultra-icons-alias */ { find: /^@uview-ultra\/icons/, replacement: path.resolve(__dirname, 'src/uni_modules/@uview-ultra/icons') }
+        /* uview-ultra-icons-alias */ { find: /^@phillui\/icons/, replacement: path.resolve(__dirname, 'src/uni_modules/@phillui/icons') }
       ],
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.nvue', '.uts']
     },

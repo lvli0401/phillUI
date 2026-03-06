@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Install @uview-ultra/icons into uni_modules for UniApp projects.
+ * Install @phillui/icons into uni_modules for UniApp projects.
  * - Detects project root (INIT_CWD preferred) and whether 'src' exists.
- * - Copies this package's dist assets into <project>/(src/)?uni_modules/@uview-ultra/icons/dist
+ * - Copies this package's dist assets into <project>/(src/)?uni_modules/@phillui/icons/dist
  */
 
 function resolvePackageRoot() {
@@ -16,7 +16,7 @@ function resolvePackageRoot() {
   if (fs.existsSync(path.join(candidate, 'dist'))) return candidate;
   const alt = path.resolve(scriptsDir, '../..'); // in case of different layouts
   if (fs.existsSync(path.join(alt, 'dist'))) return alt;
-  throw new Error('Cannot locate @uview-ultra/icons package root (dist not found).');
+  throw new Error('Cannot locate @phillui/icons package root (dist not found).');
 }
 
 function copyDir(src, dest) {
@@ -52,7 +52,7 @@ function main() {
   const uniModulesBase = fs.existsSync(srcDir)
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
-  const targetPkgDir = path.join(uniModulesBase, '@uview-ultra', 'icons');
+  const targetPkgDir = path.join(uniModulesBase, '@phillui', 'icons');
   const targetDistDir = path.join(targetPkgDir, 'dist');
 
   const pkgRoot = resolvePackageRoot();
@@ -67,13 +67,13 @@ function main() {
     copyDir(sourceDistDir, targetDistDir);
     // Lightweight package.json for uni_modules (optional but helps tooling)
     const lightPkgJson = {
-      name: '@uview-ultra/icons',
+      name: '@phillui/icons',
       description: 'Icons assets for uview-ultra in UniApp uni_modules',
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
     console.log(`[uview-ultra-icons] Installed to ${targetDistDir}`);
 
-    // Optional: Patch vite alias to map @uview-ultra/icons -> src/uni_modules/@uview-ultra/icons
+    // Optional: Patch vite alias to map @phillui/icons -> src/uni_modules/@phillui/icons
     // Not strictly required after switching to relative imports, but helpful for direct imports.
     patchViteAlias(projectRoot, !!fs.existsSync(srcDir));
   } catch (e) {
@@ -88,26 +88,26 @@ function patchViteAlias(projectRoot, hasSrc) {
   if (!vitePath) return;
   try {
     let code = fs.readFileSync(vitePath, 'utf8');
-    if (code.includes('/* uview-ultra-icons-alias */') || code.includes('@uview-ultra/icons')) {
+    if (code.includes('/* uview-ultra-icons-alias */') || code.includes('@phillui/icons')) {
       return; // already patched
     }
-    const replacementPath = hasSrc ? 'path.resolve(__dirname, \'src/uni_modules/@uview-ultra/icons\')'
-                                   : 'path.resolve(__dirname, \'uni_modules/@uview-ultra/icons\')';
+    const replacementPath = hasSrc ? 'path.resolve(__dirname, \'src/uni_modules/@phillui/icons\')'
+                                   : 'path.resolve(__dirname, \'uni_modules/@phillui/icons\')';
     // Ensure path import
     if (!/import\s+path\s+from\s+['"]path['"]/.test(code)) {
       code = code.replace(/import\s+uni\s+from\s+['"]@dcloudio\/vite-plugin-uni['"]\s*;?/, (m) => `${m}\nimport path from "path";`);
     }
     // Insert alias entry
     if (/alias\s*:\s*\[/.test(code)) {
-      code = code.replace(/alias\s*:\s*\[/, (m) => `${m}\n        /* uview-ultra-icons-alias */ { find: /^@uview-ultra\\/icons/, replacement: ${replacementPath} },`);
+      code = code.replace(/alias\s*:\s*\[/, (m) => `${m}\n        /* uview-ultra-icons-alias */ { find: /^@phillui\\/icons/, replacement: ${replacementPath} },`);
     } else if (/resolve\s*:\s*\{/.test(code)) {
-      code = code.replace(/resolve\s*:\s*\{/, (m) => `${m}\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@uview-ultra\\/icons/, replacement: ${replacementPath} }\n      ],`);
+      code = code.replace(/resolve\s*:\s*\{/, (m) => `${m}\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@phillui\\/icons/, replacement: ${replacementPath} }\n      ],`);
     } else {
       // Fallback: inject a resolve block after plugins
-      code = code.replace(/plugins\s*:\s*\[[\s\S]*?\],/, (m) => `${m}\n    resolve: {\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@uview-ultra\\/icons/, replacement: ${replacementPath} }\n      ]\n    },`);
+      code = code.replace(/plugins\s*:\s*\[[\s\S]*?\],/, (m) => `${m}\n    resolve: {\n      alias: [\n        /* uview-ultra-icons-alias */ { find: /^@phillui\\/icons/, replacement: ${replacementPath} }\n      ]\n    },`);
     }
     fs.writeFileSync(vitePath, code, 'utf8');
-    console.log('[uview-ultra-icons] Patched Vite alias for @uview-ultra/icons.');
+    console.log('[uview-ultra-icons] Patched Vite alias for @phillui/icons.');
   } catch (e) {
     console.warn('[uview-ultra-icons] Skip patching Vite alias:', e.message);
   }
