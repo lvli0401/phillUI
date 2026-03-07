@@ -54,10 +54,10 @@
 
 <script>
 	// 引入图标名称，已经对应的unicode
-	import iconsSvg from '../../../@phillUI/icons/dist/uniapp/icons-svg.js'
-	import customIcons from '../../../@phillUI/icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '../../../@phillUI/icons/dist/uniapp/icons-multicolor.json'
-	import generatedIcons from '../../../@phillUI/icons/dist/uniapp/icons-generated.js'
+	import iconsSvg from '../../../../@phillui/icons/dist/uniapp/icons-svg.js'
+	import customIcons from '../../../../@phillui/icons/dist/uniapp/icons-custom.json'
+	import multiColorIcons from '../../../../@phillui/icons/dist/uniapp/icons-multicolor.json'
+	import generatedIcons from '../../../../@phillui/icons/dist/uniapp/icons-generated.js'
 	import { props } from './props.js';
 	import { mpMixin } from '../../libs/mixin/mpMixin.js';
 	import { mixin } from '../../libs/mixin/mixin.js';
@@ -180,7 +180,7 @@
 				return multiColorIcons.includes(this.name)
 			},
 			imgSrc() {
-				return `uni_modules/@phillUI/icons/dist/uniapp/images/${this.name}.svg`
+				return `/uni_modules/@phillui/icons/dist/uniapp/images/${this.name}.svg`
 			}
 		},
 		methods: {
@@ -189,7 +189,7 @@
 			async loadAsyncSvg(name) {
 				try {
 					// 动态导入分片
-					const module = await import(`../../../@phillUI/icons/dist/uniapp/svgs/${name}.js`)
+					const module = await import(`../../../../@phillui/icons/dist/uniapp/svgs/${name}.js`)
 					this.asyncSvgContent = module.default.inner
 				} catch (e) {
 					console.error(`[up-icon] Failed to load SVG: ${name}`, e)
@@ -220,9 +220,9 @@
 	@font-face {
 		font-family: 'upicon-custom';
 		src: local('upicon-custom'),
-		    url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-		     url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-		     url('../../../@phillUI/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
+		    url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
+		     url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff') format('woff'),
+		     url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
 		font-weight: normal;
 		font-style: normal;
 		font-display: block;

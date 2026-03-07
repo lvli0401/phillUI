@@ -15,7 +15,7 @@
   ],
   "easycom": {
     "custom": {
-      "^up-(.*)": "@/uni_modules/@phillUI/ui/components/up-$1/up-$1.uvue"
+      "^up-(.*)": "@/uni_modules/@phillui/ui/components/up-$1/up-$1.uvue"
     }
   },
   "globalStyle": {

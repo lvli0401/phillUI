@@ -42,10 +42,10 @@
 </template>
 
 <script setup lang="uts">
-	import customIcons from '../../../@phillUI/icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '../../../@phillUI/icons/dist/uniapp/icons-multicolor.json'
-	import iconsSvg from '../../../@phillUI/icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '../../../@phillUI/icons/dist/uniapp/icons-generated.uts'
+	import customIcons from '../../../../@phillui/icons/dist/uniapp/icons-custom.json'
+	import multiColorIcons from '../../../../@phillui/icons/dist/uniapp/icons-multicolor.json'
+	import iconsSvg from '../../../../@phillui/icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '../../../../@phillui/icons/dist/uniapp/icons-generated.uts'
 	import { addUnit, addStyle } from '../../libs/function/index'
 	import { commonProps, useUltraUI } from '../../libs/composable/useUltraUI'
 	import config from '../../libs/config/config';
@@ -160,36 +160,31 @@
 	const emit = defineEmits(['click'])
 
 
-	const uClasses = computed(() : string[] => {
-		let classes = [] as string[]
+	const uClasses = computed(() : string => {
+		const classes = [] as string[]
 		classes.push(props.customPrefix + '-' + props.name)
 		if (props.customPrefix == 'upicon') {
 			classes.push('up-icon-custom')
 		} else {
 			classes.push(props.customPrefix)
 		}
-		// 主题色，通过类配置
-		const themes = config['type'] as string[]
-		if (props.color != '' && themes.includes(props.color)) {
+		if (props.color != '' && (config['type'] as string[]).includes(props.color)) {
 			classes.push('up-icon__icon--' + props.color)
 		}
-		return classes
+		return classes.join(' ')
 	})
-	
+
 	const iconStyle = computed(() : UTSJSONObject => {
 		const themes = config['type'] as string[]
-		let style = {
+		const style = {
 			fontSize: addUnit(props.size),
 			lineHeight: addUnit(props.size),
 			fontWeight: props.bold ? 'bold' : 'normal',
-			// 某些特殊情况 need to set a distance to the top to better center vertically
 			top: addUnit(props.top)
-		} as UTSJSONObject 
-		// 非主题色值时，才当作颜色值
+		} as UTSJSONObject
 		if (props.color != '' && !themes.includes(props.color)) {
 			style['color'] = props.color
 		}
-	
 		return style
 	})
 	
@@ -229,9 +224,9 @@
 
 	const imgSrc = computed(() : string => {
 		// 使用 uni_modules 绝对路径确保在各端加载正常
-		return `uni_modules/@phillUI/icons/dist/uniapp/images/${props.name}.svg`
+		return `/uni_modules/@phillui/icons/dist/uniapp/images/${props.name}.svg`
 	})
-	
+
 	// 方法
 	function clickHandler(e: UniPointerEvent) {
 		emit('click', props.index)
@@ -240,30 +235,49 @@
 			e.stopPropagation()
 		}
 	}
+
+	// #ifdef APP-ANDROID || APP-IOS || WEB
+	onMounted(() => {
+		if (props.name.includes('/')) return
+		// #ifdef APP-UTS
+		uni.loadFontFace({
+			family: 'upicon-custom',
+			source: "url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf')",
+			success() {
+				// console.log('success')
+			},
+			fail(err) {
+				console.warn('global loadFontFace upicon-custom fail', err.errMsg)
+			}
+		})
+		// #endif
+	})
+	// #endif
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+	@import "../../libs/css/components.scss";
 
-	// 变量定义
-	$up-icon-primary: #3c9cff !default;
-	$up-icon-success: #5ac725 !default;
-	$up-icon-info: #909193 !default;
-	$up-icon-warning: #f9ae3d !default;
-	$up-icon-error: #f56c6c !default;
-	$up-icon-label-line-height:1 !default;
+	$up-icon-primary: $up-primary !default;
+	$up-icon-success: $up-success !default;
+	$up-icon-info: $up-info !default;
+	$up-icon-warning: $up-warning !default;
+	$up-icon-error: $up-error !default;
+	$up-icon-label-line-height: 1 !default;
+
+	@font-face {
+		font-family: 'upicon-custom';
+		src: url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
+			url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff') format('woff'),
+			url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
+		font-weight: normal;
+		font-style: normal;
+		font-display: block;
+	}
 
 	.up-icon {
 		display: flex;
 		align-items: center;
-
-		@font-face {
-			font-family: 'upicon-custom';
-			src: url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-				 url('../../../@phillUI/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-				 url('../../../@phillUI/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
-			font-weight: normal;
-			font-style: normal;
-		}
 
 		&--left {
 			flex-direction: row-reverse;

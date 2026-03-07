@@ -35,7 +35,7 @@ function main() {
   const uniModulesBase = fs.existsSync(srcDir)
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
-  const targetPkgDir = path.join(uniModulesBase, '@phillUI', 'tokens');
+  const targetPkgDir = path.join(uniModulesBase, '@phillui', 'tokens');
 
   const pkgRoot = path.resolve(__dirname, '..');
   const tokensDir = path.join(pkgRoot, 'tokens');
@@ -52,7 +52,7 @@ function main() {
       fs.copyFileSync(indexFile, path.join(targetPkgDir, 'index.js'));
     }
     const lightPkgJson = {
-      name: '@phillUI/tokens',
+      name: '@phillui/tokens',
       description: 'Design tokens for phillUI in UniApp uni_modules'
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));

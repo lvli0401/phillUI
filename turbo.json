@@ -13,7 +13,7 @@
     "release-components-ui": {
       "dependsOn": ["build"],
       "outputs": [],
-      "env": ["GITHUB_TOKEN"],
+      "env": ["PHILLUI_PUBLISH"],
       "inputs": [
         "packages/components/ui/**/*",
         "pnpm-lock.yaml",
@@ -25,28 +25,28 @@
     "release-core-icons": {
       "dependsOn": ["build"],
       "outputs": [],
-      "env": ["GITHUB_TOKEN"],
+      "env": ["PHILLUI_PUBLISH"],
       "inputs": ["packages/core/icons/**/*", "pnpm-lock.yaml"],
       "cache": false
     },
     "release-core-tokens": {
       "dependsOn": ["build"],
       "outputs": [],
-      "env": ["GITHUB_TOKEN"],
+      "env": ["PHILLUI_PUBLISH"],
       "inputs": ["packages/core/tokens/**/*", "pnpm-lock.yaml"],
       "cache": false
     },
-"release": {
-  "dependsOn": ["release-components-ui", "release-core-icons", "release-core-tokens"],
-  "outputs": [],
-  "env": ["GITHUB_TOKEN"],
-  "inputs": [
-    "packages/components/ui/dist/**/*",
-    "packages/core/icons/dist/**/*",
-    "packages/core/tokens/**/*"
-  ],
-  "cache": false
-}
+    "release": {
+      "dependsOn": ["release-components-ui", "release-core-icons", "release-core-tokens"],
+      "outputs": [],
+      "env": ["PHILLUI_PUBLISH"],
+      "inputs": [
+        "packages/components/ui/dist/**/*",
+        "packages/core/icons/dist/**/*",
+        "packages/core/tokens/**/*"
+      ],
+      "cache": false
+    }
   },
   "globalDependencies": [
     "packages/core/tokens/**/*",

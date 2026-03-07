@@ -38,8 +38,14 @@ const replacements = [
   {
     pattern: /@\/uni_modules\/lime-dayuts/g,
     replacement: (filePath) => {
-      const relToDist = path.relative(path.dirname(filePath), path.dirname(distUViewPath));
-      return `./${relToDist}/lime-dayuts`;
+      // In dist, phillui sources are in dist/phillui
+      // But they will be installed into uni_modules/@phillui/ui
+      // So the relative path from a file in dist/phillui/components/...
+      // to dist/lime-dayuts needs to account for the extra level in @phillui/ui
+      const relToDist = path.relative(path.dirname(filePath), path.dirname(distUViewPath)).split(path.sep).join('/');
+      // Add an extra '../' because phillui is installed in @phillui/ui (2 levels) 
+      // instead of just phillui (1 level) in uni_modules
+      return `./../${relToDist}/lime-dayuts`;
     }
   }
 ];

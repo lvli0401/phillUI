@@ -11,5 +11,5 @@ onHide(() => {
 });
 </script>
 <style lang="scss">
-  @import "@/uni_modules/@phillUI/ui/index.scss";
+  @import "@/uni_modules/@phillui/ui/index.scss";
 </style>

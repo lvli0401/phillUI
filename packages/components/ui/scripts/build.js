@@ -77,39 +77,12 @@ function scrubDist() {
   });
 }
 
-function syncPlayground() {
-  const uiTargets = [
-    path.join(repoRoot, 'apps/playground/uniapp/src/uni_modules/@phillUI/ui'),
-    path.join(repoRoot, 'apps/playground/uniapp-x/uni_modules/@phillUI/ui')
-  ];
-  uiTargets.forEach(target => {
-    if (fs.existsSync(path.dirname(target))) {
-      console.log(`[Build] Sync to ${path.relative(repoRoot, target)}...`);
-      if (fs.existsSync(target)) execSync(`rm -rf "${target}"`);
-      execSync(`rsync -aq "${distUView}/" "${target}/"`);
-    }
-  });
-  const extraLibs = fs.existsSync(distPath) ? fs.readdirSync(distPath).filter(n => n !== 'phillui') : [];
-  extraLibs.forEach(lib => {
-    const src = path.join(distPath, lib);
-    if (!fs.statSync(src).isDirectory()) return;
-    [path.join(repoRoot, 'apps/playground/uniapp/src/uni_modules', lib), path.join(repoRoot, 'apps/playground/uniapp-x/uni_modules', lib)].forEach(dest => {
-      if (fs.existsSync(path.dirname(dest))) {
-        if (fs.existsSync(dest)) execSync(`rm -rf "${dest}"`);
-        execSync(`rsync -aq "${src}/" "${dest}/"`);
-      }
-    });
-  });
-}
-
 function main() {
   clean();
   syncSourceToDist();
   scrubDist();
   runRollup();
   patchImports();
-  // Dev convenience
-  syncPlayground();
   console.log('[Build] Done.');
 }
 
