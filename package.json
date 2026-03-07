@@ -1,6 +1,6 @@
 {
   "name": "phillUI",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "A uView-like component library for UniApp & UniApp X",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "docs:build": "vitepress build apps/docs",
     "docs:serve": "vitepress preview apps/docs",
     "icons:build": "node packages/core/icons/scripts/build.js",
-    "icons:manage": "pnpm --filter @phillui/icon-portal run dev",
+    "icons:manage": "pnpm --filter phillui-icon-portal run dev",
     "test": "echo \"No test specified\"",
     "build": "turbo run build",
     "release": "turbo run release"

@@ -7,7 +7,7 @@
       "@/*": ["./src/*"]
     },
     "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types", "./src/uni_modules/@phillui/ui/types"],
+    "types": ["@dcloudio/types", "./src/uni_modules/phillui-ui/types"],
     "moduleResolution": "node",
     "verbatimModuleSyntax": true,
     "allowJs": true,

@@ -38,7 +38,7 @@ function main() {
   const projectRoot = process.env.INIT_CWD || process.cwd();
   const srcDir = path.join(projectRoot, 'src');
   const uniModulesBase = fs.existsSync(srcDir) ? path.join(srcDir, 'uni_modules') : path.join(projectRoot, 'uni_modules');
-  const targetDir = path.join(uniModulesBase, '@phillui', 'ui');
+  const targetDir = path.join(uniModulesBase, 'phillui-ui');
 
   let pkgPath;
   try {

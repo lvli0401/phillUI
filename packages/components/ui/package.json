@@ -1,7 +1,7 @@
 {
-  "name": "@phillui/ui",
+  "name": "phillui-ui",
   "displayName": "phillUI全面兼容uniapp-x、uniapp鸿蒙组件库。",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "phillUI全面兼容uni-app/uni-app-x/鸿蒙/nvue，全面的组件和便捷的工具会让您信手拈来，如鱼得水",
   "keywords": [
     "phillUI",
@@ -107,7 +107,7 @@
   "dependencies": {
     "clipboard": "^2.0.11",
     "dayjs": "^1.11.3",
-    "@phillui/icons": "workspace:*"
+    "phillui-icons": "workspace:*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

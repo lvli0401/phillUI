@@ -2,7 +2,7 @@ import App from './App.uvue'
 
 import { createSSRApp } from 'vue'
 
-import ultraUI from '@/uni_modules/@phillui/ui/index.uts'
+import ultraUI from '@/uni_modules/phillui-ui/index.uts'
 
 export function createApp() {
 	const app = createSSRApp(App)

@@ -8,7 +8,7 @@
 
 ```bash
 # 如果是在 npm 环境下
-npm install @phillui/ui
+npm install phillui-ui
 ```
 
 ## 引入方式
@@ -22,7 +22,7 @@ npm install @phillui/ui
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^up-(.*)": "@phillui/ui/components/up-$1/up-$1.vue"
+      "^up-(.*)": "phillui-ui/components/up-$1/up-$1.vue"
     }
   },
   "pages": [

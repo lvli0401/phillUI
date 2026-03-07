@@ -1,6 +1,6 @@
 {
-  "name": "@phillui/icons",
-  "version": "0.0.0",
+  "name": "phillui-icons",
+  "version": "0.0.1",
   "description": "Unified icons for phillUI mobile and pc libraries",
   "main": "dist/index.js",
   "module": "dist/index.js",

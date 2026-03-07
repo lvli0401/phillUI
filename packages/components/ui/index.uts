@@ -29,7 +29,7 @@ export function loadFont() {
 	uni.loadFontFace({
 	  global: true,
 	  family: 'upicon-custom',
-	  source: "url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf')",
+	  source: "url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.ttf')",
 	  success() {
 		console.log('global loadFontFace upicon-custom success')
 	  },

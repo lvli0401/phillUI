@@ -42,10 +42,10 @@
 </template>
 
 <script setup lang="uts">
-	import customIcons from '../../../../@phillui/icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '../../../../@phillui/icons/dist/uniapp/icons-multicolor.json'
-	import iconsSvg from '../../../../@phillui/icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '../../../../@phillui/icons/dist/uniapp/icons-generated.uts'
+	import customIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-custom.json'
+	import multiColorIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-multicolor.json'
+	import iconsSvg from '@/uni_modules/phillui-icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-generated.uts'
 	import { addUnit, addStyle } from '../../libs/function/index'
 	import { commonProps, useUltraUI } from '../../libs/composable/useUltraUI'
 	import config from '../../libs/config/config';
@@ -224,7 +224,7 @@
 
 	const imgSrc = computed(() : string => {
 		// 使用 uni_modules 绝对路径确保在各端加载正常
-		return `/uni_modules/@phillui/icons/dist/uniapp/images/${props.name}.svg`
+		return `/uni_modules/phillui-icons/dist/uniapp/images/${props.name}.svg`
 	})
 
 	// 方法
@@ -242,7 +242,7 @@
 		// #ifdef APP-UTS
 		uni.loadFontFace({
 			family: 'upicon-custom',
-			source: "url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf')",
+			source: "url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.ttf')",
 			success() {
 				// console.log('success')
 			},
@@ -267,9 +267,9 @@
 
 	@font-face {
 		font-family: 'upicon-custom';
-		src: url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-			url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-			url('/uni_modules/@phillui/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
+		src: url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
+			url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.woff') format('woff'),
+			url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.ttf') format('truetype');
 		font-weight: normal;
 		font-style: normal;
 		font-display: block;
