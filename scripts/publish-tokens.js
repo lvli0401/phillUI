@@ -35,16 +35,6 @@ function main() {
     console.error('[publish-tokens] 发布失败：', e.message);
     process.exit(e.status || 1);
   }
-
-  // 联动发布 UI
-  try {
-    const uiPublishCmd = 'node ../../../scripts/publish-ui.js';
-    console.log(`[publish-tokens] 联动执行 UI 发布：${uiPublishCmd}`);
-    cp.execSync(uiPublishCmd, { stdio: 'inherit', cwd: path.resolve(pkgDir, '../../components/ui') });
-  } catch (e) {
-    console.error('[publish-tokens] 联动发布 UI 失败：', e.message);
-    process.exit(e.status || 1);
-  }
 }
 
 main();

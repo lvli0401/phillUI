@@ -10,25 +10,6 @@
         "packages/**/rollup.config.*"
       ]
     },
-    "release-components-ui": {
-      "dependsOn": ["build"],
-      "outputs": [],
-      "env": ["PHILLUI_PUBLISH"],
-      "inputs": [
-        "packages/components/ui/**/*",
-        "pnpm-lock.yaml",
-        "packages/core/tokens/**/*",
-        "packages/core/hooks/**/*"
-      ],
-      "cache": false
-    },
-    "release-core-icons": {
-      "dependsOn": ["build"],
-      "outputs": [],
-      "env": ["PHILLUI_PUBLISH"],
-      "inputs": ["packages/core/icons/**/*", "pnpm-lock.yaml"],
-      "cache": false
-    },
     "release-core-tokens": {
       "dependsOn": ["build"],
       "outputs": [],
@@ -36,15 +17,28 @@
       "inputs": ["packages/core/tokens/**/*", "pnpm-lock.yaml"],
       "cache": false
     },
-    "release": {
-      "dependsOn": ["release-components-ui", "release-core-icons", "release-core-tokens"],
+    "release-core-icons": {
+      "dependsOn": ["release-core-tokens"],
+      "outputs": [],
+      "env": ["PHILLUI_PUBLISH"],
+      "inputs": ["packages/core/icons/**/*", "pnpm-lock.yaml"],
+      "cache": false
+    },
+    "release-components-ui": {
+      "dependsOn": ["release-core-icons"],
       "outputs": [],
       "env": ["PHILLUI_PUBLISH"],
       "inputs": [
-        "packages/components/ui/dist/**/*",
-        "packages/core/icons/dist/**/*",
+        "packages/components/ui/**/*",
+        "pnpm-lock.yaml",
         "packages/core/tokens/**/*"
       ],
+      "cache": false
+    },
+    "release": {
+      "dependsOn": ["release-components-ui"],
+      "outputs": [],
+      "env": ["PHILLUI_PUBLISH"],
       "cache": false
     }
   },

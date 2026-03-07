@@ -5,7 +5,6 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "tokens",
     "scripts"
   ],
   "scripts": {
