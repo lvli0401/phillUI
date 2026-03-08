@@ -1,3 +1,12 @@
+## 0.1.10
+
+### Patch Changes
+
+- 0d4fe24: change path
+- Updated dependencies [0d4fe24]
+  - @phill-component/icons@0.1.10
+  - @phill-component/tokens@0.1.10
+
 ## 0.1.9
 
 ### Patch Changes
