@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.7
+
+### Patch Changes
+
+- b501493: 新版本
+
 ## 0.1.6
 
 ### Patch Changes
