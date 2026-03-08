@@ -14,8 +14,9 @@
     "icons:manage": "pnpm --filter phillui-icon-portal run dev",
     "test": "echo \"No test specified\"",
     "build": "turbo run build",
-    "release": "release-it",
-    "release:publish": "turbo run release"
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "PHILLUI_PUBLISH=1 turbo run release"
   },
   "keywords": [
     "uniapp",
@@ -43,11 +44,9 @@
     }
   },
   "devDependencies": {
-    "@release-it-plugins/workspaces": "^5.0.3",
-    "@release-it/conventional-changelog": "^10.0.5",
+    "@changesets/cli": "^2.30.0",
     "case": "^1.6.3",
     "figma-api": "^2.1.2-beta",
-    "release-it": "^19.2.4",
     "svgo": "^4.0.0",
     "svgtofont": "^6.5.1",
     "turbo": "^2.8.13",

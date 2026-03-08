@@ -20,8 +20,6 @@ function main() {
   }
   const tokensPkg = readJSON(tokensPkgPath);
 
-  // 不再强制 tokens 与 ui 版本一致，仅在 tokens 发布后联动 UI 发布
-
   if (checkOnly || !doPublish) {
     console.log('[publish-tokens] 校验通过。未执行发布（设置 PHILLUI_PUBLISH=1 才会发布）。');
     process.exit(0);
@@ -34,25 +32,31 @@ function main() {
   try {
     if (npmToken) {
       console.log('[publish-tokens] 检测到 NPM_TOKEN，创建临时 .npmrc...');
-      fs.writeFileSync(npmrcPath, `//registry.npmjs.org/:_authToken=${npmToken}\n`);
+      const content = `registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${npmToken}\n`;
+      fs.writeFileSync(npmrcPath, content);
       npmrcCreated = true;
     }
 
-    const publishCmd = 'pnpm publish --no-git-checks --access public';
+    const publishCmd = 'npm publish --access public';
     console.log(`[publish-tokens] 执行：${publishCmd}`);
-    cp.execSync(publishCmd, { stdio: 'inherit' });
+    cp.execSync(publishCmd, { stdio: 'pipe' });
   } catch (e) {
     // 检查版本是否已存在
-    try {
-      const remoteVersion = cp.execSync(`npm view ${tokensPkg.name} version`, { encoding: 'utf8' }).trim();
-      if (remoteVersion === tokensPkg.version) {
-        console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 已存在，跳过。`);
-        return; // 使用 return 而不是 process.exit，以便后续清理
+    const errOutput = (e.stdout?.toString() || '') + (e.stderr?.toString() || '') + e.message;
+    if (errOutput.includes('403') || errOutput.includes('previously published versions') || errOutput.includes('404')) {
+      try {
+        const remoteVersion = cp.execSync(`npm view ${tokensPkg.name} version`, { encoding: 'utf8' }).trim();
+        if (remoteVersion === tokensPkg.version) {
+          console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 已存在，跳过。`);
+          return;
+        }
+      } catch (viewErr) {
+        // 如果 npm view 也失败了，说明包可能真的不存在或者有其他权限问题
       }
-    } catch (viewErr) {
-      // 忽略 view 错误
     }
     console.error('[publish-tokens] 发布失败：', e.message);
+    if (e.stdout) console.error(e.stdout.toString());
+    if (e.stderr) console.error(e.stderr.toString());
     process.exit(e.status || 1);
   } finally {
     if (npmrcCreated && fs.existsSync(npmrcPath)) {

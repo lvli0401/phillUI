@@ -34,21 +34,25 @@ function main() {
   try {
     if (npmToken) {
       console.log('[publish-ui] 检测到 NPM_TOKEN，创建临时 .npmrc...');
-      fs.writeFileSync(npmrcPath, `//registry.npmjs.org/:_authToken=${npmToken}\n`);
+      const content = `registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${npmToken}\n`;
+      fs.writeFileSync(npmrcPath, content);
       npmrcCreated = true;
     }
 
-    const cmd = 'pnpm publish --no-git-checks --access public';
+    const cmd = 'npm publish --access public';
     console.log(`[publish-ui] 执行：${cmd}`);
-    cp.execSync(cmd, { stdio: 'inherit' });
+    cp.execSync(cmd, { stdio: 'pipe' });
   } catch (e) {
-    try {
-      const remoteVersion = cp.execSync(`npm view ${uiPkg.name} version`, { encoding: 'utf8' }).trim();
-      if (remoteVersion === uiPkg.version) {
-        console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 已存在，跳过。`);
-        return;
-      }
-    } catch (viewErr) {}
+    const errOutput = e.stdout?.toString() + e.stderr?.toString() + e.message;
+    if (errOutput.includes('403') || errOutput.includes('previously published versions') || errOutput.includes('404')) {
+      try {
+        const remoteVersion = cp.execSync(`npm view ${uiPkg.name} version`, { encoding: 'utf8' }).trim();
+        if (remoteVersion === uiPkg.version) {
+          console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 已存在，跳过。`);
+          return;
+        }
+      } catch (viewErr) {}
+    }
     console.error('[publish-ui] 发布失败：', e.message);
     process.exit(e.status || 1);
   } finally {
