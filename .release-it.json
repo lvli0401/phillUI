@@ -8,7 +8,8 @@
     "release": false
   },
   "npm": {
-    "publish": false
+    "publish": false,
+    "versionArgs": ["--no-git-tag-version"]
   },
   "plugins": {
     "@release-it/conventional-changelog": {
