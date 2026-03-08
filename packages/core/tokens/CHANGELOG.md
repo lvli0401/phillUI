@@ -1,5 +1,11 @@
 # phillui-tokens
 
+## 0.1.11
+
+### Patch Changes
+
+- 6cc4b67: new version
+
 ## 0.1.10
 
 ### Patch Changes
