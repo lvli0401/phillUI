@@ -66,6 +66,10 @@ function scrubDist() {
     let content = fs.readFileSync(fp, 'utf8');
     const original = content;
     content = content.split('\n').filter(line => !reFilePath.test(line)).join('\n');
+    // 替换 tokens 导入
+    content = content.replace(/['"]phillui-tokens['"]/g, "'@phill-component/tokens'");
+    // 替换 icons 导入
+    content = content.replace(/['"]phillui-icons['"]/g, "'@phill-component/icons'");
     // clean README external links
     if (path.basename(fp).toLowerCase() === 'readme.md') {
       content = content.split('\n').filter(line => !reReadmeLinks.test(line)).join('\n');

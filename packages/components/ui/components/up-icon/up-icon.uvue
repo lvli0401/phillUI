@@ -42,12 +42,10 @@
 </template>
 
 <script setup lang="uts">
-	import customIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-multicolor.json'
-	import iconsSvg from '@/uni_modules/phillui-icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-generated.uts'
-	import { addUnit, addStyle } from '../../libs/function/index'
-	import { commonProps, useUltraUI } from '../../libs/composable/useUltraUI'
+	import { addUnit, addStyle, getPx, getUnit } from '../../libs/function/index.uts';
+	import { icons } from '@phill-component/icons';
+	import { color as tokensColor } from '@phill-component/tokens';
+	import { props } from './props.uts';
 	import config from '../../libs/config/config';
 
 	const props = defineProps({

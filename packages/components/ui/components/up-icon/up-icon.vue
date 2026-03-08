@@ -53,15 +53,13 @@
 </template>
 
 <script>
-	// 引入图标名称，已经对应的unicode
-	import iconsSvg from '@/uni_modules/phillui-icons/dist/uniapp/icons-svg.js'
-	import customIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-custom.json'
-	import multiColorIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-multicolor.json'
-	import generatedIcons from '@/uni_modules/phillui-icons/dist/uniapp/icons-generated.js'
+	import { computed, inject } from 'vue';
+	import { addUnit, getPx, getUnit, addStyle } from '../../libs/function/index.js';
+	import { icons } from '@phill-component/icons';
+	import { color as tokensColor } from '@phill-component/tokens';
 	import { props } from './props.js';
 	import { mpMixin } from '../../libs/mixin/mpMixin.js';
 	import { mixin } from '../../libs/mixin/mixin.js';
-	import { addUnit, addStyle } from '../../libs/function/index.js';
 	import config from '../../libs/config/config.js';
 	/**
 	 * icon 图标

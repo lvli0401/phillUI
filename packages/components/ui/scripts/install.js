@@ -71,11 +71,27 @@ function main() {
       fs.mkdirSync(dest, { recursive: true });
       copyDir(src, dest, exclude);
     });
-    console.log(`[phillui/ui] Installed to ${targetDir} ${isX ? '(UniApp X)' : '(UniApp, Exclude .uvue/.uts)'}`);
+    // 4. 更新页面引用 (可选)
+    // 比如在 pages.json 或其他地方引用了 phillui-ui
+    // ...
+
+    console.log('✅ phillui-ui 安装配置完成！');
+    checkDeps();
   } catch (e) {
-    console.error('[phillui/ui] Installation failed:', e.message);
+    console.error('❌ 安装失败:', e.message);
     process.exit(1);
   }
+}
+
+// 检查是否安装了依赖
+function checkDeps() {
+  try {
+    const pkg = JSON.parse(fs.readFileSync(path.resolve(process.env.INIT_CWD || process.cwd(), 'package.json'), 'utf8'));
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    if (!deps['@phill-component/icons']) {
+      console.warn('⚠️  未检测到 @phill-component/icons，请手动安装: pnpm add @phill-component/icons');
+    }
+  } catch (e) {}
 }
 
 main();

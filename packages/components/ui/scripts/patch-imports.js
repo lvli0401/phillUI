@@ -36,27 +36,20 @@ const replacements = [
     }
   },
   {
-    // Handle any @/uni_modules/ references and convert to relative
-    pattern: /@\/uni_modules\/([^'"]+)/g,
-    replacement: (filePath) => (match, group1) => {
-      // Current file is in packages/components/ui/dist/phillui/...
-      // distUViewPath is packages/components/ui/dist/phillui
-      
-      // Relative path from current file directory to phillui (dist root)
-      const relToDist = path.relative(path.dirname(filePath), distUViewPath).split(path.sep).join('/');
-      
-      // If we are in components/up-icon/up-icon.vue
-      // path.dirname(filePath) is .../phillui/components/up-icon
-      // relToDist is "../../"
-      // uni_modules root is 1 level above phillui
-      // So relative path to group1 (phillui-icons/...) is relToDist + "/../" + group1
-      
-      let finalPath = path.join(relToDist, '..', group1).split(path.sep).join('/');
-      if (!finalPath.startsWith('.')) {
-        finalPath = './' + finalPath;
-      }
-      return finalPath;
-    }
+    pattern: /@\/uni_modules\/phillui-icons/g,
+    replacement: () => '@phill-component/icons'
+  },
+  {
+    pattern: /@\/uni_modules\/phillui-tokens/g,
+    replacement: () => '@phill-component/tokens'
+  },
+  {
+    pattern: /['"]phillui-tokens['"]/g,
+    replacement: () => "'@phill-component/tokens'"
+  },
+  {
+    pattern: /['"]phillui-icons['"]/g,
+    replacement: () => "'@phill-component/icons'"
   }
 ];
 

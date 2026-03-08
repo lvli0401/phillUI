@@ -3,11 +3,11 @@
   "changelog": "@changesets/cli/changelog",
   "commit": true,
   "fixed": [
-    ["phillui-ui", "phillui-icons", "phillui-tokens"]
+    ["@phill-component/ui", "@phill-component/icons", "@phill-component/tokens"]
   ],
   "linked": [],
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["phillui-icon-portal"]
+  "ignore": ["phillUI", "phillui-icon-portal"]
 }

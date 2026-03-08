@@ -10,6 +10,8 @@ import * as index from './libs/function/index.uts'
 export {config, color}
 export {mixin, mpMixin}
 export * from './libs/function/index'
+export * from '@phill-component/icons';
+export * from '@phill-component/tokens';
 
 // export class UPArray = {
 // 	list: [] as Array<any>
