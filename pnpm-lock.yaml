@@ -35,6 +35,12 @@ importers:
 
   apps/icon-portal:
     dependencies:
+      '@phill-component/icons':
+        specifier: workspace:*
+        version: link:../../packages/core/icons
+      '@phill-component/tokens':
+        specifier: workspace:*
+        version: link:../../packages/core/tokens
       formidable:
         specifier: ^3.5.4
         version: 3.5.4
@@ -54,15 +60,18 @@ importers:
 
   packages/components/ui:
     dependencies:
+      '@phill-component/icons':
+        specifier: workspace:*
+        version: link:../../core/icons
+      '@phill-component/tokens':
+        specifier: workspace:*
+        version: link:../../core/tokens
       clipboard:
         specifier: ^2.0.11
         version: 2.0.11
       dayjs:
         specifier: ^1.11.3
         version: 1.11.3
-      phillui-icons:
-        specifier: workspace:*
-        version: link:../../core/icons
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^29.0.0
