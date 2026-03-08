@@ -1,3 +1,12 @@
+## 0.1.11
+
+### Patch Changes
+
+- 6cc4b67: new version
+- Updated dependencies [6cc4b67]
+  - @phill-component/icons@0.1.11
+  - @phill-component/tokens@0.1.11
+
 ## 0.1.10
 
 ### Patch Changes

@@ -38,7 +38,17 @@ function main() {
       }
     } catch (e) {}
 
-    let cmd = 'npm publish --access public';
+    // 使用 pnpm pack 生成 tarball，以确保 workspace:* 等协议被转换为真实版本
+    console.log('[publish-ui] 打包 tarball（使用 pnpm pack）...');
+    cp.execSync('pnpm pack', { stdio: 'inherit', cwd: pkgDir });
+    const tarNameBase = uiPkg.name.replace(/^@/, '').replace(/\//g, '-');
+    const tarFile = path.join(pkgDir, `${tarNameBase}-${uiPkg.version}.tgz`);
+    if (!fs.existsSync(tarFile)) {
+      console.error(`[publish-ui] 未找到打包产物：${tarFile}`);
+      process.exit(1);
+    }
+
+    let cmd = `npm publish "${tarFile}" --access public`;
     if (fs.existsSync(npmrcPath)) {
       console.log(`[publish-ui] 使用配置文件：${npmrcPath}`);
       cmd += ` --userconfig ${npmrcPath}`;
@@ -56,6 +66,10 @@ function main() {
     console.log(`[publish-ui] 执行：${cmd}`);
     cp.execSync(cmd, { stdio: 'pipe' });
     console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 发布成功！`);
+    // 清理 tarball
+    try {
+      fs.unlinkSync(tarFile);
+    } catch (_) {}
   } catch (e) {
     console.error('[publish-ui] 发布失败：', e.message);
     if (e.stdout) console.error('STDOUT:', e.stdout.toString());
