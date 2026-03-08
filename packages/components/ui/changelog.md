@@ -1,3 +1,11 @@
+## 0.1.6
+
+### Patch Changes
+
+- e1a530c: sfsf
+- Updated dependencies [e1a530c]
+  - phillui-icons@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes
