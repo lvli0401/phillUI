@@ -9,5 +9,5 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["phillUI", "phillui-icon-portal"]
+  "ignore": ["phillui-icon-portal"]
 }
