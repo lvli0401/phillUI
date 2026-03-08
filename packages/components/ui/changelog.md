@@ -1,3 +1,12 @@
+## 0.1.9
+
+### Patch Changes
+
+- 42b882e: new version
+- Updated dependencies [42b882e]
+  - @phill-component/tokens@0.1.9
+  - @phill-component/icons@0.1.9
+
 ## 0.1.8
 
 ### Patch Changes
