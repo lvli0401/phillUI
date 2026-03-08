@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.9
+
+### Patch Changes
+
+- 42b882e: new version
+
 ## 0.1.8
 
 ### Patch Changes

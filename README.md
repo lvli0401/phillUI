@@ -6,7 +6,7 @@ A lightweight, high-performance component library for UniApp (Vue 3).
 
 ### Via npm (for custom build)
 ```bash
-npm install phillui-ui
+npx @phill-component/ui
 
 ### publish
 1. pnpm changeset

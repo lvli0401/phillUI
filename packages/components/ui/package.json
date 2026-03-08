@@ -1,7 +1,7 @@
 {
   "name": "@phill-component/ui",
   "displayName": "phillUI全面兼容uniapp-x、uniapp鸿蒙组件库。",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "phillUI全面兼容uni-app/uni-app-x/鸿蒙/nvue，全面的组件和便捷的工具会让您信手拈来，如鱼得水",
   "keywords": [
     "phillUI",
