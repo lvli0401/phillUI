@@ -1,3 +1,12 @@
+## 0.1.12
+
+### Patch Changes
+
+- 42e887a: pnpm lock
+- Updated dependencies [42e887a]
+  - @phill-component/icons@0.1.12
+  - @phill-component/tokens@0.1.12
+
 ## 0.1.11
 
 ### Patch Changes
