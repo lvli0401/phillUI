@@ -9,7 +9,7 @@ const path = require('path');
  */
 
 const distRoot = path.resolve(__dirname, '../dist');
-const distUViewPath = path.join(distRoot, 'phillui');
+const distUViewPath = path.join(distRoot, '@phill-component/ui');
 
 function walk(dir, callback) {
   fs.readdirSync(dir).forEach(f => {

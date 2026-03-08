@@ -38,17 +38,17 @@ function main() {
   const projectRoot = process.env.INIT_CWD || process.cwd();
   const srcDir = path.join(projectRoot, 'src');
   const uniModulesBase = fs.existsSync(srcDir) ? path.join(srcDir, 'uni_modules') : path.join(projectRoot, 'uni_modules');
-  const targetDir = path.join(uniModulesBase, 'phillui-ui');
+  const targetDir = path.join(uniModulesBase, '@phill-component/ui');
 
   let pkgPath;
   try {
     pkgPath = path.resolve(__dirname, '..');
   } catch (e) {
-    console.error('[phillui/ui] Cannot resolve package root.');
+    console.error('[@phill-component/ui] Cannot resolve package root.');
     process.exit(1);
   }
   const distDir = path.join(pkgPath, 'dist');
-  const distUView = path.join(distDir, 'phillui');
+  const distUView = path.join(distDir, '@phill-component/ui');
   if (!fs.existsSync(distDir)) {
     console.error('[phillui/ui] dist not found. Please run build before install.');
     process.exit(1);
@@ -62,7 +62,7 @@ function main() {
     rimraf(targetDir);
     fs.mkdirSync(targetDir, { recursive: true });
     copyDir(distUView, targetDir, exclude);
-    const extras = fs.readdirSync(distDir).filter(n => n !== 'phillui');
+    const extras = fs.readdirSync(distDir).filter(n => n !== 'phill-component-ui');
     extras.forEach(name => {
       const src = path.join(distDir, name);
       if (!fs.statSync(src).isDirectory()) return;

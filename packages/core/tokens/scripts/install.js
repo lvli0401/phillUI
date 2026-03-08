@@ -35,7 +35,7 @@ function main() {
   const uniModulesBase = fs.existsSync(srcDir)
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
-  const targetPkgDir = path.join(uniModulesBase, 'phillui-tokens');
+  const targetPkgDir = path.join(uniModulesBase, '@phill-component/tokens');
 
   const pkgRoot = path.resolve(__dirname, '..');
   const tokensDir = path.join(pkgRoot, 'tokens');

@@ -57,7 +57,7 @@ function main() {
   const uniModulesBase = fs.existsSync(srcDir)
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
-  const targetPkgDir = path.join(uniModulesBase, 'phillui-icons');
+  const targetPkgDir = path.join(uniModulesBase, '@phill-component/icons');
   const targetDistDir = path.join(targetPkgDir, 'dist');
 
   const pkgRoot = resolvePackageRoot();

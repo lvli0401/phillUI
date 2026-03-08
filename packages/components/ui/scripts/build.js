@@ -11,10 +11,12 @@ const { execSync } = require('child_process');
  * 5. Optionally sync to playground for local dev
  */
 
+// Config
+const PKG_NAME = '@phill-component/ui';
 const packageRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(packageRoot, '../..');
 const distPath = path.join(packageRoot, 'dist');
-const distUView = path.join(distPath, 'phillui');
+const distUView = path.join(distPath, PKG_NAME);
 const utsLibsSrc = path.join(packageRoot, 'uts-libs');
 
 function clean() {
