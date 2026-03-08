@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.10
+
+### Patch Changes
+
+- 0d4fe24: change path
+
 ## 0.1.9
 
 ### Patch Changes
