@@ -7,3 +7,8 @@ A lightweight, high-performance component library for UniApp (Vue 3).
 ### Via npm (for custom build)
 ```bash
 npm install phillui-ui
+
+### publish
+1. pnpm changeset
+2. pnpm version-packages
+3. PHILLUI_PUBLISH=1 pnpm release

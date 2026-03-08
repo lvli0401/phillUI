@@ -3,26 +3,37 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 
+function readJSON(p) {
+  return JSON.parse(fs.readFileSync(p, 'utf8'));
+}
+
 function main() {
   const args = process.argv.slice(2);
   const checkOnly = args.includes('--check');
   const doPublish = process.env.PHILLUI_PUBLISH === '1';
+
+  const pkgDir = process.cwd();
+  const iconsPkgPath = path.join(pkgDir, 'package.json');
+  if (!fs.existsSync(iconsPkgPath)) {
+    console.error('[publish-icons] 未在 icons 包目录下执行。');
+    process.exit(1);
+  }
+  const iconsPkg = readJSON(iconsPkgPath);
 
   if (checkOnly || !doPublish) {
     console.log('[publish-icons] 校验通过。未执行发布（设置 PHILLUI_PUBLISH=1 才会发布）。');
     process.exit(0);
   }
 
-  const pkgDir = process.cwd();
   const projectRoot = path.resolve(pkgDir, '../../../');
   const npmrcPath = path.join(projectRoot, '.npmrc');
 
   try {
     // 预先检查版本
     try {
-      const remoteVersion = cp.execSync(`npm view phillui-icons version`, { encoding: 'utf8' }).trim();
-      if (remoteVersion === '0.1.5') {
-        console.log(`[publish-icons] phillui-icons@0.1.5 已存在，跳过。`);
+      const remoteVersion = cp.execSync(`npm view ${iconsPkg.name} version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === iconsPkg.version) {
+        console.log(`[publish-icons] ${iconsPkg.name}@${iconsPkg.version} 已存在，跳过。`);
         return;
       }
     } catch (e) {}
@@ -44,7 +55,7 @@ function main() {
 
     console.log(`[publish-icons] 执行：${cmd}`);
     cp.execSync(cmd, { stdio: 'pipe' });
-    console.log(`[publish-icons] phillui-icons@0.1.5 发布成功！`);
+    console.log(`[publish-icons] ${iconsPkg.name}@${iconsPkg.version} 发布成功！`);
   } catch (e) {
     console.error('[publish-icons] 发布失败：', e.message);
     if (e.stdout) console.error('STDOUT:', e.stdout.toString());
