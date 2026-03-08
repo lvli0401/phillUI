@@ -21,6 +21,32 @@ function walk(dir, callback) {
 }
 
 const replacements = [
+  // Absolute/alias uni_modules paths for icons/tokens -> new scoped dirs
+  {
+    pattern: /['"]\/uni_modules\/phillui-icons\//g,
+    replacement: () => "'/uni_modules/@phill-component/icons/"
+  },
+  {
+    pattern: /@\/uni_modules\/phillui-icons\//g,
+    replacement: () => '@/uni_modules/@phill-component/icons/'
+  },
+  {
+    pattern: /['"]\/uni_modules\/phillui-tokens\//g,
+    replacement: () => "'/uni_modules/@phill-component/tokens/"
+  },
+  {
+    pattern: /@\/uni_modules\/phillui-tokens\//g,
+    replacement: () => '@/uni_modules/@phill-component/tokens/'
+  },
+  // Relative paths depth fix: ../../../phillui-icons -> ../../../../@phill-component/icons
+  {
+    pattern: /\.\.\/\.\.\/\.\.\/phillui-icons\//g,
+    replacement: () => '../../../../@phill-component/icons/'
+  },
+  {
+    pattern: /\.\.\/\.\.\/\.\.\/phillui-tokens\//g,
+    replacement: () => '../../../../@phill-component/tokens/'
+  },
   {
     pattern: /import\s+dayjs\s+from\s+['"]dayjs['"]/g,
     replacement: (filePath) => {
@@ -73,5 +99,5 @@ if (fs.existsSync(distUViewPath)) {
   walk(distUViewPath, patchFile);
   console.log('[Patch] Complete.');
 } else {
-  console.warn('[Patch] dist/phillui not found, skip.');
+  console.warn('[Patch] dist/@phill-component/ui not found, skip.');
 }

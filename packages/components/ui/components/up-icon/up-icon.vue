@@ -178,7 +178,7 @@
 				return multiColorIcons.includes(this.name)
 			},
 			imgSrc() {
-				return `/uni_modules/phillui-icons/dist/uniapp/images/${this.name}.svg`
+				return `/uni_modules/@phill-component/icons/dist/uniapp/images/${this.name}.svg`
 			}
 		},
 		methods: {
@@ -187,7 +187,7 @@
 			async loadAsyncSvg(name) {
 				try {
 					// 动态导入分片
-					const module = await import(`@/uni_modules/phillui-icons/dist/uniapp/svgs/${name}.js`)
+					const module = await import(`@/uni_modules/@phill-component/icons/dist/uniapp/svgs/${name}.js`)
 					this.asyncSvgContent = module.default.inner
 				} catch (e) {
 					console.error(`[up-icon] Failed to load SVG: ${name}`, e)
@@ -218,9 +218,9 @@
 	@font-face {
 		font-family: 'upicon-custom';
 		src: local('upicon-custom'),
-		    url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-		     url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.woff') format('woff'),
-		     url('/uni_modules/phillui-icons/dist/uniapp/upicon-custom.ttf') format('truetype');
+		    url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
+		     url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff') format('woff'),
+		     url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
 		font-weight: normal;
 		font-style: normal;
 		font-display: block;

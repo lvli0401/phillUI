@@ -27,7 +27,7 @@ function clean() {
 }
 
 function syncSourceToDist() {
-  console.log('[Build] Sync sources to dist/phillui...');
+  console.log('[Build] Sync sources to dist/@phill-component/ui...');
   fs.mkdirSync(distUView, { recursive: true });
   execSync(
     `rsync -aq --exclude='node_modules' --exclude='dist' --exclude='scripts' --exclude='rollup.config.mjs' --exclude='uts-libs' "${packageRoot}/" "${distUView}/"`

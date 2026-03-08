@@ -50,7 +50,7 @@ function main() {
   const distDir = path.join(pkgPath, 'dist');
   const distUView = path.join(distDir, '@phill-component/ui');
   if (!fs.existsSync(distDir)) {
-    console.error('[phillui/ui] dist not found. Please run build before install.');
+    console.error('[@phill-component/ui] dist not found. Please run build before install.');
     process.exit(1);
   }
 
@@ -62,7 +62,7 @@ function main() {
     rimraf(targetDir);
     fs.mkdirSync(targetDir, { recursive: true });
     copyDir(distUView, targetDir, exclude);
-    const extras = fs.readdirSync(distDir).filter(n => n !== 'phill-component-ui');
+    const extras = fs.readdirSync(distDir).filter(n => n !== '@phill-component/ui');
     extras.forEach(name => {
       const src = path.join(distDir, name);
       if (!fs.statSync(src).isDirectory()) return;
@@ -72,10 +72,10 @@ function main() {
       copyDir(src, dest, exclude);
     });
     // 4. 更新页面引用 (可选)
-    // 比如在 pages.json 或其他地方引用了 phillui-ui
+    // 比如在 pages.json 或其他地方引用了 @phill-component/ui
     // ...
 
-    console.log('✅ phillui-ui 安装配置完成！');
+    console.log('✅ @phill-component/ui 安装配置完成！');
     checkDeps();
   } catch (e) {
     console.error('❌ 安装失败:', e.message);
