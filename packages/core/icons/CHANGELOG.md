@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.6
+
+### Patch Changes
+
+- e1a530c: sfsf
+
 ## 0.1.5
 
 ### Patch Changes
