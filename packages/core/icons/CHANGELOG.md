@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.13
+
+### Patch Changes
+
+- 840236b: remove warning
+
 ## 0.1.12
 
 ### Patch Changes
