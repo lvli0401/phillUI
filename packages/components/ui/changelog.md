@@ -1,3 +1,12 @@
+## 0.1.8
+
+### Patch Changes
+
+- d7fad56: new version
+- Updated dependencies [d7fad56]
+  - @phill-component/tokens@0.1.8
+  - @phill-component/icons@0.1.8
+
 ## 0.1.7
 
 ### Patch Changes
