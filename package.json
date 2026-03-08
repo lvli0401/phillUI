@@ -1,6 +1,6 @@
 {
   "name": "phillUI",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "description": "A uView-like component library for UniApp & UniApp X",
   "main": "index.js",

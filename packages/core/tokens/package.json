@@ -1,6 +1,6 @@
 {
   "name": "phillui-tokens",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "Design tokens for phillUI components",
   "main": "index.js",
   "files": [
