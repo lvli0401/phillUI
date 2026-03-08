@@ -1,6 +1,6 @@
 {
   "name": "phillUI",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "A uView-like component library for UniApp & UniApp X",
   "main": "index.js",
@@ -14,7 +14,8 @@
     "icons:manage": "pnpm --filter phillui-icon-portal run dev",
     "test": "echo \"No test specified\"",
     "build": "turbo run build",
-    "release": "turbo run release"
+    "release": "release-it",
+    "release:publish": "turbo run release"
   },
   "keywords": [
     "uniapp",
@@ -42,8 +43,11 @@
     }
   },
   "devDependencies": {
+    "@release-it-plugins/workspaces": "^5.0.3",
+    "@release-it/conventional-changelog": "^10.0.5",
     "case": "^1.6.3",
     "figma-api": "^2.1.2-beta",
+    "release-it": "^19.2.4",
     "svgo": "^4.0.0",
     "svgtofont": "^6.5.1",
     "turbo": "^2.8.13",

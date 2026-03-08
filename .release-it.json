@@ -1,0 +1,27 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "requireCleanWorkingDir": false
+  },
+  "github": {
+    "release": false
+  },
+  "npm": {
+    "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    },
+    "@release-it-plugins/workspaces": {
+      "publish": false,
+      "skipChecks": true
+    }
+  },
+  "hooks": {
+    "after:bump": "pnpm install --no-frozen-lockfile",
+    "after:release": "PHILLUI_PUBLISH=1 pnpm run release:publish"
+  }
+}

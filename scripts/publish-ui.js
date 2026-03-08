@@ -27,13 +27,35 @@ function main() {
     process.exit(0);
   }
 
+  const npmToken = process.env.NPM_TOKEN;
+  const npmrcPath = path.join(pkgDir, '.npmrc');
+  let npmrcCreated = false;
+
   try {
+    if (npmToken) {
+      console.log('[publish-ui] 检测到 NPM_TOKEN，创建临时 .npmrc...');
+      fs.writeFileSync(npmrcPath, `//registry.npmjs.org/:_authToken=${npmToken}\n`);
+      npmrcCreated = true;
+    }
+
     const cmd = 'pnpm publish --no-git-checks --access public';
     console.log(`[publish-ui] 执行：${cmd}`);
     cp.execSync(cmd, { stdio: 'inherit' });
   } catch (e) {
+    try {
+      const remoteVersion = cp.execSync(`npm view ${uiPkg.name} version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === uiPkg.version) {
+        console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 已存在，跳过。`);
+        return;
+      }
+    } catch (viewErr) {}
     console.error('[publish-ui] 发布失败：', e.message);
     process.exit(e.status || 1);
+  } finally {
+    if (npmrcCreated && fs.existsSync(npmrcPath)) {
+      console.log('[publish-ui] 清理临时 .npmrc');
+      fs.unlinkSync(npmrcPath);
+    }
   }
 }
 

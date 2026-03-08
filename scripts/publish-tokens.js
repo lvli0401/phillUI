@@ -27,13 +27,38 @@ function main() {
     process.exit(0);
   }
 
+  const npmToken = process.env.NPM_TOKEN;
+  const npmrcPath = path.join(pkgDir, '.npmrc');
+  let npmrcCreated = false;
+
   try {
+    if (npmToken) {
+      console.log('[publish-tokens] 检测到 NPM_TOKEN，创建临时 .npmrc...');
+      fs.writeFileSync(npmrcPath, `//registry.npmjs.org/:_authToken=${npmToken}\n`);
+      npmrcCreated = true;
+    }
+
     const publishCmd = 'pnpm publish --no-git-checks --access public';
     console.log(`[publish-tokens] 执行：${publishCmd}`);
     cp.execSync(publishCmd, { stdio: 'inherit' });
   } catch (e) {
+    // 检查版本是否已存在
+    try {
+      const remoteVersion = cp.execSync(`npm view ${tokensPkg.name} version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === tokensPkg.version) {
+        console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 已存在，跳过。`);
+        return; // 使用 return 而不是 process.exit，以便后续清理
+      }
+    } catch (viewErr) {
+      // 忽略 view 错误
+    }
     console.error('[publish-tokens] 发布失败：', e.message);
     process.exit(e.status || 1);
+  } finally {
+    if (npmrcCreated && fs.existsSync(npmrcPath)) {
+      console.log('[publish-tokens] 清理临时 .npmrc');
+      fs.unlinkSync(npmrcPath);
+    }
   }
 }
 
