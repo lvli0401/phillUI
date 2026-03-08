@@ -76,22 +76,10 @@ function main() {
     // ...
 
     console.log('✅ @phill-component/ui 安装配置完成！');
-    checkDeps();
   } catch (e) {
     console.error('❌ 安装失败:', e.message);
     process.exit(1);
   }
-}
-
-// 检查是否安装了依赖
-function checkDeps() {
-  try {
-    const pkg = JSON.parse(fs.readFileSync(path.resolve(process.env.INIT_CWD || process.cwd(), 'package.json'), 'utf8'));
-    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-    if (!deps['@phill-component/icons']) {
-      console.warn('⚠️  未检测到 @phill-component/icons，请手动安装: pnpm add @phill-component/icons');
-    }
-  } catch (e) {}
 }
 
 main();

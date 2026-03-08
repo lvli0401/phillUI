@@ -1,3 +1,12 @@
+## 0.1.13
+
+### Patch Changes
+
+- 840236b: remove warning
+- Updated dependencies [840236b]
+  - @phill-component/icons@0.1.13
+  - @phill-component/tokens@0.1.13
+
 ## 0.1.12
 
 ### Patch Changes

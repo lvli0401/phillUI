@@ -6,6 +6,7 @@ const { execSync } = require('child_process');
  * Build script for phillUI (subpackage)
  * 1. Clean dist
  * 2. Sync package sources to dist (exclude node_modules, scripts, dist)
+ * 2.5. Stage scoped deps (@phill-component/icons, @phill-component/tokens) into dist
  * 3. Bundle vendors into dist/vendor via rollup
  * 4. Patch imports inside dist
  * 5. Optionally sync to playground for local dev
@@ -40,6 +41,78 @@ function syncSourceToDist() {
       execSync(`rsync -aq "${src}/" "${dest}/"`);
     });
   }
+}
+
+function existsDir(p) {
+  try {
+    return fs.existsSync(p) && fs.statSync(p).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
+function rsyncDir(src, dest) {
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  execSync(`rsync -aq "${src}/" "${dest}/"`);
+}
+
+/**
+ * Stage scoped dependencies into dist so install.js can copy them into uni_modules
+ * - @phill-component/icons -> dist/@phill-component/icons
+ * - @phill-component/tokens -> dist/@phill-component/tokens
+ */
+function stageScopedDeps() {
+  const candidates = [
+    {
+      name: '@phill-component/icons',
+      nodeModulesPath: path.join(packageRoot, 'node_modules/@phill-component/icons'),
+      repoPath: path.resolve(packageRoot, '../../core/icons'),
+      distSubdir: '@phill-component/icons',
+      pick: 'dist', // copy dist dir
+    },
+    {
+      name: '@phill-component/tokens',
+      nodeModulesPath: path.join(packageRoot, 'node_modules/@phill-component/tokens'),
+      repoPath: path.resolve(packageRoot, '../../core/tokens'),
+      distSubdir: '@phill-component/tokens',
+      pick: null, // copy root files used at runtime (index.js, tokens/)
+    },
+  ];
+
+  candidates.forEach(dep => {
+    let sourceBase = null;
+    if (existsDir(dep.nodeModulesPath)) {
+      sourceBase = dep.nodeModulesPath;
+    } else if (existsDir(dep.repoPath)) {
+      sourceBase = dep.repoPath;
+    }
+    if (!sourceBase) {
+      console.warn(`[Build] Skip staging ${dep.name} (not found)`);
+      return;
+    }
+    const destBase = path.join(distPath, dep.distSubdir);
+    fs.mkdirSync(destBase, { recursive: true });
+    if (dep.pick === 'dist') {
+      const src = path.join(sourceBase, 'dist');
+      if (existsDir(src)) {
+        rsyncDir(src, path.join(destBase, 'dist'));
+        console.log(`[Build] Staged ${dep.name} dist -> ${path.relative(packageRoot, destBase)}`);
+      } else {
+        console.warn(`[Build] ${dep.name} has no dist folder at ${src}, skipped`);
+      }
+    } else {
+      // tokens: copy index.js and tokens directory if present
+      const indexJs = path.join(sourceBase, 'index.js');
+      if (fs.existsSync(indexJs)) {
+        fs.copyFileSync(indexJs, path.join(destBase, 'index.js'));
+      }
+      const tokensDir = path.join(sourceBase, 'tokens');
+      if (existsDir(tokensDir)) {
+        rsyncDir(tokensDir, path.join(destBase, 'tokens'));
+      }
+      console.log(`[Build] Staged ${dep.name} -> ${path.relative(packageRoot, destBase)}`);
+    }
+  });
 }
 
 function runRollup() {
@@ -86,6 +159,7 @@ function scrubDist() {
 function main() {
   clean();
   syncSourceToDist();
+  stageScopedDeps();
   scrubDist();
   runRollup();
   patchImports();
