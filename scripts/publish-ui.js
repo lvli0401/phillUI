@@ -20,46 +20,47 @@ function main() {
   }
   const uiPkg = readJSON(uiPkgPath);
 
-  // 不再强制 tokens 与 ui 版本一致
-
   if (checkOnly || !doPublish) {
     console.log('[publish-ui] 校验通过。未执行发布（设置 PHILLUI_PUBLISH=1 才会发布）。');
     process.exit(0);
   }
 
-  const npmToken = process.env.NPM_TOKEN;
-  const npmrcPath = path.join(pkgDir, '.npmrc');
-  let npmrcCreated = false;
+  const projectRoot = path.resolve(pkgDir, '../../../');
+  const npmrcPath = path.join(projectRoot, '.npmrc');
 
   try {
-    if (npmToken) {
-      console.log('[publish-ui] 检测到 NPM_TOKEN，创建临时 .npmrc...');
-      const content = `registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${npmToken}\n`;
-      fs.writeFileSync(npmrcPath, content);
-      npmrcCreated = true;
+    // 预先检查版本
+    try {
+      const remoteVersion = cp.execSync(`npm view ${uiPkg.name} version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === uiPkg.version) {
+        console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 已存在，跳过。`);
+        return;
+      }
+    } catch (e) {}
+
+    let cmd = 'npm publish --access public';
+    if (fs.existsSync(npmrcPath)) {
+      console.log(`[publish-ui] 使用配置文件：${npmrcPath}`);
+      cmd += ` --userconfig ${npmrcPath}`;
+
+      // 验证身份
+      try {
+        const whoami = cp.execSync(`npm whoami --userconfig ${npmrcPath}`, { encoding: 'utf8' }).trim();
+        console.log(`[publish-ui] 当前登录用户：${whoami}`);
+      } catch (e) {
+        console.error('[publish-ui] 身份验证失败，请检查 .npmrc 中的令牌。');
+        process.exit(1);
+      }
     }
 
-    const cmd = 'npm publish --access public';
     console.log(`[publish-ui] 执行：${cmd}`);
     cp.execSync(cmd, { stdio: 'pipe' });
+    console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 发布成功！`);
   } catch (e) {
-    const errOutput = e.stdout?.toString() + e.stderr?.toString() + e.message;
-    if (errOutput.includes('403') || errOutput.includes('previously published versions') || errOutput.includes('404')) {
-      try {
-        const remoteVersion = cp.execSync(`npm view ${uiPkg.name} version`, { encoding: 'utf8' }).trim();
-        if (remoteVersion === uiPkg.version) {
-          console.log(`[publish-ui] ${uiPkg.name}@${uiPkg.version} 已存在，跳过。`);
-          return;
-        }
-      } catch (viewErr) {}
-    }
     console.error('[publish-ui] 发布失败：', e.message);
+    if (e.stdout) console.error('STDOUT:', e.stdout.toString());
+    if (e.stderr) console.error('STDERR:', e.stderr.toString());
     process.exit(e.status || 1);
-  } finally {
-    if (npmrcCreated && fs.existsSync(npmrcPath)) {
-      console.log('[publish-ui] 清理临时 .npmrc');
-      fs.unlinkSync(npmrcPath);
-    }
   }
 }
 

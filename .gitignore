@@ -5,3 +5,4 @@ unpackage
 .hbuilderx
 apps/docs/.vitepress/cache
 .turbo
+.npmrc

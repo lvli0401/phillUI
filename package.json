@@ -16,7 +16,7 @@
     "build": "turbo run build",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "PHILLUI_PUBLISH=1 turbo run release"
+    "release": "pnpm build && PHILLUI_PUBLISH=1 turbo run release"
   },
   "keywords": [
     "uniapp",

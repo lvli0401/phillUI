@@ -14,39 +14,42 @@ function main() {
   }
 
   const pkgDir = process.cwd();
-  const npmToken = process.env.NPM_TOKEN;
-  const npmrcPath = path.join(pkgDir, '.npmrc');
-  let npmrcCreated = false;
+  const projectRoot = path.resolve(pkgDir, '../../../');
+  const npmrcPath = path.join(projectRoot, '.npmrc');
 
   try {
-    if (npmToken) {
-      console.log('[publish-icons] 检测到 NPM_TOKEN，创建临时 .npmrc...');
-      const content = `registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${npmToken}\n`;
-      fs.writeFileSync(npmrcPath, content);
-      npmrcCreated = true;
+    // 预先检查版本
+    try {
+      const remoteVersion = cp.execSync(`npm view phillui-icons version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === '0.1.5') {
+        console.log(`[publish-icons] phillui-icons@0.1.5 已存在，跳过。`);
+        return;
+      }
+    } catch (e) {}
+
+    let cmd = 'npm publish --access public';
+    if (fs.existsSync(npmrcPath)) {
+      console.log(`[publish-icons] 使用配置文件：${npmrcPath}`);
+      cmd += ` --userconfig ${npmrcPath}`;
+
+      // 验证身份
+      try {
+        const whoami = cp.execSync(`npm whoami --userconfig ${npmrcPath}`, { encoding: 'utf8' }).trim();
+        console.log(`[publish-icons] 当前登录用户：${whoami}`);
+      } catch (e) {
+        console.error('[publish-icons] 身份验证失败，请检查 .npmrc 中的令牌。');
+        process.exit(1);
+      }
     }
 
-    const cmd = 'npm publish --access public';
     console.log(`[publish-icons] 执行：${cmd}`);
     cp.execSync(cmd, { stdio: 'pipe' });
+    console.log(`[publish-icons] phillui-icons@0.1.5 发布成功！`);
   } catch (e) {
-    const errOutput = e.stdout?.toString() + e.stderr?.toString() + e.message;
-    if (errOutput.includes('403') || errOutput.includes('previously published versions') || errOutput.includes('404')) {
-      try {
-        const remoteVersion = cp.execSync(`npm view phillui-icons version`, { encoding: 'utf8' }).trim();
-        if (remoteVersion === '0.1.3') {
-          console.log(`[publish-icons] 已存在，跳过。`);
-          return;
-        }
-      } catch (viewErr) {}
-    }
     console.error('[publish-icons] 发布失败：', e.message);
+    if (e.stdout) console.error('STDOUT:', e.stdout.toString());
+    if (e.stderr) console.error('STDERR:', e.stderr.toString());
     process.exit(e.status || 1);
-  } finally {
-    if (npmrcCreated && fs.existsSync(npmrcPath)) {
-      console.log('[publish-icons] 清理临时 .npmrc');
-      fs.unlinkSync(npmrcPath);
-    }
   }
 }
 

@@ -13,6 +13,9 @@ function main() {
   const doPublish = process.env.PHILLUI_PUBLISH === '1';
 
   const pkgDir = process.cwd();
+  const projectRoot = path.resolve(pkgDir, '../../../');
+  const npmrcPath = path.join(projectRoot, '.npmrc');
+
   const tokensPkgPath = path.join(pkgDir, 'package.json');
   if (!fs.existsSync(tokensPkgPath)) {
     console.error('[publish-tokens] 未在 tokens 包目录下执行。');
@@ -25,44 +28,41 @@ function main() {
     process.exit(0);
   }
 
-  const npmToken = process.env.NPM_TOKEN;
-  const npmrcPath = path.join(pkgDir, '.npmrc');
-  let npmrcCreated = false;
-
   try {
-    if (npmToken) {
-      console.log('[publish-tokens] 检测到 NPM_TOKEN，创建临时 .npmrc...');
-      const content = `registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=${npmToken}\n`;
-      fs.writeFileSync(npmrcPath, content);
-      npmrcCreated = true;
+    // 预先检查版本
+    try {
+      const remoteVersion = cp.execSync(`npm view ${tokensPkg.name} version`, { encoding: 'utf8' }).trim();
+      if (remoteVersion === tokensPkg.version) {
+        console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 已存在，跳过。`);
+        return;
+      }
+    } catch (e) {
+      // 包可能还没发布过，忽略错误
     }
 
-    const publishCmd = 'npm publish --access public';
-    console.log(`[publish-tokens] 执行：${publishCmd}`);
-    cp.execSync(publishCmd, { stdio: 'pipe' });
-  } catch (e) {
-    // 检查版本是否已存在
-    const errOutput = (e.stdout?.toString() || '') + (e.stderr?.toString() || '') + e.message;
-    if (errOutput.includes('403') || errOutput.includes('previously published versions') || errOutput.includes('404')) {
+    let publishCmd = 'npm publish --access public';
+    if (fs.existsSync(npmrcPath)) {
+      console.log(`[publish-tokens] 使用配置文件：${npmrcPath}`);
+      publishCmd += ` --userconfig ${npmrcPath}`;
+      
+      // 验证身份
       try {
-        const remoteVersion = cp.execSync(`npm view ${tokensPkg.name} version`, { encoding: 'utf8' }).trim();
-        if (remoteVersion === tokensPkg.version) {
-          console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 已存在，跳过。`);
-          return;
-        }
-      } catch (viewErr) {
-        // 如果 npm view 也失败了，说明包可能真的不存在或者有其他权限问题
+        const whoami = cp.execSync(`npm whoami --userconfig ${npmrcPath}`, { encoding: 'utf8' }).trim();
+        console.log(`[publish-tokens] 当前登录用户：${whoami}`);
+      } catch (e) {
+        console.error('[publish-tokens] 身份验证失败，请检查 .npmrc 中的令牌。');
+        process.exit(1);
       }
     }
+
+    console.log(`[publish-tokens] 执行：${publishCmd}`);
+    cp.execSync(publishCmd, { stdio: 'pipe' });
+    console.log(`[publish-tokens] ${tokensPkg.name}@${tokensPkg.version} 发布成功！`);
+  } catch (e) {
     console.error('[publish-tokens] 发布失败：', e.message);
-    if (e.stdout) console.error(e.stdout.toString());
-    if (e.stderr) console.error(e.stderr.toString());
+    if (e.stdout) console.error('STDOUT:', e.stdout.toString());
+    if (e.stderr) console.error('STDERR:', e.stderr.toString());
     process.exit(e.status || 1);
-  } finally {
-    if (npmrcCreated && fs.existsSync(npmrcPath)) {
-      console.log('[publish-tokens] 清理临时 .npmrc');
-      fs.unlinkSync(npmrcPath);
-    }
   }
 }
 
