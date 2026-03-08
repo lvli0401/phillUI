@@ -1,6 +1,6 @@
 {
   "name": "@phill-component/icons",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Unified icons for phillUI mobile and pc libraries",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -9,7 +9,7 @@
     "scripts"
   ],
   "bin": {
-    "phillui-icons": "scripts/install.js"
+    "@phill-component/icons": "scripts/install.js"
   },
   "scripts": {
     "build": "node scripts/build.js",

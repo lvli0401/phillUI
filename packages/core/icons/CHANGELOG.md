@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.8
+
+### Patch Changes
+
+- d7fad56: new version
+
 ## 0.1.7
 
 ### Patch Changes
