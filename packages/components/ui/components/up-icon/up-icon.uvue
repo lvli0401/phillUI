@@ -9,45 +9,28 @@
 		    v-if="isImg"
 		    :src="name"
 		    :mode="imgMode"
-		    :style="[imgStyle, addStyle(customStyle)]"
+		    :style="imgMergedStyle"
 		></image>
 		<image
+		    v-else
 		    class="up-icon__img"
-		    v-else-if="isMultiColor"
 		    :src="imgSrc"
 		    :mode="imgMode"
-		    :style="[imgStyle, addStyle(customStyle)]"
+		    :style="imgMergedStyle"
 		></image>
-		<text
-		    v-else
-		    class="up-icon__icon"
-		    :class="uClasses"
-		    :style="[iconStyle, addStyle(customStyle)]"
-		    :hover-class="hoverClass"
-		>{{icon}}</text>
 		<!-- 这里进行空字符串判断，如果仅仅是v-if="label"，可能会出现传递0的时候，结果也无法显示 -->
 		<text
 		    v-if="label !== ''" 
 		    class="up-icon__label"
-		    :style="{
-			color: labelColor,
-			fontSize: addUnit(labelSize),
-			marginLeft: labelPos == 'right' ? addUnit(space) : 0,
-			marginTop: labelPos == 'bottom' ? addUnit(space) : 0,
-			marginRight: labelPos == 'left' ? addUnit(space) : 0,
-			marginBottom: labelPos == 'top' ? addUnit(space) : 0,
-		}"
+		    :style="labelStyle"
 		>{{ label }}</text>
 	</view>
 </template>
 
 <script setup lang="uts">
 	import { addUnit, addStyle, getPx } from '../../libs/function/index.uts';
-	// 引入图标数据源（H5/svg、多端字体映射、多色和自定义列表）
-	import iconsSvg from '../../../icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '../../../icons/dist/uniapp/icons-generated.js'
-	import multiColorIcons from '../../../icons/dist/uniapp/icons-multicolor.json'
-	import customIcons from '../../../icons/dist/uniapp/icons-custom.json'
+	// 引入图标数据源（X 端使用 .uts 映射，避免解析 .js 失败）
+	import iconsSvg from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-svg.uts'
 	import { propsIcon } from './props.uts';
 	import config from '../../libs/config/config';
 
@@ -191,7 +174,7 @@
 	
 	// 判断传入的name属性，是否图片路径，只要带有"/"均认为是图片形式
 	const isImg = computed(() : boolean => {
-		return props.name.indexOf('/') !== -1
+		return props.name.indexOf('/') != -1
 	})
 	
 	const imgStyle = computed(() : UTSJSONObject => {
@@ -202,32 +185,44 @@
 		return style
 	})
 	
+	const imgMergedStyle = computed(() : UTSJSONObject => {
+		const base = imgStyle.value as UTSJSONObject
+		const extraRaw = addStyle(props.customStyle, 'object')
+		const extra = (typeof extraRaw == 'object') ? (extraRaw as UTSJSONObject) : ({} as UTSJSONObject)
+		const out = {} as UTSJSONObject
+		UTSJSONObject.keys(base).forEach((k: string) => { out[k] = base[k] })
+		UTSJSONObject.keys(extra).forEach((k: string) => { out[k] = extra[k] })
+		return out
+	})
+
+	const labelStyle = computed(() : UTSJSONObject => {
+		const out = {} as UTSJSONObject
+		if (props.labelColor != '') out['color'] = props.labelColor
+		out['fontSize'] = addUnit(props.labelSize)
+		out['marginLeft'] = props.labelPos == 'right' ? addUnit(props.space) : 0
+		out['marginTop'] = props.labelPos == 'bottom' ? addUnit(props.space) : 0
+		out['marginRight'] = props.labelPos == 'left' ? addUnit(props.space) : 0
+		out['marginBottom'] = props.labelPos == 'top' ? addUnit(props.space) : 0
+		return out
+	})
+	
 	// 通过图标名，查找对应的图标
-	const icon = computed(() : string => {
-		// 使用自定义图标的时候页面上会把name属性也展示出来，所以在这里处理一下
-		if (props.customPrefix !== "upicon") return "";
-		// 如果内置的图标中找不到对应的图标，就直接返回name值，因为用户可能传入的是unicode代码
-		if (generatedIcons[props.name] != null) {
-			return generatedIcons[props.name] as string
-		} else {
-			return props.name.toString()
-		}
-	})
-
-	const isMultiColor = computed(() : boolean => {
-		if (iconsSvg[props.name] != null) {
-			const item = iconsSvg[props.name] as UTSJSONObject
-			if (item['multi'] == true) return true
-		}
-		const multicolorList = multiColorIcons as string[]
-		return multicolorList.includes(props.name)
-	})
-
 	const imgSrc = computed(() : string => {
-		// 如果已按需载入 SVG，则优先返回 data URI
-		if (asyncSvgDataUri.value.length > 0) return asyncSvgDataUri.value
-		// 否则回退到打包的图片资源
-		return `../../../icons/dist/uniapp/images/${props.name}.svg`
+		// X 端不进行动态导入，直接使用静态映射（注意空值保护），失败回退图片
+		let recAny: UTSJSONObject | null = null
+		try {
+			const mapAny: UTSJSONObject | null = iconsSvg as UTSJSONObject
+			recAny = mapAny != null ? mapAny[props.name] as UTSJSONObject : null
+		} catch (e) {
+			recAny = null
+		}
+		if (recAny != null && typeof recAny == 'object') {
+			const direct = recAny['dataUri'] as string | null
+			if (direct != null && direct.length > 0) return direct
+			const inner = recAny['inner'] as string | null
+			if (inner != null && inner.length > 0) return 'data:image/svg+xml;utf8,' + encodeURIComponent(inner)
+		}
+		return `/uni_modules/@phill-component/icons/dist/uniapp/images/${props.name}.svg`
 	})
 
 	// 方法
@@ -239,43 +234,9 @@
 		}
 	}
 
-	// 按需加载 SVG 分片（X 端）
-	const asyncSvgDataUri = ref<string>('') 
-	// #ifdef APP-UTS
-	watch(() => props.name, async (val) => {
-		asyncSvgDataUri.value = ''
-		if (!val || val.indexOf('/') !== -1) return
-		// 仅对多色图标尝试按需加载
-		if (!(multiColorIcons as string[]).includes(val)) return
-		try {
-			// 动态导入分片并构造 data URI
-			const mod = await import(`../../../icons/dist/uniapp/svgs/${val}.js`)
-			const inner = (mod.default as UTSJSONObject)['inner'] as string
-			asyncSvgDataUri.value = 'data:image/svg+xml;utf8,' + encodeURIComponent(inner)
-		} catch (e) {
-			// 失败则使用打包的图片资源回退
-			asyncSvgDataUri.value = ''
-		}
-	}, { immediate: true })
-	// #endif
+	// X 端不进行动态导入，直接使用静态映射
 
-	// #ifdef APP-ANDROID || APP-IOS || WEB
-	onMounted(() => {
-		if (props.name.includes('/')) return
-		// #ifdef APP-UTS
-		uni.loadFontFace({
-			family: 'upicon-custom',
-			source: "url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf')",
-			success() {
-				// console.log('success')
-			},
-			fail(err) {
-				console.warn('global loadFontFace upicon-custom fail', err.errMsg)
-			}
-		})
-		// #endif
-	})
-	// #endif
+	// 移除字体加载逻辑，统一使用 data URI / 图片方案
 </script>
 
 <style lang="scss">
@@ -287,16 +248,6 @@
 	$up-icon-warning: $up-warning !default;
 	$up-icon-error: $up-error !default;
 	$up-icon-label-line-height: 1 !default;
-
-	@font-face {
-		font-family: 'upicon-custom';
-		src: url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-			url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-			url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
-		font-weight: normal;
-		font-style: normal;
-		font-display: block;
-	}
 
 	.up-icon {
 		display: flex;
@@ -320,31 +271,6 @@
 		&--bottom {
 			flex-direction: column;
 			justify-content: center;
-		}
-
-		&__icon {
-			position: relative;
-			font-family: upicon-custom;
-
-			&--primary {
-				color: $up-icon-primary;
-			}
-
-			&--success {
-				color: $up-icon-success;
-			}
-
-			&--error {
-				color: $up-icon-error;
-			}
-
-			&--warning {
-				color: $up-icon-warning;
-			}
-
-			&--info {
-				color: $up-icon-info;
-			}
 		}
 
 		&__img {

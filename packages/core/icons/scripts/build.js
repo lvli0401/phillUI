@@ -7,7 +7,7 @@ const Case = require('case');
 const rootDir = path.resolve(__dirname, '..');
 const srcDir = path.resolve(rootDir, 'svg');
 const distDir = path.resolve(rootDir, 'dist');
-const vueDir = path.resolve(distDir, 'vue');
+  const vueDir = path.resolve(distDir, 'vue');
 const uniappDir = path.resolve(distDir, 'uniapp');
 const uniappCompDir = path.resolve(distDir, 'uniapp-components');
 const uniappImgDir = path.resolve(uniappDir, 'images');
@@ -56,41 +56,24 @@ async function build() {
     }).data;
 
     const innerSvg = optimized.replace(/<svg[^>]*>|<\/svg>/g, '');
+    const base64Data = Buffer.from(optimized, 'utf8').toString('base64');
+    const dataUri = `data:image/svg+xml;base64,${base64Data}`;
 
-    // 1. Generate Standard Vue Component (PC/Web)
+    // 1. Generate Standard Vue Component using <image> with base64 URI
     const vueContent = `<template>
-  <svg 
-    viewBox="0 0 24 24" 
-    :width="size" 
-    :height="size" 
-    :fill="multi ? 'none' : color"
-    xmlns="http://www.w3.org/2000/svg"
-    v-bind="$attrs"
-  >
-    ${innerSvg}
-  </svg>
+  <image :src="src" v-bind="$attrs" />
 </template>
-
 <script setup>
-defineProps({
-  size: { type: [String, Number], default: '1em' },
-  color: { type: String, default: 'currentColor' },
-  multi: { type: Boolean, default: ${multi} }
-});
+const src = ${JSON.stringify(dataUri)};
 </script>`;
     fs.writeFileSync(path.join(vueDir, `${pascalName}.vue`), vueContent);
 
     // 2. Optimized Standalone SVG for Native/MP
-    if (multi) {
-      multiColorIcons.push(name);
-      // Include multi-color SVG data inline in icons-svg.js
-      // This avoids the need for dynamic imports which don't work with bare module specifiers
-      svgMappings[name] = { inner: innerSvg, multi: true };
-      
-      fs.writeFileSync(path.join(uniappImgDir, file), optimized);
-    } else {
-      singleColorIcons.push(file);
-    }
+    // Always include image version and base64 mapping
+    if (multi) multiColorIcons.push(name);
+    svgMappings[name] = { dataUri, inner: innerSvg, multi };
+    // Also emit standalone image for fallback
+    fs.writeFileSync(path.join(uniappImgDir, file), optimized);
 
     iconData.push({ name, pascalName, multi });
   }
@@ -123,8 +106,15 @@ defineProps({
     console.log('Native font generated.');
   }
 
-  // 5. Generate Mappings for consumers
+  // 5. Generate Mappings and per-icon modules for on-demand loading
   fs.writeFileSync(path.join(uniappDir, 'icons-svg.js'), `export default ${JSON.stringify(svgMappings, null, 2)}`);
+  fs.writeFileSync(path.join(uniappDir, 'icons-svg.uts'), `export default ${JSON.stringify(svgMappings, null, 2)} as UTSJSONObject`);
+  const svgsDir = path.join(uniappDir, 'svgs');
+  if (!fs.existsSync(svgsDir)) fs.mkdirSync(svgsDir, { recursive: true });
+  Object.entries(svgMappings).forEach(([n, rec]) => {
+    const mod = `export default ${JSON.stringify(rec, null, 2)};`;
+    fs.writeFileSync(path.join(svgsDir, `${n}.js`), mod);
+  });
   fs.writeFileSync(path.join(uniappDir, 'icons-generated.js'), `export default ${JSON.stringify(fontMappings, null, 2)}`);
   fs.writeFileSync(path.join(uniappDir, 'icons-generated.uts'), `export default ${JSON.stringify(fontMappings, null, 2)} as UTSJSONObject`);
   fs.writeFileSync(path.join(uniappDir, 'icons-custom.json'), JSON.stringify(iconData.map(i => i.name), null, 2));

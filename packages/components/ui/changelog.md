@@ -1,3 +1,12 @@
+## 0.1.15
+
+### Patch Changes
+
+- 2753ceb: use base64
+- Updated dependencies [2753ceb]
+  - @phill-component/icons@0.1.15
+  - @phill-component/tokens@0.1.15
+
 ## 0.1.14
 
 ### Patch Changes

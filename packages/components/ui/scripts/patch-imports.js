@@ -32,39 +32,6 @@ function relToTokensDir(filePath) {
 }
 
 const replacements = [
-  // Rewrite absolute/alias uni_modules paths to relative (icons)
-  {
-    pattern: /(['"])\/uni_modules\/@phill-component\/icons\//g,
-    replacement: (filePath, _m0, quote) => `${quote}${relToIconsDir(filePath)}`
-  },
-  {
-    pattern: /@\/uni_modules\/@phill-component\/icons\//g,
-    replacement: (filePath) => relToIconsDir(filePath)
-  },
-  // Rewrite absolute/alias uni_modules paths to relative (tokens)
-  {
-    pattern: /(['"])\/uni_modules\/@phill-component\/tokens\//g,
-    replacement: (filePath, _m0, quote) => `${quote}${relToTokensDir(filePath)}`
-  },
-  {
-    pattern: /@\/uni_modules\/@phill-component\/tokens\//g,
-    replacement: (filePath) => relToTokensDir(filePath)
-  },
-  // Bare specifiers: export/import from '@phill-component/icons' -> relative to staged dist
-  {
-    pattern: /from\s+(['"])@phill-component\/icons\1/g,
-    replacement: (filePath, _q) => {
-      const base = relToIconsDir(filePath);
-      return `from '${base}dist/index.js'`;
-    }
-  },
-  {
-    pattern: /from\s+(['"])@phill-component\/tokens\1/g,
-    replacement: (filePath, _q) => {
-      const base = relToTokensDir(filePath);
-      return `from '${base}index.js'`;
-    }
-  },
   // Legacy relative path fixes from phillui-* to new icons/tokens dirs
   {
     pattern: /\.\.\/\.\.\/\.\.\/phillui-icons\//g,

@@ -11,31 +11,13 @@
 		    :mode="imgMode"
 		    :style="[imgStyle, addStyle(customStyle)]"
 		></image>
-		<!-- #ifdef H5 -->
-		<view
-		    v-else-if="isCustom"
-		    class="up-icon__svg"
-		    :style="[imgStyle, addStyle(customStyle)]"
-		>
-			<svg viewBox="0 0 24 24" width="100%" height="100%" :fill="isMultiColor ? 'none' : 'currentColor'" v-html="svgContent"></svg>
-		</view>
-		<!-- #endif -->
-		<!-- #ifndef H5 -->
 		<image
+		    v-else
 		    class="up-icon__img"
-		    v-else-if="isMultiColor"
-		    :src="imgSrc"
+		    :src="iconSrc"
 		    :mode="imgMode"
 		    :style="[imgStyle, addStyle(customStyle)]"
 		></image>
-		<!-- #endif -->
-		<text
-		    v-else
-		    class="up-icon__icon"
-		    :class="uClasses"
-		    :style="[iconStyle, addStyle(customStyle)]"
-		    :hover-class="hoverClass"
-		>{{icon}}</text>
 		<!-- 这里进行空字符串判断，如果仅仅是v-if="label"，可能会出现传递0的时候，结果也无法显示 -->
 		<text
 		    v-if="label !== ''" 
@@ -55,11 +37,11 @@
 <script>
 	import { computed, inject } from 'vue';
 	import { addUnit, getPx, addStyle } from '../../libs/function/index.js';
-	// Icons data sources（相对路径，针对 uni_modules 布局）
-	import iconsSvg from '../../../icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '../../../icons/dist/uniapp/icons-generated.js'
-	import multiColorList from '../../../icons/dist/uniapp/icons-multicolor.json'
-	import customIcons from '../../../icons/dist/uniapp/icons-custom.json'
+	// Icons data sources（使用 uni_modules 别名路径）
+	import iconsSvg from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-generated.js'
+	import multiColorList from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-multicolor.json'
+	import customIcons from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-custom.json'
 	import { props } from './props.js';
 	import { mpMixin } from '../../libs/mixin/mpMixin.js';
 	import { mixin } from '../../libs/mixin/mixin.js';
@@ -99,18 +81,6 @@
 		},
 		emits: ['click'],
 		mixins: [props],
-		watch: {
-			name: {
-				immediate: true,
-				handler(val) {
-					// #ifdef H5
-					if (this.isMultiColor && !iconsSvg[val]) {
-						this.loadAsyncSvg(val)
-					}
-					// #endif
-				}
-			}
-		},
 		computed: {
 			uClasses() {
 				let classes = []
@@ -172,10 +142,15 @@
 				return Array.isArray(customIcons) ? customIcons.includes(this.name) : false
 				// #endif
 			},
-			svgContent() {
-				const item = iconsSvg?.[this.name]
-				if (typeof item === 'object') return item.inner
-				return this.asyncSvgContent
+			svgDataUri() {
+				const item = iconsSvg ? iconsSvg[this.name] : null
+				if (item && typeof item === 'object') {
+					if (item.dataUri) return item.dataUri
+					if (item.inner) {
+						return 'data:image/svg+xml;utf8,' + encodeURIComponent(item.inner)
+					}
+				}
+				return ''
 			},
 			isMultiColor() {
 				// icons-multicolor.json 可能是数组
@@ -184,20 +159,14 @@
 			},
 			imgSrc() {
 				return `/uni_modules/@phill-component/icons/dist/uniapp/images/${this.name}.svg`
+			},
+			iconSrc() {
+				return this.svgDataUri || this.imgSrc
 			}
 		},
 		methods: {
 			addStyle,
 			addUnit,
-			async loadAsyncSvg(name) {
-				try {
-					// 动态导入分片
-					const module = await import(`../../../icons/dist/uniapp/svgs/${name}.js`)
-					this.asyncSvgContent = module.default.inner
-				} catch (e) {
-					console.error(`[up-icon] Failed to load SVG: ${name}`, e)
-				}
-			},
 			clickHandler(e) {
 				this.$emit('click', this.index)
 				// 是否阻止事件冒泡
@@ -217,20 +186,6 @@
 	$up-icon-warning: $up-warning !default;
 	$up-icon-error: $up-error !default;
 	$up-icon-label-line-height:1 !default;
-
-	/* #ifndef APP-NVUE */
-	// 非nvue下加载字体
-	@font-face {
-		font-family: 'upicon-custom';
-		src: local('upicon-custom'),
-		    url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff2') format('woff2'),
-		     url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.woff') format('woff'),
-		     url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf') format('truetype');
-		font-weight: normal;
-		font-style: normal;
-		font-display: block;
-	}
-	/* #endif */
 
 	.up-icon {
 		/* #ifndef APP-NVUE */
