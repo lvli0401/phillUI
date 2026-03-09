@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.14
+
+### Patch Changes
+
+- cdec4fd: new version
+
 ## 0.1.13
 
 ### Patch Changes
