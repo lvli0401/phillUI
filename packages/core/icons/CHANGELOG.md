@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.1.15
+
+### Patch Changes
+
+- 2753ceb: use base64
+
 ## 0.1.14
 
 ### Patch Changes
