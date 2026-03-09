@@ -1,3 +1,12 @@
+## 0.1.14
+
+### Patch Changes
+
+- cdec4fd: new version
+- Updated dependencies [cdec4fd]
+  - @phill-component/icons@0.1.14
+  - @phill-component/tokens@0.1.14
+
 ## 0.1.13
 
 ### Patch Changes
