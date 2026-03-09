@@ -3,9 +3,8 @@ const path = require('path');
 
 /**
  * Patch imports in dist
- * Replace: import dayjs from 'dayjs' -> import from ./vendor/dayjs.min.js
- *          import Clipboard from 'clipboard' -> ./vendor/clipboard.min.js
- *          @/uni_modules/lime-dayuts -> relative path to dist/lime-dayuts (if present)
+ * - Replace dayjs/clipboard to vendor files
+ * - Rewrite absolute/alias uni_modules paths to relative paths within dist
  */
 
 const distRoot = path.resolve(__dirname, '../dist');
@@ -20,62 +19,75 @@ function walk(dir, callback) {
   });
 }
 
+function relToIconsDir(filePath) {
+  const iconsDir = path.join(distRoot, '@phill-component/icons');
+  const rel = path.relative(path.dirname(filePath), iconsDir).split(path.sep).join('/');
+  return rel.endsWith('/') ? rel : rel + '/';
+}
+
+function relToTokensDir(filePath) {
+  const tokensDir = path.join(distRoot, '@phill-component/tokens');
+  const rel = path.relative(path.dirname(filePath), tokensDir).split(path.sep).join('/');
+  return rel.endsWith('/') ? rel : rel + '/';
+}
+
 const replacements = [
-  // Absolute/alias uni_modules paths for icons/tokens -> new scoped dirs
+  // Rewrite absolute/alias uni_modules paths to relative (icons)
   {
-    pattern: /['"]\/uni_modules\/phillui-icons\//g,
-    replacement: () => "'/uni_modules/@phill-component/icons/"
+    pattern: /(['"])\/uni_modules\/@phill-component\/icons\//g,
+    replacement: (filePath, _m0, quote) => `${quote}${relToIconsDir(filePath)}`
   },
   {
-    pattern: /@\/uni_modules\/phillui-icons\//g,
-    replacement: () => '@/uni_modules/@phill-component/icons/'
+    pattern: /@\/uni_modules\/@phill-component\/icons\//g,
+    replacement: (filePath) => relToIconsDir(filePath)
+  },
+  // Rewrite absolute/alias uni_modules paths to relative (tokens)
+  {
+    pattern: /(['"])\/uni_modules\/@phill-component\/tokens\//g,
+    replacement: (filePath, _m0, quote) => `${quote}${relToTokensDir(filePath)}`
   },
   {
-    pattern: /['"]\/uni_modules\/phillui-tokens\//g,
-    replacement: () => "'/uni_modules/@phill-component/tokens/"
+    pattern: /@\/uni_modules\/@phill-component\/tokens\//g,
+    replacement: (filePath) => relToTokensDir(filePath)
+  },
+  // Bare specifiers: export/import from '@phill-component/icons' -> relative to staged dist
+  {
+    pattern: /from\s+(['"])@phill-component\/icons\1/g,
+    replacement: (filePath, _q) => {
+      const base = relToIconsDir(filePath);
+      return `from '${base}dist/index.js'`;
+    }
   },
   {
-    pattern: /@\/uni_modules\/phillui-tokens\//g,
-    replacement: () => '@/uni_modules/@phill-component/tokens/'
+    pattern: /from\s+(['"])@phill-component\/tokens\1/g,
+    replacement: (filePath, _q) => {
+      const base = relToTokensDir(filePath);
+      return `from '${base}index.js'`;
+    }
   },
-  // Relative paths depth fix: ../../../phillui-icons -> ../../../../@phill-component/icons
+  // Legacy relative path fixes from phillui-* to new icons/tokens dirs
   {
     pattern: /\.\.\/\.\.\/\.\.\/phillui-icons\//g,
-    replacement: () => '../../../../@phill-component/icons/'
+    replacement: (filePath) => relToIconsDir(filePath)
   },
   {
     pattern: /\.\.\/\.\.\/\.\.\/phillui-tokens\//g,
-    replacement: () => '../../../../@phill-component/tokens/'
+    replacement: (filePath) => relToTokensDir(filePath)
   },
+  // Vendor redirects
   {
     pattern: /import\s+dayjs\s+from\s+['"]dayjs['"]/g,
     replacement: (filePath) => {
-      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/dayjs.min.js'));
+      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/dayjs.min.js')).split(path.sep).join('/');
       return `import dayjs from './${relPath}'`;
     }
   },
   {
     pattern: /import\s+Clipboard\s+from\s+['"]clipboard['"]/g,
     replacement: (filePath) => {
-      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/clipboard.min.js'));
+      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/clipboard.min.js')).split(path.sep).join('/');
       return `import Clipboard from './${relPath}'`;
     }
-  },
-  {
-    pattern: /@\/uni_modules\/phillui-icons/g,
-    replacement: () => '@phill-component/icons'
-  },
-  {
-    pattern: /@\/uni_modules\/phillui-tokens/g,
-    replacement: () => '@phill-component/tokens'
-  },
-  {
-    pattern: /['"]phillui-tokens['"]/g,
-    replacement: () => "'@phill-component/tokens'"
-  },
-  {
-    pattern: /['"]phillui-icons['"]/g,
-    replacement: () => "'@phill-component/icons'"
   }
 ];
 
@@ -85,7 +97,7 @@ function patchFile(filePath) {
   let changed = false;
   replacements.forEach(conf => {
     if (conf.pattern.test(content)) {
-      content = content.replace(conf.pattern, conf.replacement(filePath));
+      content = content.replace(conf.pattern, (...args) => conf.replacement(filePath, ...args));
       changed = true;
     }
   });

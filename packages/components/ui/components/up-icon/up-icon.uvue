@@ -42,10 +42,13 @@
 </template>
 
 <script setup lang="uts">
-	import { addUnit, addStyle, getPx, getUnit } from '../../libs/function/index.uts';
-	import { icons } from '@phill-component/icons';
-	import { color as tokensColor } from '@phill-component/tokens';
-	import { props } from './props.uts';
+	import { addUnit, addStyle, getPx } from '../../libs/function/index.uts';
+	// 引入图标数据源（H5/svg、多端字体映射、多色和自定义列表）
+	import iconsSvg from '../../../icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '../../../icons/dist/uniapp/icons-generated.js'
+	import multiColorIcons from '../../../icons/dist/uniapp/icons-multicolor.json'
+	import customIcons from '../../../icons/dist/uniapp/icons-custom.json'
+	import { propsIcon } from './props.uts';
 	import config from '../../libs/config/config';
 
 	const props = defineProps({
@@ -221,8 +224,10 @@
 	})
 
 	const imgSrc = computed(() : string => {
-		// 使用 uni_modules 绝对路径确保在各端加载正常
-		return `/uni_modules/@phill-component/icons/dist/uniapp/images/${props.name}.svg`
+		// 如果已按需载入 SVG，则优先返回 data URI
+		if (asyncSvgDataUri.value.length > 0) return asyncSvgDataUri.value
+		// 否则回退到打包的图片资源
+		return `../../../icons/dist/uniapp/images/${props.name}.svg`
 	})
 
 	// 方法
@@ -233,6 +238,26 @@
 			e.stopPropagation()
 		}
 	}
+
+	// 按需加载 SVG 分片（X 端）
+	const asyncSvgDataUri = ref<string>('') 
+	// #ifdef APP-UTS
+	watch(() => props.name, async (val) => {
+		asyncSvgDataUri.value = ''
+		if (!val || val.indexOf('/') !== -1) return
+		// 仅对多色图标尝试按需加载
+		if (!(multiColorIcons as string[]).includes(val)) return
+		try {
+			// 动态导入分片并构造 data URI
+			const mod = await import(`../../../icons/dist/uniapp/svgs/${val}.js`)
+			const inner = (mod.default as UTSJSONObject)['inner'] as string
+			asyncSvgDataUri.value = 'data:image/svg+xml;utf8,' + encodeURIComponent(inner)
+		} catch (e) {
+			// 失败则使用打包的图片资源回退
+			asyncSvgDataUri.value = ''
+		}
+	}, { immediate: true })
+	// #endif
 
 	// #ifdef APP-ANDROID || APP-IOS || WEB
 	onMounted(() => {

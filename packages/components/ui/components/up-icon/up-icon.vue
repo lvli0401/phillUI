@@ -54,9 +54,12 @@
 
 <script>
 	import { computed, inject } from 'vue';
-	import { addUnit, getPx, getUnit, addStyle } from '../../libs/function/index.js';
-	import { icons } from '@phill-component/icons';
-	import { color as tokensColor } from '@phill-component/tokens';
+	import { addUnit, getPx, addStyle } from '../../libs/function/index.js';
+	// Icons data sources（相对路径，针对 uni_modules 布局）
+	import iconsSvg from '../../../icons/dist/uniapp/icons-svg.js'
+	import generatedIcons from '../../../icons/dist/uniapp/icons-generated.js'
+	import multiColorList from '../../../icons/dist/uniapp/icons-multicolor.json'
+	import customIcons from '../../../icons/dist/uniapp/icons-custom.json'
 	import { props } from './props.js';
 	import { mpMixin } from '../../libs/mixin/mpMixin.js';
 	import { mixin } from '../../libs/mixin/mixin.js';
@@ -158,7 +161,7 @@
 				// 使用自定义图标的时候页面上会把name属性也展示出来，所以在这里处理一下
 				if (this.customPrefix !== "upicon") return "";
 				// 如果内置的图标中找不到对应的图标，就直接返回name值，因为用户可能传入的是unicode代码
-				return generatedIcons[this.name] || this.name
+				return generatedIcons?.[this.name] || this.name
 			},
 			isCustom() {
 				// #ifdef H5
@@ -166,16 +169,18 @@
 				return this.isMultiColor
 				// #endif
 				// #ifndef H5
-				return customIcons.includes(this.name)
+				return Array.isArray(customIcons) ? customIcons.includes(this.name) : false
 				// #endif
 			},
 			svgContent() {
-				const item = iconsSvg[this.name]
+				const item = iconsSvg?.[this.name]
 				if (typeof item === 'object') return item.inner
 				return this.asyncSvgContent
 			},
 			isMultiColor() {
-				return multiColorIcons.includes(this.name)
+				// icons-multicolor.json 可能是数组
+				const arr = Array.isArray(multiColorList) ? multiColorList : []
+				return arr.includes(this.name)
 			},
 			imgSrc() {
 				return `/uni_modules/@phill-component/icons/dist/uniapp/images/${this.name}.svg`
@@ -187,7 +192,7 @@
 			async loadAsyncSvg(name) {
 				try {
 					// 动态导入分片
-					const module = await import(`@/uni_modules/@phill-component/icons/dist/uniapp/svgs/${name}.js`)
+					const module = await import(`../../../icons/dist/uniapp/svgs/${name}.js`)
 					this.asyncSvgContent = module.default.inner
 				} catch (e) {
 					console.error(`[up-icon] Failed to load SVG: ${name}`, e)

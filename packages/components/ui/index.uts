@@ -11,7 +11,7 @@ export {config, color}
 export {mixin, mpMixin}
 export * from './libs/function/index'
 export * from '@phill-component/icons';
-export * from '@phill-component/tokens';
+// export * from '@phill-component/tokens';
 
 // export class UPArray = {
 // 	list: [] as Array<any>
@@ -28,10 +28,15 @@ export * from '@phill-component/tokens';
 export function loadFont() {
 	if ((uni as any)['$uFontLoaded'] == true) return
 	(uni as any)['$uFontLoaded'] = true
+	// #ifdef APP-UTS
+	const fontUrl = "../icons/dist/uniapp/upicon-custom.ttf"
+	// #else
+	const fontUrl = "/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf"
+	// #endif
 	uni.loadFontFace({
 	  global: true,
 	  family: 'upicon-custom',
-	  source: "url('/uni_modules/@phill-component/icons/dist/uniapp/upicon-custom.ttf')",
+	  source: `url('${fontUrl}')`,
 	  success() {
 		console.log('global loadFontFace upicon-custom success')
 	  },
