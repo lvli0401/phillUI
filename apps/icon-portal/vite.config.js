@@ -72,7 +72,7 @@ export default defineConfig({
               
               await git.add([
                 path.join(repoRoot, 'packages/core/icons/svg'),
-                path.join(repoRoot, 'packages/core/icons/dist')
+                // path.join(repoRoot, 'packages/core/icons/dist')
               ])
               await git.commit('chore(icons): update SVG assets via manager')
               

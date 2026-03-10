@@ -22,6 +22,7 @@
             type="file" 
             ref="fileInput" 
             accept=".svg" 
+            multiple
             style="display: none" 
             @change="handleFileSelect"
           >
@@ -95,17 +96,23 @@ const uploadFile = async (file) => {
 }
 
 const handleDrop = (e) => {
-  const file = e.dataTransfer.files[0]
-  if (file && file.name.endsWith('.svg')) {
-    uploadFile(file)
-  }
+  const files = e.dataTransfer.files
+  if (files.length === 0) return
+  Array.from(files).forEach(file => {
+    if (file && file.name.endsWith('.svg')) {
+      uploadFile(file)
+    }
+  })
 }
 
 const handleFileSelect = (e) => {
-  const file = e.target.files[0]
-  if (file) {
-    uploadFile(file)
-  }
+  const files = e.target.files
+  if (files.length === 0) return
+  Array.from(files).forEach(file => {
+    if (file) {
+      uploadFile(file)
+    }
+  })
 }
 
 const syncToGit = async () => {
