@@ -1,3 +1,15 @@
+## 0.2.0
+
+### Minor Changes
+
+- 82c0565: icon strategy
+
+### Patch Changes
+
+- Updated dependencies [82c0565]
+  - @phill-component/icons@0.2.0
+  - @phill-component/tokens@0.2.0
+
 ## 0.1.15
 
 ### Patch Changes
