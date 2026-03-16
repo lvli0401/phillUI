@@ -1,3 +1,12 @@
+## 0.2.1
+
+### Patch Changes
+
+- 6bb327d: 删除无用组件代码
+- Updated dependencies [6bb327d]
+  - @phill-component/icons@0.2.1
+  - @phill-component/tokens@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
