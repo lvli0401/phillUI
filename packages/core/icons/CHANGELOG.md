@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.2.1
+
+### Patch Changes
+
+- 6bb327d: 删除无用组件代码
+
 ## 0.2.0
 
 ### Minor Changes
