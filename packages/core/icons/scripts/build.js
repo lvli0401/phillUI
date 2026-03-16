@@ -1,4 +1,3 @@
-const svgtofont = require('svgtofont').default;
 const path = require('path');
 const fs = require('fs');
 const { optimize } = require('svgo');
@@ -7,30 +6,32 @@ const Case = require('case');
 const rootDir = path.resolve(__dirname, '..');
 const srcDir = path.resolve(rootDir, 'svg');
 const distDir = path.resolve(rootDir, 'dist');
-  const vueDir = path.resolve(distDir, 'vue');
-const uniappDir = path.resolve(distDir, 'uniapp');
-const uniappCompDir = path.resolve(distDir, 'uniapp-components');
-const uniappImgDir = path.resolve(uniappDir, 'images');
-
-// Ensure directories exist
-[distDir, vueDir, uniappDir, uniappCompDir, uniappImgDir].forEach(dir => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-});
-
-function isMultiColor(svgContent) {
-  const colorRegex = /(fill|stroke)="(?!none|currentColor|\$)(#[0-9a-fA-F]{3,6}|rgba?|hsla?)/gi;
-  const matches = svgContent.match(colorRegex);
-  if (!matches) return false;
-  const colors = new Set(matches.map(m => m.split('"')[1].toLowerCase()));
-  return colors.size > 1;
-}
+// web: 仅供 PC/Web 使用（始终内联 SVG）
+const webDir = path.resolve(distDir, 'web');
+const webVueDir = path.resolve(webDir, 'vue');
+// mobile：供 uni-app 使用（H5 内联 SVG；非 H5 用 PNG/SVG）
+const mobileDir = path.resolve(distDir, 'mobile');
+const mobileVueDir = path.resolve(mobileDir, 'vue');
+const mobileUvueDir = path.resolve(mobileDir, 'uvue');
+// 静态资源输出到 dist/image/{svg,png}
+const imageDir = path.resolve(distDir, 'image');
+const svgDir = path.resolve(imageDir, 'svg');
+const pngDir = path.resolve(imageDir, 'png');
 
 async function build() {
+  // clean dist first, then (re)create subdirs to avoid writeFileSync ENOENT
+  if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true, force: true });
+  [distDir, webDir, webVueDir, mobileDir, mobileVueDir, mobileUvueDir, imageDir, svgDir, pngDir].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  });
+  
+  // read image files
   const files = fs.readdirSync(srcDir).filter(f => f.endsWith('.svg'));
-  const singleColorIcons = [];
-  const multiColorIcons = [];
   const iconData = [];
   const svgMappings = {};
+  // Optional rasterizer
+  let sharp = null;
+  try { sharp = require('sharp'); } catch (e) { sharp = null; }
 
   console.log(`Building icons from ${srcDir} to ${distDir}...`);
 
@@ -38,17 +39,8 @@ async function build() {
     const name = file.replace('.svg', '');
     const pascalName = Case.pascal(name);
     const content = fs.readFileSync(path.join(srcDir, file), 'utf-8');
-    
-    const multi = isMultiColor(content);
-    
-    // Optimize
+    // Optimize（不区分单/多色，统一按默认优化）
     const svgoPlugins = ['preset-default', 'removeDimensions'];
-    if (!multi) {
-      svgoPlugins.push({
-        name: 'convertColors',
-        params: { currentColor: true }
-      });
-    }
 
     let optimized = optimize(content, { 
       path: file,
@@ -56,69 +48,59 @@ async function build() {
     }).data;
 
     const innerSvg = optimized.replace(/<svg[^>]*>|<\/svg>/g, '');
-    const base64Data = Buffer.from(optimized, 'utf8').toString('base64');
-    const dataUri = `data:image/svg+xml;base64,${base64Data}`;
 
-    // 1. Generate Standard Vue Component using <image> with base64 URI
-    const vueContent = `<template>
-  <image :src="src" v-bind="$attrs" />
-</template>
-<script setup>
-const src = ${JSON.stringify(dataUri)};
-</script>`;
-    fs.writeFileSync(path.join(vueDir, `${pascalName}.vue`), vueContent);
+    // 1) web/vue：始终内联 SVG，供 PC/Web 使用（模板）
+    const webTpl = fs.readFileSync(path.join(__dirname, 'templates/web.vue.tpl'), 'utf-8');
+    const webOut = webTpl.replace('__INNER_SVG__', innerSvg);
+    fs.writeFileSync(path.join(webVueDir, `${pascalName}.vue`), webOut);
 
-    // 2. Optimized Standalone SVG for Native/MP
-    // Always include image version and base64 mapping
-    if (multi) multiColorIcons.push(name);
-    svgMappings[name] = { dataUri, inner: innerSvg, multi };
-    // Also emit standalone image for fallback
-    fs.writeFileSync(path.join(uniappImgDir, file), optimized);
+    // 2) mobile/vue（模板）
+    const mobileVueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.vue.tpl'), 'utf-8');
+    // 计算运行时图片 URL（非 H5 使用）
+    const runtimePngUrl = `@/uni_modules/@phill-component/icons/dist/image/png/${name}.png`;
+    const runtimeSvgUrl = `@/uni_modules/@phill-component/icons/dist/image/svg/${name}.svg`;
+    const mobileVueImgUrl = sharp ? runtimePngUrl : runtimeSvgUrl;
 
-    iconData.push({ name, pascalName, multi });
-  }
+    const mobileVueOut = mobileVueTpl
+      .replace('__INNER_SVG__', innerSvg)
+      .replace(/__IMG_SRC__/g, mobileVueImgUrl);
+    fs.writeFileSync(path.join(mobileVueDir, `${pascalName}.vue`), mobileVueOut);
 
-  // 3. Generate Vue Entry
-  const entryContent = iconData.map(i => `export { default as Icon${i.pascalName} } from './vue/${i.pascalName}.vue';`).join('\n');
-  fs.writeFileSync(path.join(distDir, 'index.js'), entryContent);
-
-  // 4. Build Native Font (UniApp Native Single-color)
-  let fontMappings = {};
-  if (singleColorIcons.length > 0) {
-    const tempFontSrc = path.join(rootDir, 'temp-font-src');
-    if (!fs.existsSync(tempFontSrc)) fs.mkdirSync(tempFontSrc);
-    singleColorIcons.forEach(f => fs.copyFileSync(path.join(srcDir, f), path.join(tempFontSrc, f)));
-
-    await svgtofont({
-      src: tempFontSrc,
-      dist: uniappDir,
-      fontName: 'upicon-custom',
-      css: false,
-      outSVGReact: false,
-      outSVGPath: false,
-      typescript: true,
-      emptyDist: false,
-      getIconUnicode: (name, unicode) => {
-        fontMappings[name] = unicode;
+    // 3) mobile/uvue：H5 用 SVG；非 H5 用 PNG/SVG
+    let targetImgFile = runtimeSvgUrl;
+    if (sharp) {
+      try {
+        const pngPath = path.join(pngDir, `${name}.png`);
+        await sharp(Buffer.from(optimized)).resize(128, 128, { fit: 'contain' }).png().toFile(pngPath);
+        targetImgFile = runtimePngUrl;
+      } catch (e) {
+        console.warn(`[icons] PNG rasterize failed for ${name}:`, e.message);
       }
-    });
-    fs.rmSync(tempFontSrc, { recursive: true, force: true });
-    console.log('Native font generated.');
+    } else {
+      console.warn('[icons] "sharp" not found, skip PNG rasterization; X will use SVG image fallback.');
+    }
+    const mobileUvueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.uvue.tpl'), 'utf-8');
+    const mobileUvueOut = mobileUvueTpl
+      .replace('__INNER_SVG__', innerSvg)
+      .replace(/__IMG_SRC__/g, targetImgFile);
+    fs.writeFileSync(path.join(mobileUvueDir, `${pascalName}.uvue`), mobileUvueOut);
+
+    // 4) 输出独立 SVG 文件与 PNG（若已生成）
+    svgMappings[name] = { inner: innerSvg };
+    fs.writeFileSync(path.join(svgDir, file), optimized);
+
+    iconData.push({ name, pascalName });
   }
 
-  // 5. Generate Mappings and per-icon modules for on-demand loading
-  fs.writeFileSync(path.join(uniappDir, 'icons-svg.js'), `export default ${JSON.stringify(svgMappings, null, 2)}`);
-  fs.writeFileSync(path.join(uniappDir, 'icons-svg.uts'), `export default ${JSON.stringify(svgMappings, null, 2)} as UTSJSONObject`);
-  const svgsDir = path.join(uniappDir, 'svgs');
-  if (!fs.existsSync(svgsDir)) fs.mkdirSync(svgsDir, { recursive: true });
-  Object.entries(svgMappings).forEach(([n, rec]) => {
-    const mod = `export default ${JSON.stringify(rec, null, 2)};`;
-    fs.writeFileSync(path.join(svgsDir, `${n}.js`), mod);
-  });
-  fs.writeFileSync(path.join(uniappDir, 'icons-generated.js'), `export default ${JSON.stringify(fontMappings, null, 2)}`);
-  fs.writeFileSync(path.join(uniappDir, 'icons-generated.uts'), `export default ${JSON.stringify(fontMappings, null, 2)} as UTSJSONObject`);
-  fs.writeFileSync(path.join(uniappDir, 'icons-custom.json'), JSON.stringify(iconData.map(i => i.name), null, 2));
-  fs.writeFileSync(path.join(uniappDir, 'icons-multicolor.json'), JSON.stringify(multiColorIcons, null, 2));
+  // 5) 生成入口：web/index.js、mobile/vue/index.js、mobile/uvue/index.uts
+  const webEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.vue';`).join('\n');
+  fs.writeFileSync(path.join(webVueDir, 'index.js'), webEntry);
+  const mobileVueEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.vue';`).join('\n');
+  fs.writeFileSync(path.join(mobileVueDir, 'index.js'), mobileVueEntry);
+  const mobileUtsEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.uvue'`).join('\n');
+  fs.writeFileSync(path.join(mobileUvueDir, 'index.uts'), mobileUtsEntry);
+
+  // 不再输出 icons-svg.js/uts 等映射与其它冗余目录
 
   console.log('All icons built to dist successfully.');
 }

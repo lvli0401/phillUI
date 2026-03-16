@@ -1,34 +1,42 @@
 <template>
-	<view class="container">
-		<up-navbar title="Icon Test" safeAreaInsetTop fixed placeholder></up-navbar>
-		<view class="section">
-			<text class="title">1. Single-Color (Font Icons)</text>
-			<view class="row">
-				<up-icon name="close-circle" size="30" color="#333"></up-icon>
-				<text>close-circle (Local Font)</text>
-			</view>
-			<view class="row">
-				<up-icon name="home" size="30" color="#2979ff"></up-icon>
-				<text>home (Built-in Font)</text>
-			</view>
-		</view>
-		
-		<view class="section">
-			<text class="title">2. Multi-Color (SVG Sprite / Image)</text>
-			<view class="row">
-				<up-icon name="success-color" size="30"></up-icon>
-				<text>success-color (H5: Sprite, Native: Image)</text>
-			</view>
-		</view>
-	</view>
-</template>
+  <view class="container">
+    <up-navbar title="Icon Test" safeAreaInsetTop fixed placeholder></up-navbar>
+    <view class="section">
+      <text class="title">1. 使用 Icon 组件</text>
+      <view class="row">
+        <IconCalendar size="24px" />
+        <text>IconCalendar</text>
+      </view>
+      <view class="row">
+        <IconFileFold size="28px" />
+        <text>IconFileFold</text>
+      </view>
+      <view class="row">
+        <IconSetting size="28px" />
+        <text>IconSetting</text>
+      </view>
+    </view>
 
-<script>
-export default {
-	data() {
-		return {}
-	}
-}
+    <view class="section">
+      <text class="title">2. 使用 up-icon（兼容各端）</text>
+      <view class="row">
+        <up-icon name="calendar" size="24"></up-icon>
+        <text>up-icon IconCalendar</text>
+      </view>
+      <view class="row">
+        <up-icon name="file-fold" size="28" color="#2979ff"></up-icon>
+        <text>up-icon FileFold</text>
+      </view>
+      <view class="row">
+        <up-icon name="setting" size="28"></up-icon>
+        <text>up-icon setting</text>
+      </view>
+    </view>
+  </view>
+  </template>
+
+<script setup>
+import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/vue/index.js'
 </script>
 
 <style lang="scss" scoped>

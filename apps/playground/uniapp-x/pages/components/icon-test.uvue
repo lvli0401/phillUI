@@ -1,38 +1,28 @@
 <template>
-	<view class="container">
-		<up-navbar title="Icon Test" :safeAreaInsetTop="true" :fixed="true" placeholder></up-navbar>
-		<view class="section">
-			<text class="title">1. Single-Color (Font Icons)</text>
-			<view class="row">
-				<up-icon name="close-circle" size="30" color="#333"></up-icon>
-				<text class="label">close-circle (Local Font)</text>
-			</view>
-			<view class="row">
-				<up-icon name="home" size="30" color="#2979ff"></up-icon>
-				<text class="label">home (Built-in Font)</text>
-			</view>
-		</view>
-		
-		<view class="section">
-			<text class="title">2. Multi-Color (SVG Image on Native)</text>
-			<view class="row">
-				<up-icon name="success-color" size="30"></up-icon>
-				<text class="label">success-color (Dynamic SVG)</text>
-			</view>
-		</view>
-
-		<view class="section">
-			<text class="title">3. Sizes & Colors</text>
-			<view class="row">
-				<up-icon name="heart" size="20" color="error"></up-icon>
-				<up-icon name="heart" size="30" color="warning"></up-icon>
-				<up-icon name="heart" size="40" color="primary"></up-icon>
-			</view>
-		</view>
-	</view>
+  <view class="container">
+	<!-- #ifdef H5 -->
+    <up-navbar title="Icon Tests" :safeAreaInsetTop="true" :fixed="true" placeholder></up-navbar>
+	<!-- #endif -->
+    <view class="section">
+      <text class="title">Icon 组件（UniApp X）</text>
+      <view class="row">
+        <IconCalendar size="24px" />
+        <text class="label">IconCalendar</text>
+      </view>
+      <view class="row">
+        <IconFileFold size="28px" />
+        <text class="label">IconFileFold</text>
+      </view>
+      <view class="row">
+        <IconSetting size="28px" />
+        <text class="label">IconSetting</text>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script setup lang="uts">
+import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/uvue/index.uts'
 </script>
 
 <style lang="scss" scoped>

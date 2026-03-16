@@ -11,13 +11,13 @@
 		    :mode="imgMode"
 		    :style="[imgStyle, addStyle(customStyle)]"
 		></image>
-		<image
+		<text
 		    v-else
-		    class="up-icon__img"
-		    :src="iconSrc"
-		    :mode="imgMode"
-		    :style="[imgStyle, addStyle(customStyle)]"
-		></image>
+		    class="up-icon__icon"
+		    :class="uClasses"
+		    :style="[iconStyle, addStyle(customStyle)]"
+		    :hover-class="hoverClass"
+		>{{icon}}</text>
 		<!-- 这里进行空字符串判断，如果仅仅是v-if="label"，可能会出现传递0的时候，结果也无法显示 -->
 		<text
 		    v-if="label !== ''" 
@@ -35,16 +35,23 @@
 </template>
 
 <script>
-	import { computed, inject } from 'vue';
-	import { addUnit, getPx, addStyle } from '../../libs/function/index.js';
-	// Icons data sources（使用 uni_modules 别名路径）
-	import iconsSvg from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-svg.js'
-	import generatedIcons from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-generated.js'
-	import multiColorList from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-multicolor.json'
-	import customIcons from '@/uni_modules/@phill-component/icons/dist/uniapp/icons-custom.json'
+	// #ifdef APP-NVUE
+	// nvue通过weex的dom模块引入字体，相关文档地址如下：
+	// https://weex.apache.org/zh/docs/modules/dom.html#addrule
+	const fontUrl = 'https://at.alicdn.com/t/font_2225171_8kdcwk4po24.ttf'
+	const domModule = weex.requireModule('dom')
+	domModule.addRule('fontFace', {
+		'fontFamily': "upicon-iconfont",
+		'src': `url('${fontUrl}')`
+	})
+	// #endif
+
+	// 引入图标名称，已经对应的unicode
+	import icons from './icons.js'
 	import { props } from './props.js';
 	import { mpMixin } from '../../libs/mixin/mpMixin.js';
 	import { mixin } from '../../libs/mixin/mixin.js';
+	import { addUnit, addStyle } from '../../libs/function/index.js';
 	import config from '../../libs/config/config.js';
 	/**
 	 * icon 图标
@@ -76,7 +83,7 @@
 		name: 'up-icon',
 		data() {
 			return {
-				asyncSvgContent: ''
+
 			}
 		},
 		emits: ['click'],
@@ -87,7 +94,7 @@
 				classes.push(this.customPrefix + '-' + this.name)
 				// uview-plus的自定义图标类名为up-iconfont
 				if (this.customPrefix == 'upicon') {
-					classes.push('up-icon-custom')
+					classes.push('up-iconfont')
 				} else {
 					// 不能缺少这一步，否则自定义图标会无效
 					classes.push(this.customPrefix)
@@ -131,37 +138,7 @@
 				// 使用自定义图标的时候页面上会把name属性也展示出来，所以在这里处理一下
 				if (this.customPrefix !== "upicon") return "";
 				// 如果内置的图标中找不到对应的图标，就直接返回name值，因为用户可能传入的是unicode代码
-				return generatedIcons?.[this.name] || this.name
-			},
-			isCustom() {
-				// #ifdef H5
-				// H5 下多色图标走 SVG，单色走字体
-				return this.isMultiColor
-				// #endif
-				// #ifndef H5
-				return Array.isArray(customIcons) ? customIcons.includes(this.name) : false
-				// #endif
-			},
-			svgDataUri() {
-				const item = iconsSvg ? iconsSvg[this.name] : null
-				if (item && typeof item === 'object') {
-					if (item.dataUri) return item.dataUri
-					if (item.inner) {
-						return 'data:image/svg+xml;utf8,' + encodeURIComponent(item.inner)
-					}
-				}
-				return ''
-			},
-			isMultiColor() {
-				// icons-multicolor.json 可能是数组
-				const arr = Array.isArray(multiColorList) ? multiColorList : []
-				return arr.includes(this.name)
-			},
-			imgSrc() {
-				return `/uni_modules/@phill-component/icons/dist/uniapp/images/${this.name}.svg`
-			},
-			iconSrc() {
-				return this.svgDataUri || this.imgSrc
+				return icons['upicon-' + this.name] || this.name
 			}
 		},
 		methods: {
@@ -186,6 +163,15 @@
 	$up-icon-warning: $up-warning !default;
 	$up-icon-error: $up-error !default;
 	$up-icon-label-line-height:1 !default;
+
+	/* #ifndef APP-NVUE */
+	// 非nvue下加载字体
+	@font-face {
+		font-family: 'upicon-iconfont';
+		src: url('https://at.alicdn.com/t/font_2225171_8kdcwk4po24.ttf') format('truetype');
+	}
+
+	/* #endif */
 
 	.up-icon {
 		/* #ifndef APP-NVUE */
@@ -214,10 +200,10 @@
 		}
 
 		&__icon {
+			font-family: upicon-iconfont;
 			position: relative;
 			@include flex;
 			align-items: center;
-			font-family: upicon-custom !important;
 
 			&--primary {
 				color: $up-icon-primary;

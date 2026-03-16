@@ -14,8 +14,10 @@
     }
   ],
   "easycom": {
+    "autoscan": true,
     "custom": {
-      "^up-(.*)": "@/uni_modules/@phill-component/ui/components/up-$1/up-$1.uvue"
+      "^up-(.*)": "@/uni_modules/@phill-component/ui/components/up-$1/up-$1.uvue",
+      "^Icon(.*)$": "@/uni_modules/@phill-component/icons/dist/uniapp-x/$1.uvue"
     }
   },
   "globalStyle": {
