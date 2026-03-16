@@ -1,7 +1,14 @@
-export * from '../components/up-action-sheet/types.uts'
-
-export * from '../components/up-swipe-action-item/types.uts'
-
-export * from './common.uts'
+export type UPCommonStyle = {
+	color ?: string,
+	fontSize ?: string,
+	backgroundColor ?: string,
+	borderRadius ?: string,
+	width ?: string,
+	height ?: string,
+	margin ?: string,
+	padding ?: string,
+	transform ?: string,
+	borderColor ?: string,
+}
 
 export {}
