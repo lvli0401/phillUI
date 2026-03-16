@@ -1,5 +1,11 @@
 # phillui-tokens
 
+## 0.2.0
+
+### Minor Changes
+
+- 82c0565: icon strategy
+
 ## 0.1.15
 
 ## 0.1.14
