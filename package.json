@@ -56,8 +56,5 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "packageManager": "pnpm@8.6.7",
-  "dependencies": {
-    "sharp": "^0.34.5"
-  }
+  "packageManager": "pnpm@8.6.7"
 }

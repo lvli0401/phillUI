@@ -26,8 +26,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "case": "^1.6.3",
     "svgo": "^4.0.0",
-    "svgtofont": "^6.5.1",
-    "case": "^1.6.3"
+    "svgtofont": "^6.5.1"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

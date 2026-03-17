@@ -16,22 +16,6 @@
         <text>IconSetting</text>
       </view>
     </view>
-
-    <view class="section">
-      <text class="title">2. 使用 up-icon（兼容各端）</text>
-      <view class="row">
-        <up-icon name="calendar" size="24"></up-icon>
-        <text>up-icon IconCalendar</text>
-      </view>
-      <view class="row">
-        <up-icon name="file-fold" size="28" color="#2979ff"></up-icon>
-        <text>up-icon FileFold</text>
-      </view>
-      <view class="row">
-        <up-icon name="setting" size="28"></up-icon>
-        <text>up-icon setting</text>
-      </view>
-    </view>
   </view>
   </template>
 
