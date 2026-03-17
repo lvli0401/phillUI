@@ -1,6 +1,5 @@
 <template>
   <view class="container">
-    <up-navbar title="Icon Test" safeAreaInsetTop fixed placeholder></up-navbar>
     <view class="section">
       <text class="title">1. 使用 Icon 组件</text>
       <view class="row">

@@ -1,4 +1,4 @@
-// 历遍生成4个方向的底部安全区
+// 遍历生成4个方向的底部安全区
 @each $d in top, right, bottom, left {
 	.u-safe-area-inset-#{$d},
     .up-safe-area-inset-#{$d} {

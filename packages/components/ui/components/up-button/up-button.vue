@@ -25,43 +25,19 @@
         @tap="clickHandler"
         :class="bemClass"
     >
-        <template v-if="loading">
-            <up-loading-icon
-                :mode="loadingMode"
-                :size="loadingSize * 1.15"
-                :color="loadingColor"
-            ></up-loading-icon>
+        <slot>
             <text
-                class="up-button__loading-text"
+                class="up-button__text"
                 :style="[{ fontSize: textSize + 'px' }]"
-                >{{ loadingText || text }}</text
+                >{{ text }}</text
             >
-        </template>
-        <template v-else>
-            <up-icon
-                v-if="icon"
-                :name="icon"
-                :color="iconColorCom"
-                :size="textSize * 1.35"
-                :customStyle="{ marginRight: '2px' }"
-            ></up-icon>
-            <slot>
-                <text
-                    class="up-button__text"
-                    :style="[{ fontSize: textSize + 'px' }]"
-                    >{{ text }}</text
-                >
-            </slot>
-        </template>
+        </slot>
     </button>
 
 </template>
 
 <script>
-import { buttonMixin } from "../../libs/mixin/button.js";
 import { openType } from "../../libs/mixin/openType.js";
-import { mpMixin } from '../../libs/mixin/mpMixin.js';
-import { mixin } from '../../libs/mixin/mixin.js';
 import { props } from './props.js';
 import { addStyle } from '../../libs/function/index.js';
 import { throttle } from '../../libs/function/throttle.js';
@@ -249,194 +225,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../libs/css/components.scss";
 
-@import "./vue.scss";
-
-$up-button-up-button-height: 40px !default;
-$up-button-text-font-size: 15px !default;
-$up-button-loading-text-font-size: 15px !default;
-$up-button-loading-text-margin-left: 4px !default;
-$up-button-large-width: 100% !default;
-$up-button-large-height: 50px !default;
-$up-button-normal-padding: 0 12px !default;
-$up-button-large-padding: 0 15px !default;
-$up-button-normal-font-size: 14px !default;
-$up-button-small-min-width: 60px !default;
-$up-button-small-height: 30px !default;
-$up-button-small-padding: 0px 8px !default;
-$up-button-mini-padding: 0px 8px !default;
-$up-button-small-font-size: 12px !default;
-$up-button-mini-height: 22px !default;
-$up-button-mini-font-size: 10px !default;
-$up-button-mini-min-width: 50px !default;
-$up-button-disabled-opacity: 0.5 !default;
-$up-button-info-color: #323233 !default;
-$up-button-info-background-color: #fff !default;
-$up-button-info-border-color: #ebedf0 !default;
-$up-button-info-border-width: 1px !default;
-$up-button-info-border-style: solid !default;
-$up-button-success-color: #fff !default;
-$up-button-success-background-color: $up-success !default;
-$up-button-success-border-color: $up-button-success-background-color !default;
-$up-button-success-border-width: 1px !default;
-$up-button-success-border-style: solid !default;
-$up-button-primary-color: #fff !default;
-$up-button-primary-background-color: $up-primary !default;
-$up-button-primary-border-color: $up-button-primary-background-color !default;
-$up-button-primary-border-width: 1px !default;
-$up-button-primary-border-style: solid !default;
-$up-button-error-color: #fff !default;
-$up-button-error-background-color: $up-error !default;
-$up-button-error-border-color: $up-button-error-background-color !default;
-$up-button-error-border-width: 1px !default;
-$up-button-error-border-style: solid !default;
-$up-button-warning-color: #fff !default;
-$up-button-warning-background-color: $up-warning !default;
-$up-button-warning-border-color: $up-button-warning-background-color !default;
-$up-button-warning-border-width: 1px !default;
-$up-button-warning-border-style: solid !default;
-$up-button-block-width: 100% !default;
-$up-button-circle-border-top-right-radius: 100px !default;
-$up-button-circle-border-top-left-radius: 100px !default;
-$up-button-circle-border-bottom-left-radius: 100px !default;
-$up-button-circle-border-bottom-right-radius: 100px !default;
-$up-button-square-border-top-right-radius: 3px !default;
-$up-button-square-border-top-left-radius: 3px !default;
-$up-button-square-border-bottom-left-radius: 3px !default;
-$up-button-square-border-bottom-right-radius: 3px !default;
-$up-button-icon-min-width: 1em !default;
-$up-button-plain-background-color: #fff !default;
-$up-button-hairline-border-width: 0.5px !default;
-
-.up-button {
-    height: $up-button-up-button-height;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    @include flex;
-    /* #ifndef APP-NVUE */
-    box-sizing: border-box;
-    /* #endif */
-    flex-direction: row;
-
-    &__text {
-        font-size: $up-button-text-font-size;
-    }
-
-    &__loading-text {
-        font-size: $up-button-loading-text-font-size;
-        margin-left: $up-button-loading-text-margin-left;
-    }
-
-    &--large {
-        /* #ifndef APP-NVUE */
-        width: $up-button-large-width;
-        /* #endif */
-        height: $up-button-large-height;
-        padding: $up-button-large-padding;
-    }
-
-    &--normal {
-        padding: $up-button-normal-padding;
-        font-size: $up-button-normal-font-size;
-    }
-
-    &--small {
-        /* #ifndef APP-NVUE */
-        min-width: $up-button-small-min-width;
-        /* #endif */
-        height: $up-button-small-height;
-        padding: $up-button-small-padding;
-        font-size: $up-button-small-font-size;
-    }
-
-    &--mini {
-        height: $up-button-mini-height;
-        font-size: $up-button-mini-font-size;
-        /* #ifndef APP-NVUE */
-        min-width: $up-button-mini-min-width;
-        /* #endif */
-        padding: $up-button-mini-padding;
-    }
-
-    &--disabled {
-        opacity: $up-button-disabled-opacity;
-    }
-
-    &--info {
-        color: $up-button-info-color;
-        background-color: $up-button-info-background-color;
-        border-color: $up-button-info-border-color;
-        border-width: $up-button-info-border-width;
-        border-style: $up-button-info-border-style;
-    }
-
-    &--success {
-        color: $up-button-success-color;
-        background-color: $up-button-success-background-color;
-        border-color: $up-button-success-border-color;
-        border-width: $up-button-success-border-width;
-        border-style: $up-button-success-border-style;
-    }
-
-    &--primary {
-        color: $up-button-primary-color;
-        background-color: $up-button-primary-background-color;
-        border-color: $up-button-primary-border-color;
-        border-width: $up-button-primary-border-width;
-        border-style: $up-button-primary-border-style;
-    }
-
-    &--error {
-        color: $up-button-error-color;
-        background-color: $up-button-error-background-color;
-        border-color: $up-button-error-border-color;
-        border-width: $up-button-error-border-width;
-        border-style: $up-button-error-border-style;
-    }
-
-    &--warning {
-        color: $up-button-warning-color;
-        background-color: $up-button-warning-background-color;
-        border-color: $up-button-warning-border-color;
-        border-width: $up-button-warning-border-width;
-        border-style: $up-button-warning-border-style;
-    }
-
-    &--block {
-        @include flex;
-        width: $up-button-block-width;
-    }
-
-    &--circle {
-        border-top-right-radius: $up-button-circle-border-top-right-radius;
-        border-top-left-radius: $up-button-circle-border-top-left-radius;
-        border-bottom-left-radius: $up-button-circle-border-bottom-left-radius;
-        border-bottom-right-radius: $up-button-circle-border-bottom-right-radius;
-    }
-
-    &--square {
-        border-bottom-left-radius: $up-button-square-border-top-right-radius;
-        border-bottom-right-radius: $up-button-square-border-top-left-radius;
-        border-top-left-radius: $up-button-square-border-bottom-left-radius;
-        border-top-right-radius: $up-button-square-border-bottom-right-radius;
-    }
-
-    &__icon {
-        /* #ifndef APP-NVUE */
-        min-width: $up-button-icon-min-width;
-        line-height: inherit !important;
-        vertical-align: top;
-        /* #endif */
-    }
-
-    &--plain {
-        background-color: $up-button-plain-background-color;
-    }
-
-    &--hairline {
-        border-width: $up-button-hairline-border-width !important;
-    }
-}
 </style>

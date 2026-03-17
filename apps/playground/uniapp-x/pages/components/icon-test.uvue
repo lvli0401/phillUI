@@ -1,8 +1,5 @@
 <template>
   <view class="container">
-	<!-- #ifdef H5 -->
-    <up-navbar title="Icon Tests" :safeAreaInsetTop="true" :fixed="true" placeholder></up-navbar>
-	<!-- #endif -->
     <view class="section">
       <text class="title">Icon 组件（UniApp X）</text>
       <view class="row">
