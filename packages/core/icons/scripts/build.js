@@ -13,21 +13,17 @@ const webVueDir = path.resolve(webDir, 'vue');
 const mobileDir = path.resolve(distDir, 'mobile');
 const mobileVueDir = path.resolve(mobileDir, 'vue');
 const mobileUvueDir = path.resolve(mobileDir, 'uvue');
-// 静态资源输出到 dist/image/{svg,png}
-const imageDir = path.resolve(distDir, 'image');
-const pngDir = path.resolve(imageDir, 'png');
 
 async function build() {
   // clean dist first, then (re)create subdirs to avoid writeFileSync ENOENT
   if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true, force: true });
-  [distDir, webDir, webVueDir, mobileDir, mobileVueDir, mobileUvueDir, imageDir, pngDir].forEach(dir => {
+  [distDir, webDir, webVueDir, mobileDir, mobileVueDir, mobileUvueDir].forEach(dir => {
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   });
   
   // read image files
   const files = fs.readdirSync(srcDir).filter(f => f.endsWith('.svg'));
   const iconData = [];
-  const svgMappings = {};
   // Optional rasterizer
   let sharp = null;
   try { sharp = require('sharp'); } catch (e) { sharp = null; }
@@ -56,8 +52,7 @@ async function build() {
     // 2) mobile/vue（模板）
     const mobileVueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.vue.tpl'), 'utf-8');
     // 计算运行时图片 URL（非 H5 使用）
-    const runtimePngUrl = `@/uni_modules/@phill-component/icons/dist/image/png/${name}.png`;
-    const runtimeSvgUrl = `@/uni_modules/@phill-component/icons/dist/image/svg/${name}.svg`;
+    const runtimePngUrl = `@/uni_modules/@phill-component/icons/dist/mobile/uvue/${pascalName}/${name}.png`;
     const mobileVueImgUrl = runtimePngUrl;
 
     const mobileVueOut = mobileVueTpl
@@ -66,19 +61,19 @@ async function build() {
     fs.writeFileSync(path.join(mobileVueDir, `${pascalName}.vue`), mobileVueOut);
 
     // 3) mobile/uvue：H5 用 SVG；非 H5 用 PNG/SVG
-    let targetImgFile = runtimeSvgUrl;
+    const uvueComponentdir = path.join(mobileUvueDir, pascalName);
+    if (!fs.existsSync(uvueComponentdir)) fs.mkdirSync(uvueComponentdir, { recursive: true });
     try {
-      const pngPath = path.join(pngDir, `${name}.png`);
+      const pngPath = path.join(uvueComponentdir, `${name}.png`);
       await sharp(Buffer.from(optimized)).resize(128, 128, { fit: 'contain' }).png().toFile(pngPath);
-      targetImgFile = runtimePngUrl;
     } catch (e) {
       console.warn(`[icons] PNG rasterize failed for ${name}:`, e.message);
     }
     const mobileUvueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.uvue.tpl'), 'utf-8');
     const mobileUvueOut = mobileUvueTpl
       .replace('__INNER_SVG__', innerSvg)
-      .replace(/__IMG_SRC__/g, targetImgFile);
-    fs.writeFileSync(path.join(mobileUvueDir, `${pascalName}.uvue`), mobileUvueOut);
+      .replace(/__IMG_SRC__/g, runtimePngUrl);
+    fs.writeFileSync(path.join(uvueComponentdir, `${pascalName}.uvue`), mobileUvueOut);
 
     iconData.push({ name, pascalName });
   }
@@ -88,7 +83,7 @@ async function build() {
   fs.writeFileSync(path.join(webVueDir, 'index.js'), webEntry);
   const mobileVueEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.vue';`).join('\n');
   fs.writeFileSync(path.join(mobileVueDir, 'index.js'), mobileVueEntry);
-  const mobileUtsEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.uvue'`).join('\n');
+  const mobileUtsEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}/${i.pascalName}.uvue'`).join('\n');
   fs.writeFileSync(path.join(mobileUvueDir, 'index.uts'), mobileUtsEntry);
 
   // 不再输出 icons-svg.js/uts 等映射与其它冗余目录
