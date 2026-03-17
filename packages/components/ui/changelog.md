@@ -1,3 +1,12 @@
+## 0.2.2
+
+### Patch Changes
+
+- 05f39da: 修改 icon 打包产物路径
+- Updated dependencies [05f39da]
+  - @phill-component/icons@0.2.2
+  - @phill-component/tokens@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
