@@ -1,5 +1,11 @@
 # phillui-icons
 
+## 0.2.2
+
+### Patch Changes
+
+- 05f39da: 修改 icon 打包产物路径
+
 ## 0.2.1
 
 ### Patch Changes
