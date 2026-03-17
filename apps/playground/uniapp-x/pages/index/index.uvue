@@ -4,9 +4,9 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
-		<up-button @click="navToIcon" class="button" type="success">
+		<tsm-button @click="navToIcon" class="button" type="success">
 			进入图标测试页
-		</up-button>
+		</tsm-button>
 	</view>
 </template>
 

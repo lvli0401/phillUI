@@ -4,8 +4,7 @@
     <view class="text-area">
       <text class="title">{{ title }}</text>
     </view>
-    <up-button @click="show = !show" class="button" type="primary">{{ show ? '关闭日历' : '打开日历' }}</up-button>
-    <up-button @click="navToIcon" class="button" type="success">进入图标测试页</up-button>
+    <tsm-button @click="navToIcon" class="button" type="success">进入图标测试页</tsm-button>
   </view>
 </template>
 

@@ -5,7 +5,7 @@
  */
 import config from './config.js'
 
-import Button from '../../components/up-button/button.js'
+import Button from '../../components/button/button.js'
 
 const {
     color

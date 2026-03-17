@@ -162,19 +162,6 @@ export default {
             }
             return style;
         },
-        // nvue版本按钮的字体不会继承父组件的颜色，需要对每一个text组件进行单独的设置
-        nvueTextStyle() {
-            let style = {};
-            // 针对自定义了color颜色的情况，镂空状态下，就是用自定义的颜色
-            if (this.type === "info") {
-                style.color = "#323233";
-            }
-            if (this.color) {
-                style.color = this.plain ? this.color : "white";
-            }
-            style.fontSize = this.textSize + "px";
-            return style;
-        },
         // 字体大小
         textSize() {
             let fontSize = 14,

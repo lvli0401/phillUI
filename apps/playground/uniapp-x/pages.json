@@ -16,7 +16,7 @@
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^up-(.*)": "@/uni_modules/@phill-component/ui/components/up-$1/up-$1.uvue"
+      "^tsm-(.*)": "@/uni_modules/@phill-component/ui/components/$1/$1.uvue"
     }
   },
   "globalStyle": {
