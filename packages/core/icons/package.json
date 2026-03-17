@@ -8,6 +8,7 @@
     "dist",
     "scripts"
   ],
+  "sideEffects": false, 
   "bin": {
     "@phill-component/icons": "scripts/install.js"
   },

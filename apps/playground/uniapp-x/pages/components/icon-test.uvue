@@ -23,6 +23,9 @@
 
 <script setup lang="uts">
 import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/uvue/index.uts'
+// import IconSetting from '@/uni_modules/@phill-component/icons/dist/mobile/uvue/Setting/Setting.uvue'
+// import IconFileFold from '@/uni_modules/@phill-component/icons/dist/mobile/uvue/FileFold/FileFold.uvue'
+// import IconCalendar from '@/uni_modules/@phill-component/icons/dist/mobile/uvue/Calendar/Calendar.uvue'
 </script>
 
 <style lang="scss" scoped>
