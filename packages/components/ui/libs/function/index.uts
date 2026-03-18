@@ -44,7 +44,7 @@ export function upGetRect(selector: string, all: boolean = false, comp: Componen
    */
 export function bem(name: string, fixed: Array<string>, change: Array<Array<any>>): string  {
 	  // 类名前缀
-	  const prefix = `up-${name}--`
+	  const prefix = `tsm-${name}--`
 	  const classes = {}
 	  if (fixed.length > 0) {
 		  fixed.map((item) => {
@@ -680,15 +680,15 @@ export function padZero(value: any): string {
 }
 
 /**
- * @description 在up-form的子组件内容发生变化，或者失去焦点时，尝试通知up-form执行校验方法
+ * @description 在tsm-form的子组件内容发生变化，或者失去焦点时，尝试通知tsm-form执行校验方法
  * @param {*} instance
  * @param {*} event
  */
 export function formValidate(instance: any, event: any): void {
     // todox
-    // const formItem = uni.$u.$parent.call(instance, 'up-form-item')
-    // const form = uni.$u.$parent.call(instance, 'up-form')
-    // // 如果发生变化的input或者textarea等，其父组件中有up-form-item或者up-form等，就执行form的validate方法
+    // const formItem = uni.$u.$parent.call(instance, 'tsm-form-item')
+    // const form = uni.$u.$parent.call(instance, 'tsm-form')
+    // // 如果发生变化的input或者textarea等，其父组件中有tsm-form-item或者tsm-form等，就执行form的validate方法
     // // 同时将form-item的pros传递给form，让其进行精确对象验证
     // if (formItem && form) {
     // 	form.validateField(formItem.prop, () => {}, event)
@@ -805,10 +805,10 @@ export function getParentDataFunc(that: any, parentName: string): any {
 	console.log('that', JSON.stringify(that))
     // 避免在created中去定义parent变量
     //if (that.parent == null) that.parent = {}
-    // 这里的本质原理是，通过获取父组件实例(也即类似up-radio的父组件up-radio-group的this)
-    // 将父组件this中对应的参数，赋值给本组件(up-radio的this)的parentData对象中对应的属性
+    // 这里的本质原理是，通过获取父组件实例(也即类似tsm-radio的父组件tsm-radio-group的this)
+    // 将父组件this中对应的参数，赋值给本组件(tsm-radio的this)的parentData对象中对应的属性
     // 之所以需要这么做，是因为所有端中，头条小程序不支持通过this.parent.xxx去监听父组件参数的变化
-    // 此处并不会自动更新子组件的数据，而是依赖父组件up-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
+    // 此处并不会自动更新子组件的数据，而是依赖父组件tsm-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
     // that.$data['parent'] = getParent(that, parentName)
     // console.log('that.parent', that.parent)
     // todo

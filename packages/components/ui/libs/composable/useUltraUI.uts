@@ -112,10 +112,10 @@ export function useUltraUI(parentDataInit: UTSJSONObject = {}): UPUseUltraUIType
     // 获取父组件数据
     const getParentData = function(parentName: string, instance: ComponentPublicInstance, refMode: boolean): ComponentPublicInstance|null {
         // 避免在created中去定义parent变量
-        // 这里的本质原理是，通过获取父组件实例(也即类似up-radio的父组件up-radio-group的this)
-        // 将父组件this中对应的参数，赋值给本组件up-radio的this)的parentData对象中对应的属性
+        // 这里的本质原理是，通过获取父组件实例(也即类似tsm-radio的父组件tsm-radio-group的this)
+        // 将父组件this中对应的参数，赋值给本组件tsm-radio的this)的parentData对象中对应的属性
         // 之所以需要这么做，是因为所有端中，头条小程序不支持通过this.parent.xxx去监听父组件参数的变化
-        // 此处并不会自动更新子组件的数据，而是依赖父组件up-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
+        // 此处并不会自动更新子组件的数据，而是依赖父组件tsm-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
         // 注意不能赋值给parent,会导致与addChild中push冲突
         let parentIns = getParent(parentName, instance)
 		// console.log('parentIns', parentIns)

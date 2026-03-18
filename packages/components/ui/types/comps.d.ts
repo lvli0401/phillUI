@@ -1,6 +1,6 @@
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ['up-button']: typeof import('./comps/button')['Button']
+    ['tsm-button']: typeof import('./comps/button')['Button']
   }
 }
 

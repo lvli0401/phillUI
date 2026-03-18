@@ -82,8 +82,8 @@ export const mount$u = function() {
 }
 
 // #ifdef H5
-const importFn = import.meta.glob('./components/up-*/up-*.vue', { eager: true })
-// const miniImportFn = import.meta.glob('./components/up-*/up-*.uvue', { eager: true })
+const importFn = import.meta.glob('./components/*/*.vue', { eager: true })
+// const miniImportFn = import.meta.glob('./components/*/*.uvue', { eager: true })
 let components = [];
 
 // 批量注册全局组件

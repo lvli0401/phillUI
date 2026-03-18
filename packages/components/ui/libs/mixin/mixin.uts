@@ -2,7 +2,7 @@ import { defineMixin } from '../vue.uts'
 import {
 	array as testArray
 } from '../function/test.uts'
-import { bem, addUnit as _addUnit, addStyle as _addStyle, getPx as _getPx, upGetRect } from '../../libs/function/index';
+import { bem, addUnit as _addUnit, addStyle as _addStyle, getPx as _getPx, upGetRect } from '../../libs/function/index.uts';
 export const mixin = defineMixin({
     // 定义每个组件都可能需要用到的外部样式以及类名
     props: {
@@ -145,15 +145,15 @@ export const mixin = defineMixin({
         /**
          * 获取父组件数据
          * @author jry ijry@qq.com
-         * @param parentName 父组件名称如up-row
+         * @param parentName 父组件名称如tsm-row
          * @returns 
          */
         getParentData: function(parentName: string, refMode: boolean = false): any {
             // 避免在created中去定义parent变量
-            // 这里的本质原理是，通过获取父组件实例(也即类似up-radio的父组件up-radio-group的this)
-            // 将父组件this中对应的参数，赋值给本组件(up-radio的this)的parentData对象中对应的属性
+            // 这里的本质原理是，通过获取父组件实例(也即类似tsm-radio的父组件tsm-radio-group的this)
+            // 将父组件this中对应的参数，赋值给本组件(tsm-radio的this)的parentData对象中对应的属性
             // 之所以需要这么做，是因为所有端中，头条小程序不支持通过this.parent.xxx去监听父组件参数的变化
-            // 此处并不会自动更新子组件的数据，而是依赖父组件up-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
+            // 此处并不会自动更新子组件的数据，而是依赖父组件tsm-radio-group去监听data的变化，手动调用更新子组件的方法去重新获取
 			// 注意不能赋值给parent,会导致与addChild中push冲突
             let parent = this.getParent(parentName)
 			// @ts-ignore
