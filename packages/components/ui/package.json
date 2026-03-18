@@ -115,9 +115,9 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
-    "prettier": "prettier -w .",
+    "lint": "eslint -c eslint.config.cjs . --fix",
+    "lint:check": "eslint -c eslint.config.cjs .",
+    "prettier": "prettier -w . --ignore-path ../../../.prettierignore --config ../../../.prettierrc.js",
     "rollup": "rollup -c rollup.config.mjs",
     "release-components-ui": "node ../../../scripts/publish-ui.js"
   },
@@ -135,7 +135,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-vue": "^10.4.0",
-    "prettier": "^3.8.1",
     "rollup": "^4.59.0",
     "typescript": "^5.9.3",
     "vue-eslint-parser": "^10.2.0"

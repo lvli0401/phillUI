@@ -14,6 +14,7 @@ module.exports = [
       'unpackage/**',
       'uni_modules/**',
       'uts-libs/**',
+      '.turbo/**',
       '**/*.d.ts',
       '**/*.uts',
       '**/*.uvue',
