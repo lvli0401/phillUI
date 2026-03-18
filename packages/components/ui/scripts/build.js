@@ -136,18 +136,24 @@ function scrubDist() {
   }
   const reFilePath = /@FilePath/;
   const reReadmeLinks = /(uview[- ]?ultra(?:-plus)?|uview[- ]?plus|uviewui|uview|ext\.dcloud\.net\.cn)/i;
-  walk(distUView, (fp) => {
+  walk(distUView, fp => {
     if (!/\.(js|ts|vue|uvue|uts|scss|css|md)$/.test(fp)) return;
     let content = fs.readFileSync(fp, 'utf8');
     const original = content;
-    content = content.split('\n').filter(line => !reFilePath.test(line)).join('\n');
+    content = content
+      .split('\n')
+      .filter(line => !reFilePath.test(line))
+      .join('\n');
     // 替换 tokens 导入
     content = content.replace(/['"]phillui-tokens['"]/g, "'@phill-component/tokens'");
     // 替换 icons 导入
     content = content.replace(/['"]phillui-icons['"]/g, "'@phill-component/icons'");
     // clean README external links
     if (path.basename(fp).toLowerCase() === 'readme.md') {
-      content = content.split('\n').filter(line => !reReadmeLinks.test(line)).join('\n');
+      content = content
+        .split('\n')
+        .filter(line => !reReadmeLinks.test(line))
+        .join('\n');
     }
     if (content !== original) {
       fs.writeFileSync(fp, content, 'utf8');

@@ -16,9 +16,9 @@ export default [
     output: {
       file: path.join(vendorPath, 'dayjs.min.js'),
       format: 'esm',
-      sourcemap: false
+      sourcemap: false,
     },
-    plugins: [resolve(), commonjs(), terser()]
+    plugins: [resolve(), commonjs(), terser()],
   },
   {
     input: path.join(subNodeModules, 'clipboard/dist/clipboard.min.js'),
@@ -26,8 +26,8 @@ export default [
       file: path.join(vendorPath, 'clipboard.min.js'),
       format: 'esm',
       name: 'Clipboard',
-      sourcemap: false
+      sourcemap: false,
     },
-    plugins: [resolve(), commonjs(), terser()]
-  }
+    plugins: [resolve(), commonjs(), terser()],
+  },
 ];

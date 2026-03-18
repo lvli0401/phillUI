@@ -1,3 +1,3 @@
-export const defineMixin = (options) => {
-  return options
-}
+export const defineMixin = options => {
+  return options;
+};

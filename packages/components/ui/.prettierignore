@@ -1,0 +1,9 @@
+node_modules
+dist
+unpackage
+uni_modules
+uts-libs
+
+**/*.uts
+**/*.uvue
+

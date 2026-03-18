@@ -57,7 +57,7 @@ export function iteratorOperation(arr, operation) {
   const [num1, num2, ...others] = arr;
   let res = operation(num1, num2);
 
-  others.forEach((num) => {
+  others.forEach(num => {
     res = operation(res, num);
   });
 
@@ -155,7 +155,6 @@ export function enableBoundaryChecking(flag = true) {
   _boundaryCheckingState = flag;
 }
 
-
 export default {
   times,
   plus,
@@ -164,4 +163,3 @@ export default {
   round,
   enableBoundaryChecking,
 };
-

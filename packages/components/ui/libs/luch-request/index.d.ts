@@ -1,6 +1,6 @@
-type AnyObject = Record<string | number | symbol, any>
+type AnyObject = Record<string | number | symbol, any>;
 type HttpPromise<T> = Promise<HttpResponse<T>>;
-type Tasks = UniApp.RequestTask | UniApp.UploadTask | UniApp.DownloadTask
+type Tasks = UniApp.RequestTask | UniApp.UploadTask | UniApp.DownloadTask;
 export interface RequestTask {
   abort: () => void;
   offHeadersReceived: () => void;
@@ -35,11 +35,11 @@ export interface HttpRequestConfig<T = Tasks> {
   /** 请求头信息 */
   header?: AnyObject;
   /** 请求方式 */
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "CONNECT" | "HEAD" | "OPTIONS" | "TRACE" | "UPLOAD" | "DOWNLOAD";
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'CONNECT' | 'HEAD' | 'OPTIONS' | 'TRACE' | 'UPLOAD' | 'DOWNLOAD';
   /** 如果设为 json，会尝试对返回的数据做一次 JSON.parse */
   dataType?: string;
   /** 设置响应的数据类型，支付宝小程序不支持 */
-  responseType?: "text" | "arraybuffer";
+  responseType?: 'text' | 'arraybuffer';
   /** 自定义参数 */
   custom?: AnyObject;
   /** 超时时间，仅微信小程序（2.10.0）、支付宝小程序支持 */
@@ -82,10 +82,7 @@ export interface HttpError {
   header?: AnyObject;
 }
 export interface HttpInterceptorManager<V, E = V> {
-  use(
-    onFulfilled?: (config: V) => Promise<V> | V,
-    onRejected?: (config: E) => Promise<E> | E
-  ): void;
+  use(onFulfilled?: (config: V) => Promise<V> | V, onRejected?: (config: E) => Promise<E> | E): void;
   eject(id: number): void;
 }
 export abstract class HttpRequestAbstract {
@@ -94,7 +91,7 @@ export abstract class HttpRequestAbstract {
   interceptors: {
     request: HttpInterceptorManager<HttpRequestConfig, HttpRequestConfig>;
     response: HttpInterceptorManager<HttpResponse, HttpError>;
-  }
+  };
   middleware<T = any>(config: HttpRequestConfig): HttpPromise<T>;
   request<T = any>(config: HttpRequestConfig<UniApp.RequestTask>): HttpPromise<T>;
   get<T = any>(url: string, config?: HttpRequestConfig<UniApp.RequestTask>): HttpPromise<T>;
@@ -112,5 +109,5 @@ export abstract class HttpRequestAbstract {
   setConfig(onSend: (config: HttpRequestConfig) => HttpRequestConfig): void;
 }
 
-declare class HttpRequest extends HttpRequestAbstract { }
+declare class HttpRequest extends HttpRequestAbstract {}
 export default HttpRequest;

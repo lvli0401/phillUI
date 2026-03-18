@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": false,
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "types": ["@dcloudio/types"]
+  },
+  "include": [
+    "components/**/*.vue",
+    "components/**/*.ts",
+    "components/**/*.js",
+    "libs/**/*.ts",
+    "libs/**/*.js",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "unpackage"]
+}

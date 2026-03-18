@@ -1,14 +1,11 @@
-import { setConfig, install, $u } from './types/index'
+import { setConfig, install, $u } from './types/index';
 
 declare const _default: {
-  install: typeof install
-}
+  install: typeof install;
+};
 
-export default _default
+export default _default;
 
-export {
-  setConfig,
-  $u
-}
+export { setConfig, $u };
 
-export * from './types/index'
+export * from './types/index';

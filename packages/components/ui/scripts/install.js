@@ -6,10 +6,13 @@ function copyDir(src, dest, exclude = []) {
   if (!fs.existsSync(src)) return;
   if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
   for (const entry of fs.readdirSync(src)) {
-    if (exclude.some(pattern => {
-      if (pattern.startsWith('*.')) return entry.endsWith(pattern.slice(1));
-      return entry === pattern;
-    })) continue;
+    if (
+      exclude.some(pattern => {
+        if (pattern.startsWith('*.')) return entry.endsWith(pattern.slice(1));
+        return entry === pattern;
+      })
+    )
+      continue;
 
     const s = path.join(src, entry);
     const d = path.join(dest, entry);
@@ -37,7 +40,9 @@ function rimraf(p) {
 function main() {
   const projectRoot = process.env.INIT_CWD || process.cwd();
   const srcDir = path.join(projectRoot, 'src');
-  const uniModulesBase = fs.existsSync(srcDir) ? path.join(srcDir, 'uni_modules') : path.join(projectRoot, 'uni_modules');
+  const uniModulesBase = fs.existsSync(srcDir)
+    ? path.join(srcDir, 'uni_modules')
+    : path.join(projectRoot, 'uni_modules');
   const targetDir = path.join(uniModulesBase, '@phill-component/ui');
 
   let pkgPath;

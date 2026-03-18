@@ -35,27 +35,33 @@ const replacements = [
   // Legacy relative path fixes from phillui-* to new icons/tokens dirs
   {
     pattern: /\.\.\/\.\.\/\.\.\/phillui-icons\//g,
-    replacement: (filePath) => relToIconsDir(filePath)
+    replacement: filePath => relToIconsDir(filePath),
   },
   {
     pattern: /\.\.\/\.\.\/\.\.\/phillui-tokens\//g,
-    replacement: (filePath) => relToTokensDir(filePath)
+    replacement: filePath => relToTokensDir(filePath),
   },
   // Vendor redirects
   {
     pattern: /import\s+dayjs\s+from\s+['"]dayjs['"]/g,
-    replacement: (filePath) => {
-      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/dayjs.min.js')).split(path.sep).join('/');
+    replacement: filePath => {
+      const relPath = path
+        .relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/dayjs.min.js'))
+        .split(path.sep)
+        .join('/');
       return `import dayjs from './${relPath}'`;
-    }
+    },
   },
   {
     pattern: /import\s+Clipboard\s+from\s+['"]clipboard['"]/g,
-    replacement: (filePath) => {
-      const relPath = path.relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/clipboard.min.js')).split(path.sep).join('/');
+    replacement: filePath => {
+      const relPath = path
+        .relative(path.dirname(filePath), path.join(distUViewPath, 'vendor/clipboard.min.js'))
+        .split(path.sep)
+        .join('/');
       return `import Clipboard from './${relPath}'`;
-    }
-  }
+    },
+  },
 ];
 
 function patchFile(filePath) {

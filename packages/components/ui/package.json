@@ -1,8 +1,8 @@
 {
   "name": "@phill-component/ui",
-  "displayName": "phillUI全面兼容uniapp-x、uniapp鸿蒙组件库。",
+  "displayName": "phillUI全面兼容uniapp-x、uniapp、鸿蒙组件库。",
   "version": "0.2.2",
-  "description": "phillUI全面兼容uni-app/uni-app-x/鸿蒙/nvue，全面的组件和便捷的工具会让您信手拈来，如鱼得水",
+  "description": "phillUI全面兼容uni-app/uni-app-x/鸿蒙，全面的组件和便捷的工具会让您信手拈来，如鱼得水",
   "keywords": [
     "phillUI",
     "uniapp-x",
@@ -105,24 +105,39 @@
     }
   },
   "dependencies": {
-    "clipboard": "^2.0.11",
-    "dayjs": "^1.11.3",
     "@phill-component/icons": "workspace:*",
-    "@phill-component/tokens": "workspace:*"
+    "@phill-component/tokens": "workspace:*",
+    "clipboard": "^2.0.11",
+    "dayjs": "^1.11.3"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "node scripts/build.js",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
+    "prettier": "prettier -w .",
     "rollup": "rollup -c rollup.config.mjs",
     "release-components-ui": "node ../../../scripts/publish-ui.js"
   },
   "devDependencies": {
+    "@dcloudio/types": "^3.4.29",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "chokidar": "^5.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.4.0",
+    "prettier": "^3.8.1",
     "rollup": "^4.59.0",
-    "chokidar": "^5.0.0"
+    "typescript": "^5.9.3",
+    "vue-eslint-parser": "^10.2.0"
   }
 }

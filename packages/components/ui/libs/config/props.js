@@ -3,8 +3,8 @@
  * 借此用户可以全局覆盖组件的props默认值
  * 无需在每个引入组件的页面中都配置一次
  */
-import Button from '../../components/button/button'
+import Button from '../../components/button/button';
 
 export default {
-    ...Button,
-}
+  ...Button,
+};
