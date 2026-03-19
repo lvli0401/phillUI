@@ -1,13 +1,2 @@
-// 引入公共基础类
-@import './libs/css/common.scss';
-@import './libs/css/flex.scss';
+@import './uniapp/index.scss';
 
-// 小程序特有的样式
-/* #ifdef MP */
-@import './libs/css/mp.scss';
-/* #endif */
-
-// H5特有的样式
-/* #ifdef H5 */
-@import './libs/css/h5.scss';
-/* #endif */

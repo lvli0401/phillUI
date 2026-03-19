@@ -7,7 +7,6 @@
     "allowJs": true,
     "checkJs": false,
     "noEmit": true,
-    "allowArbitraryExtensions": true,
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -16,17 +15,7 @@
     "baseUrl": ".",
     "types": ["@dcloudio/types"]
   },
-  "include": [
-    "components/**/*.vue",
-    "components/**/*.uvue",
-    "components/**/*.uts",
-    "components/**/*.ts",
-    "components/**/*.js",
-    "libs/**/*.uvue",
-    "libs/**/*.uts",
-    "libs/**/*.ts",
-    "libs/**/*.js",
-    "types/**/*.d.ts"
-  ],
-  "exclude": ["node_modules", "dist", "unpackage"]
+  "include": ["components/**/*.vue", "components/**/*.ts", "components/**/*.js", "libs/**/*.ts", "libs/**/*.js", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "unpackage", "../uniapp-x"]
 }
+

@@ -115,8 +115,8 @@
   },
   "scripts": {
     "build": "node scripts/build.js",
-    "lint": "eslint -c eslint.config.cjs . --fix",
-    "lint:check": "eslint -c eslint.config.cjs .",
+    "lint": "eslint -c uniapp/eslint.config.cjs uniapp --fix",
+    "lint:check": "eslint -c uniapp/eslint.config.cjs uniapp",
     "prettier": "prettier -w . --ignore-path ../../../.prettierignore --config ../../../.prettierrc.js",
     "rollup": "rollup -c rollup.config.mjs",
     "release-components-ui": "node ../../../scripts/publish-ui.js"

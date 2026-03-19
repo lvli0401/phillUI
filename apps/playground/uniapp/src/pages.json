@@ -2,7 +2,7 @@
   "easycom": {
     "autoscan": true,
     "custom": {
-      "^tsm-(.*)": "@/uni_modules/@phill-component/ui/components/$1/$1.vue"
+      "^tsm-(.*)": "@/uni_modules/@phill-component/ui/uniapp/components/$1/$1.vue"
     }
   },
   "pages": [

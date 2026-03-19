@@ -15,6 +15,7 @@ module.exports = [
       'uni_modules/**',
       'uts-libs/**',
       '.turbo/**',
+      '../uniapp-x/**',
       '**/*.d.ts',
       '**/*.uts',
       '**/*.uvue',
@@ -72,3 +73,4 @@ module.exports = [
     },
   },
 ];
+

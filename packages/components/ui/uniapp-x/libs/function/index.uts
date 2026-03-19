@@ -4,7 +4,7 @@ import {
 	empty as testEmpty
 } from './test.uts'
 import { round } from './digit.uts'
-import config from '../config/config'
+import config from '../config/config.uts'
 
 // 查询节点信息
 // 目前此方法在支付宝小程序中无法获取组件跟接点的尺寸，为支付宝的bug(2020-07-21)
