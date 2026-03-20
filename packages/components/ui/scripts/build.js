@@ -96,6 +96,14 @@ function stageScopedDeps() {
       const src = path.join(sourceBase, 'dist');
       if (existsDir(src)) {
         rsyncDir(src, path.join(destBase, 'dist'));
+        if (dep.name === '@phill-component/tokens') {
+          const indexTs = path.join(src, 'index.ts');
+          if (fs.existsSync(indexTs)) fs.copyFileSync(indexTs, path.join(destBase, 'index.ts'));
+          const indexUts = path.join(src, 'index.uts');
+          if (fs.existsSync(indexUts)) fs.copyFileSync(indexUts, path.join(destBase, 'index.uts'));
+          const tokensScss = path.join(src, 'tokens.scss');
+          if (fs.existsSync(tokensScss)) fs.copyFileSync(tokensScss, path.join(destBase, 'tokens.scss'));
+        }
         console.log(`[Build] Staged ${dep.name} dist -> ${path.relative(packageRoot, destBase)}`);
       } else {
         console.warn(`[Build] ${dep.name} has no dist folder at ${src}, skipped`);

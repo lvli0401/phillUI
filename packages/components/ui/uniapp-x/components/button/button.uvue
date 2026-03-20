@@ -15,7 +15,7 @@
 
 <script setup lang="uts">
 import { computed } from 'vue'
-import { useThemeCssVars, useThemeTokens } from '../../libs/theme/index.uts'
+import { useThemeCssVars, useThemeTokens } from '@/uni_modules/@phill-component/tokens/index.uts'
 
 const props = defineProps({
 	type: { type: String, default: 'primary' },
@@ -39,11 +39,11 @@ const typeStyle = computed((): any => {
 	// #endif
 	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
 	if (props.type == 'default') return {}
-	let bg = tokens?.colorPrimary ?? '#2979ff'
-	if (props.type == 'success') bg = tokens?.colorSuccess ?? '#00c853'
-	if (props.type == 'warning') bg = tokens?.colorWarning ?? '#ff9100'
-	if (props.type == 'error') bg = tokens?.colorError ?? '#ff4d4f'
-	if (props.type == 'info') bg = tokens?.colorInfo ?? '#909399'
+	let bg = tokens['--tsm-color-primary'] ?? '#2979ff'
+	if (props.type == 'success') bg = tokens['--tsm-color-success'] ?? '#00c853'
+	if (props.type == 'warning') bg = tokens['--tsm-color-warning'] ?? '#ff9100'
+	if (props.type == 'error') bg = tokens['--tsm-color-error'] ?? '#ff4d4f'
+	if (props.type == 'info') bg = tokens['--tsm-color-info'] ?? '#909399'
 	if (props.plain) {
 		return { backgroundColor: 'transparent', color: bg, borderColor: bg }
 	}

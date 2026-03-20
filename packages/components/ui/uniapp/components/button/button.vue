@@ -20,8 +20,7 @@
 </template>
 
 <script lang="ts">
-import { addStyle } from '../../libs/function/index.js';
-import { useThemeCssVars } from '../../libs/theme/index.js';
+import { useThemeCssVars } from '@/uni_modules/@phill-component/tokens/index.ts';
 import { buttonProps } from './props';
 
 export default {
@@ -37,7 +36,12 @@ export default {
     },
   },
   methods: {
-    addStyle,
+    addStyle(customStyle: any) {
+      if (customStyle == null) return {};
+      if (typeof customStyle === 'string') return customStyle;
+      if (typeof customStyle === 'object') return customStyle;
+      return {};
+    },
     onClick(e: Event) {
       if (this.disabledOrLoading) return;
       this.$emit('click', e);

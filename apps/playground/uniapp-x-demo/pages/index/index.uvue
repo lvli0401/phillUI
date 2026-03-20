@@ -15,7 +15,7 @@
 
 <script setup lang="uts">
 	import { ref } from 'vue'
-	import { getThemeMode, toggleThemeMode } from '@/uni_modules/@phill-component/ui/uniapp-x/libs/theme/index.uts'
+	import { getThemeMode, toggleThemeMode } from '@/uni_modules/@phill-component/tokens/index.uts'
 	const title = ref('Hello')
 	const mode = ref(getThemeMode())
 

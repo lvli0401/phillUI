@@ -38,6 +38,11 @@ function rimraf(p) {
   if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
 }
 
+function copyIfExists(src, dest) {
+  if (!fs.existsSync(src)) return;
+  fs.copyFileSync(src, dest);
+}
+
 function main() {
   const projectRoot = process.env.INIT_CWD || process.cwd();
   const srcDir = path.join(projectRoot, 'src');
@@ -55,10 +60,13 @@ function main() {
     rimraf(targetPkgDir);
     fs.mkdirSync(targetPkgDir, { recursive: true });
     copyDir(distDir, targetDistDir);
+    copyIfExists(path.join(distDir, 'index.ts'), path.join(targetPkgDir, 'index.ts'));
+    copyIfExists(path.join(distDir, 'index.uts'), path.join(targetPkgDir, 'index.uts'));
+    copyIfExists(path.join(distDir, 'tokens.scss'), path.join(targetPkgDir, 'tokens.scss'));
     const lightPkgJson = {
       name: 'phillui-tokens',
       description: 'Design tokens for phillUI in UniApp uni_modules',
-      main: 'dist/index.js'
+      main: 'index.ts'
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
     console.log(`[phillUI-tokens] Installed to ${targetPkgDir}`);

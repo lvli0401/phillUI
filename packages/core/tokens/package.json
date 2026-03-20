@@ -2,8 +2,8 @@
   "name": "@phill-component/tokens",
   "version": "0.2.2",
   "description": "Design tokens for phillUI components",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.ts",
+  "module": "dist/index.ts",
   "files": [
     "dist",
     "scripts"
