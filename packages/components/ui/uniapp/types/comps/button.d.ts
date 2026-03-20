@@ -7,9 +7,9 @@ declare interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   text?: string | number;
-  customStyle?: Record<string, any> | string;
+  customStyle?: Record<string, unknown> | string;
   customClass?: string;
-  onClick?: (e: any) => any;
+  onClick?: (e: UniApp.BaseEvent) => void;
 }
 
 declare interface _Button {

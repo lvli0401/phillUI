@@ -3,7 +3,8 @@ const path = require('path')
 
 const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
-const srcTokensJson = path.join(rootDir, 'src', 'tokens.json')
+const srcPaletteJson = path.join(rootDir, 'src', 'palette.json')
+const srcThemesJson = path.join(rootDir, 'src', 'themes.json')
 
 function cleanDist() {
   if (fs.existsSync(distDir)) fs.rmSync(distDir, { recursive: true, force: true })
@@ -23,21 +24,54 @@ function cssVarsBlock(selector, vars) {
   return `${selector} {\n${lines.join('\n')}\n}\n`
 }
 
-function readThemes() {
-  if (!fs.existsSync(srcTokensJson)) throw new Error(`tokens.json not found at ${srcTokensJson}`)
-  const data = JSON.parse(fs.readFileSync(srcTokensJson, 'utf-8'))
-  const themes = data?.themes || {}
-  if (!themes.light || !themes.dark) throw new Error('tokens.json must contain themes.light and themes.dark')
+function resolveTokenValue(input, palette, stack) {
+  if (typeof input !== 'string') return input
+  const refMatch = input.match(/^\{([^}]+)\}$/)
+  if (!refMatch) return input
+  const refKey = refMatch[1]
+  if (stack.includes(refKey)) {
+    throw new Error(`palette has circular reference: ${[...stack, refKey].join(' -> ')}`)
+  }
+  const next = palette[refKey]
+  if (typeof next !== 'string') {
+    throw new Error(`palette reference not found: ${refKey}`)
+  }
+  return resolveTokenValue(next, palette, [...stack, refKey])
+}
+
+function resolveTheme(theme, palette, name) {
+  const resolved = {}
+  Object.entries(theme).forEach(([k, v]) => {
+    const next = resolveTokenValue(v, palette, [])
+    if (typeof next !== 'string') {
+      throw new Error(`themes.${name} value must be string: ${k}`)
+    }
+    if (String(next).match(/^\{[^}]+\}$/)) {
+      throw new Error(`themes.${name} unresolved reference at ${k}: ${next}`)
+    }
+    resolved[k] = next
+  })
+  return resolved
+}
+
+function readTokenData() {
+  if (!fs.existsSync(srcPaletteJson)) throw new Error(`palette.json not found at ${srcPaletteJson}`)
+  if (!fs.existsSync(srcThemesJson)) throw new Error(`themes.json not found at ${srcThemesJson}`)
+  const palette = JSON.parse(fs.readFileSync(srcPaletteJson, 'utf-8')) || {}
+  const themes = JSON.parse(fs.readFileSync(srcThemesJson, 'utf-8')) || {}
+  if (!themes.light || !themes.dark) throw new Error('themes.json must contain light and dark')
   const checkTheme = (theme, name) => {
     const keys = Object.keys(theme || {})
-    if (keys.length === 0) throw new Error(`tokens.json themes.${name} must not be empty`)
+    if (keys.length === 0) throw new Error(`themes.${name} must not be empty`)
     keys.forEach(k => {
-      if (!String(k).startsWith('--tsm-')) throw new Error(`tokens.json themes.${name} key must start with --tsm-: ${k}`)
+      if (!String(k).startsWith('--tsm-')) throw new Error(`themes.${name} key must start with --tsm-: ${k}`)
     })
   }
   checkTheme(themes.light, 'light')
   checkTheme(themes.dark, 'dark')
-  return themes
+  const light = resolveTheme(themes.light, palette, 'light')
+  const dark = resolveTheme(themes.dark, palette, 'dark')
+  return { palette, themes: { light, dark } }
 }
 
 function writeFile(filePath, content) {
@@ -200,7 +234,7 @@ function buildTokensScss(themes) {
 
 function build() {
   cleanDist()
-  const themes = readThemes()
+  const { themes } = readTokenData()
   const templateVars = {
     themesLight: JSON.stringify(themes.light, null, 2),
     themesDark: JSON.stringify(themes.dark, null, 2),

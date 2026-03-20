@@ -1,0 +1,31 @@
+{
+  "light": {
+    "--tsm-color-primary": "{palette-indigo-600}",
+    "--tsm-color-success": "{palette-emerald-500}",
+    "--tsm-color-warning": "{palette-amber-500}",
+    "--tsm-color-error": "{palette-red-500}",
+    "--tsm-color-info": "{palette-gray-500}",
+    "--tsm-color-text-base": "{palette-slate-800}",
+    "--tsm-color-text-secondary": "{palette-slate-600}",
+    "--tsm-color-bg-base": "{palette-slate-100}",
+    "--tsm-color-bg-container": "{palette-white}",
+    "--tsm-color-border": "{palette-slate-200}",
+    "--tsm-border-radius": "4px",
+    "--tsm-font-size-base": "14px"
+  },
+  "dark": {
+    "--tsm-color-primary": "{palette-sky-400}",
+    "--tsm-color-success": "{palette-emerald-400}",
+    "--tsm-color-warning": "{palette-orange-400}",
+    "--tsm-color-error": "{palette-red-400}",
+    "--tsm-color-info": "{palette-zinc-400}",
+    "--tsm-color-text-base": "{palette-white}",
+    "--tsm-color-text-secondary": "{palette-zinc-400}",
+    "--tsm-color-bg-base": "{palette-black}",
+    "--tsm-color-bg-container": "{palette-zinc-800}",
+    "--tsm-color-border": "{palette-zinc-700}",
+    "--tsm-border-radius": "4px",
+    "--tsm-font-size-base": "14px"
+  }
+}
+

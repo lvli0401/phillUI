@@ -8,7 +8,7 @@
     "uniapp-x",
     "uniapp"
   ],
-  "main": "uniapp/index.js",
+  "main": "uniapp/index.ts",
   "engines": {
     "HBuilderX": "^3.1.0",
     "uni-app": "^4.87",

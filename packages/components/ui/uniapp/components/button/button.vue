@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { useThemeCssVars } from '@/uni_modules/@phill-component/tokens/index.ts';
+import { useThemeCssVars } from '@/uni_modules/@phill-component/tokens/index';
 import { buttonProps } from './props';
 
 export default {

@@ -4,7 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "strict": false,
-    "allowJs": true,
+    "allowJs": false,
     "checkJs": false,
     "noEmit": true,
     "sourceMap": true,
@@ -13,9 +13,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+    "paths": {
+      "@/uni_modules/@phill-component/tokens/*": ["../../../core/tokens/dist/*"]
+    },
     "types": ["@dcloudio/types"]
   },
-  "include": ["components/**/*.vue", "components/**/*.ts", "components/**/*.js", "libs/**/*.ts", "libs/**/*.js", "types/**/*.d.ts"],
+  "include": ["index.ts", "components/**/*.vue", "components/**/*.ts", "libs/**/*.ts", "types/**/*.d.ts"],
   "exclude": ["node_modules", "dist", "unpackage", "../uniapp-x"]
 }
-

@@ -16,29 +16,32 @@
       </view>
     </view>
   </view>
-  </template>
+</template>
 
 <script setup>
-import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/vue/index.js'
+import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/vue/index.js';
 </script>
 
 <style lang="scss" scoped>
 .container {
-	padding: 20px;
+  padding: 20px;
 }
+
 .section {
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
+
 .title {
-	font-size: 18px;
-	font-weight: bold;
-	margin-bottom: 10px;
-	display: block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
 }
+
 .row {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 </style>

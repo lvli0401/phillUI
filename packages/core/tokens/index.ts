@@ -1,8 +1,8 @@
-import tokenData from './src/tokens.json'
+import palette from './src/palette.json'
+import themes from './src/themes.json'
 
-export type ThemeMode = keyof typeof tokenData.themes
+export type ThemeMode = keyof typeof themes
 export type Tokens = Record<string, string>
 
-export const themes = tokenData.themes
-export const lightTokens = tokenData.themes.light
-export const darkTokens = tokenData.themes.dark
+export const tokenPalette = palette
+export const tokenThemes = themes
