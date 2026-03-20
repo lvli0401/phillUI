@@ -27,21 +27,19 @@ export function setThemeMode(mode: string): void {
 	uni.setStorageSync(STORAGE_KEY, nextMode)
 
 	const nextTokens = nextMode == 'dark' ? darkTokens : lightTokens
-	const keys = Object.keys(state.tokens)
-	keys.forEach((k: string) => {
+	const nextTokenKeys = Object.keys(nextTokens)
+	nextTokenKeys.forEach((k: string) => {
 		// @ts-ignore
-		delete state.tokens[k]
+		state.tokens[k] = nextTokens[k]
 	})
-	Object.assign(state.tokens, nextTokens)
 
 	// #ifdef WEB || MP-WEIXIN
 	const nextVars = tokensToCssVars(nextTokens)
-	const varKeys = Object.keys(state.cssVars)
-	varKeys.forEach((k: string) => {
+	const nextVarKeys = Object.keys(nextVars)
+	nextVarKeys.forEach((k: string) => {
 		// @ts-ignore
-		delete state.cssVars[k]
+		state.cssVars[k] = nextVars[k]
 	})
-	Object.assign(state.cssVars, nextVars)
 	// #endif
 }
 

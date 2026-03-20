@@ -14,7 +14,7 @@ export const lightTokens = {
 };
 
 export const darkTokens = {
-  colorPrimary: '#4a9eff',
+  colorPrimary: 'black',
   colorSuccess: '#4ade80',
   colorWarning: '#fb923c',
   colorError: '#f87171',

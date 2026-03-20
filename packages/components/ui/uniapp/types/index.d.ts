@@ -104,7 +104,6 @@ interface $u {
    * @param {string} endColor 结束的颜色
    * @param {number} step 颜色等分的份额
    */
-  colorGradient: (startColor: string, endColor: string, step: number) => any[];
   /**
    * 将hex表示方式转换为rgb
    * @param color "#000000"-> "rgb(0,0,0)" | "rgb(0,0,0)" -> "#000000"

@@ -4,6 +4,9 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
+		<tsm-button @click="toggleTheme" class="button" type="primary">
+			切换到{{mode == 'dark' ? '浅色' : '暗黑'}}模式
+		</tsm-button>
 		<tsm-button @click="navToIcon" class="button" type="success">
 			进入图标测试页
 		</tsm-button>
@@ -12,12 +15,19 @@
 
 <script setup lang="uts">
 	import { ref } from 'vue'
+	import { getThemeMode, toggleThemeMode } from '@/uni_modules/@phill-component/ui/uniapp-x/libs/theme/index.uts'
 	const title = ref('Hello')
+	const mode = ref(getThemeMode())
 
 	const navToIcon = () => {
 		uni.navigateTo({
 			url: '/pages/components/icon-test'
 		})
+	}
+	
+	const toggleTheme = () => {
+		toggleThemeMode()
+		mode.value = getThemeMode()
 	}
 </script>
 

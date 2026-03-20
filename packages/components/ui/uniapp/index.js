@@ -10,8 +10,6 @@ import Request from './libs/luch-request';
 
 // 路由封装
 import route from './libs/util/route.js';
-// 颜色渐变相关,colorGradient-颜色渐变,hexToRgb-十六进制颜色转rgb颜色,rgbToHex-rgb转十六进制
-import colorGradient from './libs/function/colorGradient.js';
 
 // 规则检验
 import test from './libs/function/test.js';
@@ -39,7 +37,6 @@ const http = new Request();
 let themeType = ['primary', 'success', 'error', 'warning', 'info'];
 export { route, http, debounce, throttle, platform, themeType, mixin, mpMixin, props, color, test, zIndex };
 export * from './libs/function/index.js';
-export * from './libs/function/colorGradient.js';
 export { getThemeMode, initThemeMode, setThemeMode, toggleThemeMode, useThemeCssVars };
 
 /**
@@ -60,10 +57,6 @@ index.setConfig = setConfig;
 const $u = {
   route,
   date: index.timeFormat, // 另名date
-  colorGradient: colorGradient.colorGradient,
-  hexToRgb: colorGradient.hexToRgb,
-  rgbToHex: colorGradient.rgbToHex,
-  colorToRgba: colorGradient.colorToRgba,
   test,
   type: themeType,
   http,
