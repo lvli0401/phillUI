@@ -75,7 +75,7 @@ function stageScopedDeps() {
       nodeModulesPath: path.join(packageRoot, 'node_modules/@phill-component/tokens'),
       repoPath: path.resolve(packageRoot, '../../core/tokens'),
       distSubdir: '@phill-component/tokens',
-      pick: null, // copy root files used at runtime (index.js, tokens/)
+      pick: 'dist', // copy dist dir
     },
   ];
 
@@ -105,6 +105,14 @@ function stageScopedDeps() {
       const indexJs = path.join(sourceBase, 'index.js');
       if (fs.existsSync(indexJs)) {
         fs.copyFileSync(indexJs, path.join(destBase, 'index.js'));
+      }
+      const indexUts = path.join(sourceBase, 'index.uts');
+      if (fs.existsSync(indexUts)) {
+        fs.copyFileSync(indexUts, path.join(destBase, 'index.uts'));
+      }
+      const tokensScss = path.join(sourceBase, 'tokens.scss');
+      if (fs.existsSync(tokensScss)) {
+        fs.copyFileSync(tokensScss, path.join(destBase, 'tokens.scss'));
       }
       const tokensDir = path.join(sourceBase, 'tokens');
       if (existsDir(tokensDir)) {

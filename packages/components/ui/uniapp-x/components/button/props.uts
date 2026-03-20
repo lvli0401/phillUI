@@ -1,40 +1,10 @@
-import { defineMixin } from '../../libs/vue.uts'
-import defProps from './button.uts'
-let btnProp = defProps['button'] as UTSJSONObject
-
-export const propsButton = defineMixin({
-    props: {
-        type: {
-            type: String,
-            default: btnProp['type']
-        },
-        size: {
-            type: String,
-            default: btnProp['size']
-        },
-        plain: {
-            type: Boolean,
-            default: btnProp['plain']
-        },
-        disabled: {
-            type: Boolean,
-            default: btnProp['disabled']
-        },
-        loading: {
-            type: Boolean,
-            default: btnProp['loading']
-        },
-        text: {
-            type: [String, Number],
-            default: btnProp['text']
-        },
-		customStyle: {
-			type: [Object, String],
-			default: btnProp['customStyle']
-		},
-		customClass: {
-			type: String,
-			default: btnProp['customClass']
-		}
-    }
-});
+export const buttonProps = {
+	type: { type: String, default: 'primary' },
+	size: { type: String, default: 'normal' },
+	plain: { type: Boolean, default: false },
+	disabled: { type: Boolean, default: false },
+	loading: { type: Boolean, default: false },
+	text: { type: [String, Number], default: '' },
+	customStyle: { type: [Object, String], default: '' },
+	customClass: { type: String, default: '' }
+}

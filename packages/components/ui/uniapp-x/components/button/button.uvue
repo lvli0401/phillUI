@@ -2,7 +2,7 @@
 	<button
 	    class="tsm-button"
 	    :class="[customClass, `tsm-button--${type}`, `tsm-button--${size}`, plain ? 'is-plain' : '', disabledOrLoading ? 'is-disabled' : '']"
-	    :style="customStyle"
+	    :style="[themeCssVars, typeStyle, customStyle]"
 	    :disabled="disabledOrLoading"
 	    @click="onClick"
 	>
@@ -15,20 +15,34 @@
 
 <script setup lang="uts">
 import { computed } from 'vue'
+import { useThemeCssVars, useThemeTokens } from '../../libs/theme/index.uts'
+import { buttonProps } from './props.uts'
 
-const props = defineProps({
-	type: { type: String, default: 'primary' },
-	size: { type: String, default: 'normal' },
-	plain: { type: Boolean, default: false },
-	disabled: { type: Boolean, default: false },
-	loading: { type: Boolean, default: false },
-	text: { type: [String, Number], default: '' },
-	customStyle: { type: [Object, String], default: '' },
-	customClass: { type: String, default: '' }
-})
+const props = defineProps(buttonProps)
 
 const emit = defineEmits(['click'])
 const disabledOrLoading = computed((): boolean => props.disabled || props.loading)
+const themeCssVars = useThemeCssVars()
+const tokens = useThemeTokens()
+
+const typeStyle = computed((): any => {
+	// #ifdef WEB || MP-WEIXIN
+	return {}
+	// #endif
+	// #ifdef APP-ANDROID || APP-IOS || APP-HARMONY
+	if (props.type == 'default') return {}
+	let bg = tokens?.colorPrimary ?? '#2979ff'
+	if (props.type == 'success') bg = tokens?.colorSuccess ?? '#00c853'
+	if (props.type == 'warning') bg = tokens?.colorWarning ?? '#ff9100'
+	if (props.type == 'error') bg = tokens?.colorError ?? '#ff4d4f'
+	if (props.type == 'info') bg = tokens?.colorInfo ?? '#909399'
+	if (props.plain) {
+		return { backgroundColor: 'transparent', color: bg, borderColor: bg }
+	}
+	return { backgroundColor: bg, color: '#ffffff', borderColor: bg }
+	// #endif
+	return {}
+})
 
 function onClick(e: UniPointerEvent) {
 	if (disabledOrLoading.value) return
@@ -79,35 +93,12 @@ function onClick(e: UniPointerEvent) {
 		border-color: #e5e7eb;
 	}
 
-	.tsm-button--primary {
-		background: #3c9cff;
-		color: #ffffff;
-		border-color: #3c9cff;
-	}
-
-	.tsm-button--success {
-		background: #5ac725;
-		color: #ffffff;
-		border-color: #5ac725;
-	}
-
-	.tsm-button--warning {
-		background: #f9ae3d;
-		color: #ffffff;
-		border-color: #f9ae3d;
-	}
-
-	.tsm-button--error {
-		background: #f56c6c;
-		color: #ffffff;
-		border-color: #f56c6c;
-	}
-
-	.tsm-button--info {
-		background: #909399;
-		color: #ffffff;
-		border-color: #909399;
-	}
+	/* #ifdef WEB || MP-WEIXIN */
+	.tsm-button--primary { background: var(--tsm-color-primary, #2979ff); color: #ffffff; border-color: var(--tsm-color-primary, #2979ff); }
+	.tsm-button--success { background: var(--tsm-color-success, #00c853); color: #ffffff; border-color: var(--tsm-color-success, #00c853); }
+	.tsm-button--warning { background: var(--tsm-color-warning, #ff9100); color: #ffffff; border-color: var(--tsm-color-warning, #ff9100); }
+	.tsm-button--error { background: var(--tsm-color-error, #ff4d4f); color: #ffffff; border-color: var(--tsm-color-error, #ff4d4f); }
+	.tsm-button--info { background: var(--tsm-color-info, #909399); color: #ffffff; border-color: var(--tsm-color-info, #909399); }
 
 	.tsm-button--primary.is-plain,
 	.tsm-button--success.is-plain,
@@ -117,11 +108,34 @@ function onClick(e: UniPointerEvent) {
 		background: transparent;
 	}
 
-	.tsm-button--primary.is-plain { color: #3c9cff; border-color: #3c9cff; }
-	.tsm-button--success.is-plain { color: #5ac725; border-color: #5ac725; }
-	.tsm-button--warning.is-plain { color: #f9ae3d; border-color: #f9ae3d; }
-	.tsm-button--error.is-plain { color: #f56c6c; border-color: #f56c6c; }
+	.tsm-button--primary.is-plain { color: var(--tsm-color-primary, #2979ff); border-color: var(--tsm-color-primary, #2979ff); }
+	.tsm-button--success.is-plain { color: var(--tsm-color-success, #00c853); border-color: var(--tsm-color-success, #00c853); }
+	.tsm-button--warning.is-plain { color: var(--tsm-color-warning, #ff9100); border-color: var(--tsm-color-warning, #ff9100); }
+	.tsm-button--error.is-plain { color: var(--tsm-color-error, #ff4d4f); border-color: var(--tsm-color-error, #ff4d4f); }
+	.tsm-button--info.is-plain { color: var(--tsm-color-info, #909399); border-color: var(--tsm-color-info, #909399); }
+	/* #endif */
+
+	/* #ifdef APP-ANDROID || APP-IOS || APP-HARMONY */
+	.tsm-button--primary { background: #2979ff; color: #ffffff; border-color: #2979ff; }
+	.tsm-button--success { background: #00c853; color: #ffffff; border-color: #00c853; }
+	.tsm-button--warning { background: #ff9100; color: #ffffff; border-color: #ff9100; }
+	.tsm-button--error { background: #ff4d4f; color: #ffffff; border-color: #ff4d4f; }
+	.tsm-button--info { background: #909399; color: #ffffff; border-color: #909399; }
+
+	.tsm-button--primary.is-plain,
+	.tsm-button--success.is-plain,
+	.tsm-button--warning.is-plain,
+	.tsm-button--error.is-plain,
+	.tsm-button--info.is-plain {
+		background: transparent;
+	}
+
+	.tsm-button--primary.is-plain { color: #2979ff; border-color: #2979ff; }
+	.tsm-button--success.is-plain { color: #00c853; border-color: #00c853; }
+	.tsm-button--warning.is-plain { color: #ff9100; border-color: #ff9100; }
+	.tsm-button--error.is-plain { color: #ff4d4f; border-color: #ff4d4f; }
 	.tsm-button--info.is-plain { color: #909399; border-color: #909399; }
+	/* #endif */
 
 	.is-disabled {
 		opacity: 0.5;

@@ -32,6 +32,7 @@ import zIndex from './libs/config/zIndex.js';
 import color from './libs/config/color.js';
 // 平台
 import platform from './libs/function/platform';
+import { getThemeMode, initThemeMode, setThemeMode, toggleThemeMode, useThemeCssVars } from './libs/theme/index.js';
 
 // 导出
 const http = new Request();
@@ -39,6 +40,7 @@ let themeType = ['primary', 'success', 'error', 'warning', 'info'];
 export { route, http, debounce, throttle, platform, themeType, mixin, mpMixin, props, color, test, zIndex };
 export * from './libs/function/index.js';
 export * from './libs/function/colorGradient.js';
+export { getThemeMode, initThemeMode, setThemeMode, toggleThemeMode, useThemeCssVars };
 
 /**
  * @description 修改uView内置属性值
@@ -134,9 +136,17 @@ const install = Vue => {
   // $u挂载到uni对象上
   uni.$u = $u;
 
+  initThemeMode();
+  uni.$tsm = uni.$tsm || {};
+  uni.$tsm.getThemeMode = getThemeMode;
+  uni.$tsm.setThemeMode = setThemeMode;
+  uni.$tsm.toggleThemeMode = toggleThemeMode;
+  uni.$tsm.cssVars = useThemeCssVars();
+
   // #ifndef APP-NVUE
   // 只有vue，挂载到Vue.prototype才有意义，因为nvue中全局Vue.prototype和Vue.mixin是无效的
   Vue.config.globalProperties.$u = $u;
+  Vue.config.globalProperties.$tsm = uni.$tsm;
   Vue.mixin(mixin);
   // #endif
 };

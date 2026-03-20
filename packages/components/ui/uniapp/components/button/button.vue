@@ -8,7 +8,7 @@
       plain ? 'is-plain' : '',
       disabledOrLoading ? 'is-disabled' : '',
     ]"
-    :style="addStyle(customStyle) as any"
+    :style="[themeCssVars as any, addStyle(customStyle) as any]"
     :disabled="disabledOrLoading"
     @click="onClick"
   >
@@ -21,13 +21,17 @@
 
 <script lang="ts">
 import { addStyle } from '../../libs/function/index.js';
-import { props } from './props';
+import { useThemeCssVars } from '../../libs/theme/index.js';
+import { buttonProps } from './props';
 
 export default {
   name: 'tsm-button',
-  mixins: [props],
+  props: buttonProps,
   emits: ['click'],
   computed: {
+    themeCssVars() {
+      return useThemeCssVars();
+    },
     disabledOrLoading(): boolean {
       return !!(this.disabled || this.loading);
     },
@@ -86,33 +90,33 @@ export default {
 }
 
 .tsm-button--primary {
-  background: #3c9cff;
+  background: var(--tsm-color-primary, #2979ff);
   color: #ffffff;
-  border-color: #3c9cff;
+  border-color: var(--tsm-color-primary, #2979ff);
 }
 
 .tsm-button--success {
-  background: #5ac725;
+  background: var(--tsm-color-success, #00c853);
   color: #ffffff;
-  border-color: #5ac725;
+  border-color: var(--tsm-color-success, #00c853);
 }
 
 .tsm-button--warning {
-  background: #f9ae3d;
+  background: var(--tsm-color-warning, #ff9100);
   color: #ffffff;
-  border-color: #f9ae3d;
+  border-color: var(--tsm-color-warning, #ff9100);
 }
 
 .tsm-button--error {
-  background: #f56c6c;
+  background: var(--tsm-color-error, #ff4d4f);
   color: #ffffff;
-  border-color: #f56c6c;
+  border-color: var(--tsm-color-error, #ff4d4f);
 }
 
 .tsm-button--info {
-  background: #909399;
+  background: var(--tsm-color-info, #909399);
   color: #ffffff;
-  border-color: #909399;
+  border-color: var(--tsm-color-info, #909399);
 }
 
 .tsm-button--primary.is-plain,
@@ -124,24 +128,24 @@ export default {
 }
 
 .tsm-button--primary.is-plain {
-  color: #3c9cff;
-  border-color: #3c9cff;
+  color: var(--tsm-color-primary, #2979ff);
+  border-color: var(--tsm-color-primary, #2979ff);
 }
 .tsm-button--success.is-plain {
-  color: #5ac725;
-  border-color: #5ac725;
+  color: var(--tsm-color-success, #00c853);
+  border-color: var(--tsm-color-success, #00c853);
 }
 .tsm-button--warning.is-plain {
-  color: #f9ae3d;
-  border-color: #f9ae3d;
+  color: var(--tsm-color-warning, #ff9100);
+  border-color: var(--tsm-color-warning, #ff9100);
 }
 .tsm-button--error.is-plain {
-  color: #f56c6c;
-  border-color: #f56c6c;
+  color: var(--tsm-color-error, #ff4d4f);
+  border-color: var(--tsm-color-error, #ff4d4f);
 }
 .tsm-button--info.is-plain {
-  color: #909399;
-  border-color: #909399;
+  color: var(--tsm-color-info, #909399);
+  border-color: var(--tsm-color-info, #909399);
 }
 
 .is-disabled {

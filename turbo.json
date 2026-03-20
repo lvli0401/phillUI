@@ -43,7 +43,6 @@
     }
   },
   "globalDependencies": [
-    "packages/core/tokens/**/*",
-    "packages/core/hooks/**/*"
+    "packages/core/tokens/**/*"
   ]
 }

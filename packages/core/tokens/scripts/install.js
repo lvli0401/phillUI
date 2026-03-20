@@ -2,6 +2,15 @@
 const fs = require('fs');
 const path = require('path');
 
+function resolvePackageRoot() {
+  const scriptsDir = __dirname;
+  const candidate = path.resolve(scriptsDir, '..');
+  if (fs.existsSync(path.join(candidate, 'dist'))) return candidate;
+  const alt = path.resolve(scriptsDir, '../..');
+  if (fs.existsSync(path.join(alt, 'dist'))) return alt;
+  throw new Error('Cannot locate @phill-component/tokens package root (dist not found).');
+}
+
 function copyDir(src, dest) {
   if (!fs.existsSync(src)) return;
   if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
@@ -37,23 +46,19 @@ function main() {
     : path.join(projectRoot, 'uni_modules');
   const targetPkgDir = path.join(uniModulesBase, '@phill-component/tokens');
 
-  const pkgRoot = path.resolve(__dirname, '..');
-  const tokensDir = path.join(pkgRoot, 'tokens');
-  const indexFile = path.join(pkgRoot, 'index.js');
+  const pkgRoot = resolvePackageRoot();
+  const distDir = path.join(pkgRoot, 'dist');
+  const targetDistDir = path.join(targetPkgDir, 'dist');
 
   try {
     if (!fs.existsSync(uniModulesBase)) fs.mkdirSync(uniModulesBase, { recursive: true });
     rimraf(targetPkgDir);
     fs.mkdirSync(targetPkgDir, { recursive: true });
-    if (fs.existsSync(tokensDir)) {
-      copyDir(tokensDir, path.join(targetPkgDir, 'tokens'));
-    }
-    if (fs.existsSync(indexFile)) {
-      fs.copyFileSync(indexFile, path.join(targetPkgDir, 'index.js'));
-    }
+    copyDir(distDir, targetDistDir);
     const lightPkgJson = {
       name: 'phillui-tokens',
-      description: 'Design tokens for phillUI in UniApp uni_modules'
+      description: 'Design tokens for phillUI in UniApp uni_modules',
+      main: 'dist/index.js'
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
     console.log(`[phillUI-tokens] Installed to ${targetPkgDir}`);
@@ -64,4 +69,3 @@ function main() {
 }
 
 main();
-
