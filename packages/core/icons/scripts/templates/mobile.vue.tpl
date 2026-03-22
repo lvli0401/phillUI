@@ -13,6 +13,7 @@
 </template>
 <script setup>
 import { computed } from 'vue'
+import imgSrc from '__IMG_SRC__'
 const props = defineProps({
   size: { type: [String, Number], default: '1em' },
   color: { type: String, default: '' },
@@ -51,7 +52,6 @@ const labelStyle = computed(() => {
     marginBottom: props.labelPos === 'top' ? toPx(props.space) : 0
   }
 })
-const imgSrc = '__IMG_SRC__'
 function onTap(e) {
   emit('click', props.index)
   if (props.stop && e && e.stopPropagation) e.stopPropagation()

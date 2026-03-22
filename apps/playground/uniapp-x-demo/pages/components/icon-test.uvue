@@ -3,27 +3,20 @@
     <view class="section">
       <text class="title">Icon 组件（UniApp X）</text>
       <view class="row">
-        <IconCalendar size="24px" />
+        <icon-calendar size="24px" />
         <text class="label">IconCalendar</text>
       </view>
       <view class="row">
-        <IconFileFold size="28px" />
+        <icon-file-fold size="28px" />
         <text class="label">IconFileFold</text>
       </view>
       <view class="row">
-        <IconSetting size="28px" />
+        <icon-setting size="28px" />
         <text class="label">IconSetting</text>
       </view>
     </view>
   </view>
 </template>
-
-<script setup lang="uts">
-import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/mobile/uvue/index.uts'
-// import IconSetting from '@/uni_modules/@phill-component/icons/mobile/uvue/Setting/Setting.uvue'
-// import IconFileFold from '@/uni_modules/@phill-component/icons/mobile/uvue/FileFold/FileFold.uvue'
-// import IconCalendar from '@/uni_modules/@phill-component/icons/mobile/uvue/Calendar/Calendar.uvue'
-</script>
 
 <style lang="scss" scoped>
 .container {

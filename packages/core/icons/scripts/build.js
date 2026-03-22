@@ -33,6 +33,8 @@ async function build() {
   for (const file of files) {
     const name = file.replace('.svg', '');
     const pascalName = Case.pascal(name);
+    const kebab = Case.kebab(name);
+    const easycomName = `icon-${kebab}`;
     const content = fs.readFileSync(path.join(srcDir, file), 'utf-8');
     // Optimize（不区分单/多色，统一按默认优化）
     const svgoPlugins = ['preset-default', 'removeDimensions'];
@@ -52,16 +54,16 @@ async function build() {
     // 2) mobile/vue（模板）
     const mobileVueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.vue.tpl'), 'utf-8');
     // 计算运行时图片 URL（非 H5 使用）
-    const runtimePngUrl = `@/uni_modules/@phill-component/icons/mobile/uvue/${pascalName}/${name}.png`;
+    const runtimePngUrl = `@/uni_modules/@phill-component/icons/mobile/uvue/${easycomName}/${name}.png`;
     const mobileVueImgUrl = runtimePngUrl;
 
     const mobileVueOut = mobileVueTpl
       .replace('__INNER_SVG__', innerSvg)
       .replace(/__IMG_SRC__/g, mobileVueImgUrl);
-    fs.writeFileSync(path.join(mobileVueDir, `${pascalName}.vue`), mobileVueOut);
+    fs.writeFileSync(path.join(mobileVueDir, `${easycomName}.vue`), mobileVueOut);
 
     // 3) mobile/uvue：H5 用 SVG；非 H5 用 PNG/SVG
-    const uvueComponentdir = path.join(mobileUvueDir, pascalName);
+    const uvueComponentdir = path.join(mobileUvueDir, easycomName);
     if (!fs.existsSync(uvueComponentdir)) fs.mkdirSync(uvueComponentdir, { recursive: true });
     try {
       const pngPath = path.join(uvueComponentdir, `${name}.png`);
@@ -73,18 +75,14 @@ async function build() {
     const mobileUvueOut = mobileUvueTpl
       .replace('__INNER_SVG__', innerSvg)
       .replace(/__IMG_SRC__/g, runtimePngUrl);
-    fs.writeFileSync(path.join(uvueComponentdir, `${pascalName}.uvue`), mobileUvueOut);
+    fs.writeFileSync(path.join(uvueComponentdir, `${easycomName}.uvue`), mobileUvueOut);
 
-    iconData.push({ name, pascalName });
+    iconData.push({ name, pascalName, kebab });
   }
 
   // 5) 生成入口：web/index.js、mobile/vue/index.js、mobile/uvue/index.uts
   const webEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.vue';`).join('\n');
   fs.writeFileSync(path.join(webVueDir, 'index.js'), webEntry);
-  const mobileVueEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}.vue';`).join('\n');
-  fs.writeFileSync(path.join(mobileVueDir, 'index.js'), mobileVueEntry);
-  const mobileUtsEntry = iconData.map(i => `export { default as Icon${i.pascalName} } from './${i.pascalName}/${i.pascalName}.uvue'`).join('\n');
-  fs.writeFileSync(path.join(mobileUvueDir, 'index.uts'), mobileUtsEntry);
 
   // 不再输出 icons-svg.js/uts 等映射与其它冗余目录
 

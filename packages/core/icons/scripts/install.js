@@ -82,11 +82,35 @@ function main() {
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
     console.log(`[phillui/icons] Installed to ${targetPkgDir} ${isX ? '(UniApp X)' : '(UniApp, Exclude .uvue/.uts)'}`);
 
-    // Simplified: No longer patching vite.config as we use relative paths
-    // patchViteAlias(projectRoot, !!fs.existsSync(srcDir));
+    patchPagesJson(projectRoot, fs.existsSync(srcDir), isX);
   } catch (e) {
     console.error('[phillui/icons] Installation failed:', e.message);
     process.exit(1);
+  }
+}
+
+function patchPagesJson(projectRoot, hasSrc, isX) {
+  const pagesPath = hasSrc ? path.join(projectRoot, 'src/pages.json') : path.join(projectRoot, 'pages.json');
+  if (!fs.existsSync(pagesPath)) return;
+
+  try {
+    const raw = fs.readFileSync(pagesPath, 'utf8');
+    const json = JSON.parse(raw);
+    json.easycom = json.easycom || {};
+    json.easycom.autoscan = json.easycom.autoscan !== false;
+    json.easycom.custom = json.easycom.custom || {};
+
+    const key = '^icon-(.*)$';
+    const value = isX
+      ? '@/uni_modules/@phill-component/icons/mobile/uvue/icon-$1/icon-$1.uvue'
+      : '@/uni_modules/@phill-component/icons/mobile/vue/icon-$1.vue';
+    if (json.easycom.custom[key] !== value) {
+      json.easycom.custom[key] = value;
+      fs.writeFileSync(pagesPath, JSON.stringify(json, null, 2));
+      console.log('[phillui/icons] Patched pages.json easycom mapping for icons.');
+    }
+  } catch (e) {
+    console.warn('[phillui/icons] Skip patching pages.json:', e.message);
   }
 }
 
