@@ -58,7 +58,6 @@ function main() {
     ? path.join(srcDir, 'uni_modules')
     : path.join(projectRoot, 'uni_modules');
   const targetPkgDir = path.join(uniModulesBase, '@phill-component/icons');
-  const targetDistDir = path.join(targetPkgDir, 'dist');
 
   const pkgRoot = resolvePackageRoot();
   const sourceDistDir = path.join(pkgRoot, 'dist');
@@ -71,15 +70,17 @@ function main() {
     // Clean old content
     rimraf(targetPkgDir);
     fs.mkdirSync(targetPkgDir, { recursive: true });
-    // Only copy dist (uniapp and vue build outputs)
-    copyDir(sourceDistDir, targetDistDir, exclude);
+    // Copy into package root (no "dist" folder needed for consumers)
+    copyDir(path.join(sourceDistDir, 'mobile'), path.join(targetPkgDir, 'mobile'), exclude);
+    copyDir(path.join(sourceDistDir, 'web'), path.join(targetPkgDir, 'web'), exclude);
     // Lightweight package.json for uni_modules (optional but helps tooling)
     const lightPkgJson = {
       name: 'phillui-icons',
       description: 'Icons assets for phillUI in UniApp uni_modules',
+      main: 'mobile/vue/index.js',
     };
     fs.writeFileSync(path.join(targetPkgDir, 'package.json'), JSON.stringify(lightPkgJson, null, 2));
-    console.log(`[phillui/icons] Installed to ${targetDistDir} ${isX ? '(UniApp X)' : '(UniApp, Exclude .uvue/.uts)'}`);
+    console.log(`[phillui/icons] Installed to ${targetPkgDir} ${isX ? '(UniApp X)' : '(UniApp, Exclude .uvue/.uts)'}`);
 
     // Simplified: No longer patching vite.config as we use relative paths
     // patchViteAlias(projectRoot, !!fs.existsSync(srcDir));

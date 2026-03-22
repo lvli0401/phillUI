@@ -52,7 +52,7 @@ async function build() {
     // 2) mobile/vue（模板）
     const mobileVueTpl = fs.readFileSync(path.join(__dirname, 'templates/mobile.vue.tpl'), 'utf-8');
     // 计算运行时图片 URL（非 H5 使用）
-    const runtimePngUrl = `@/uni_modules/@phill-component/icons/dist/mobile/uvue/${pascalName}/${name}.png`;
+    const runtimePngUrl = `@/uni_modules/@phill-component/icons/mobile/uvue/${pascalName}/${name}.png`;
     const mobileVueImgUrl = runtimePngUrl;
 
     const mobileVueOut = mobileVueTpl

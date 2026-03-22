@@ -95,7 +95,15 @@ function stageScopedDeps() {
     if (dep.pick === 'dist') {
       const src = path.join(sourceBase, 'dist');
       if (existsDir(src)) {
-        rsyncDir(src, path.join(destBase, 'dist'));
+        if (dep.name !== '@phill-component/icons') {
+          rsyncDir(src, path.join(destBase, 'dist'));
+        }
+        if (dep.name === '@phill-component/icons') {
+          const mobileDir = path.join(src, 'mobile');
+          if (existsDir(mobileDir)) rsyncDir(mobileDir, path.join(destBase, 'mobile'));
+          const webDir = path.join(src, 'web');
+          if (existsDir(webDir)) rsyncDir(webDir, path.join(destBase, 'web'));
+        }
         if (dep.name === '@phill-component/tokens') {
           const indexTs = path.join(src, 'index.ts');
           if (fs.existsSync(indexTs)) fs.copyFileSync(indexTs, path.join(destBase, 'index.ts'));

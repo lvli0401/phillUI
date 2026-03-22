@@ -6,7 +6,7 @@
     </svg>
     <!-- #endif -->
     <!-- #ifndef H5 -->
-    <image :src="imgSrc" :style="iconBoxStyle" v-bind="$attrs" />
+    <image :src="imgSrc" :style="iconBoxStyle" />
     <!-- #endif -->
     <text v-if="label !== ''" class="icon__label" :style="labelStyle">{{ label }}</text>
   </view>

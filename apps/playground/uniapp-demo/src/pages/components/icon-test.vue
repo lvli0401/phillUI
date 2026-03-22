@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/dist/mobile/vue/index.js';
+import { IconCalendar, IconFileFold, IconSetting } from '@/uni_modules/@phill-component/icons/mobile/vue/index.js';
 </script>
 
 <style lang="scss" scoped>
