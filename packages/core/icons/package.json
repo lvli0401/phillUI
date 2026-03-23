@@ -1,6 +1,6 @@
 {
   "name": "@phill-component/icons",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Unified icons for phillUI mobile and pc libraries",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -31,6 +31,5 @@
     "svgo": "^4.0.0",
     "sharp": "^0.34.5"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

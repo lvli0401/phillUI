@@ -1,5 +1,11 @@
 # phillui-tokens
 
+## 1.0.0
+
+### Major Changes
+
+- 1f2083e: icon & token package change
+
 ## 0.2.2
 
 ### Patch Changes

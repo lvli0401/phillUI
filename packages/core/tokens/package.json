@@ -1,6 +1,6 @@
 {
   "name": "@phill-component/tokens",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Design tokens for phillUI components",
   "main": "dist/index.ts",
   "module": "dist/index.ts",
