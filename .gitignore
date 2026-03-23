@@ -6,3 +6,5 @@ unpackage
 apps/docs/.vitepress/cache
 .turbo
 .npmrc
+apps/icon-portal/.env
+apps/icon-portal/icons.db
