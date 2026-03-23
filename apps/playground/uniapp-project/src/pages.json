@@ -1,0 +1,29 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^tsm-(.*)": "@/uni_modules/@phill-component/ui/uniapp/components/$1/$1.vue",
+      "^icon-(.*)$": "@/uni_modules/@phill-component/icons/mobile/vue/icon-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "uni-app"
+      }
+    },
+    {
+      "path": "pages/components/icon-test",
+      "style": {
+        "navigationBarTitleText": "Icon Test"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}
