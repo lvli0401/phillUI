@@ -1,6 +1,8 @@
 <template>
 	<button
 	    class="tsm-button"
+	    hover-class="tsm-button--active"
+	    :hover-stay-time="150"
 	    :class="[customClass, `tsm-button--${type}`, `tsm-button--${size}`, plain ? 'is-plain' : '', disabledOrLoading ? 'is-disabled' : '']"
 	    :style="[themeCssVars, typeStyle, customStyle]"
 	    :disabled="disabledOrLoading"
@@ -144,6 +146,10 @@ function onClick(e: UniPointerEvent) {
 	.tsm-button--error.is-plain { color: #ff4d4f; border-color: #ff4d4f; }
 	.tsm-button--info.is-plain { color: #909399; border-color: #909399; }
 	/* #endif */
+
+	.tsm-button--active {
+		opacity: 0.7;
+	}
 
 	.is-disabled {
 		opacity: 0.5;

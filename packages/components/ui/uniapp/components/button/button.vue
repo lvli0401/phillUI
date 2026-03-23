@@ -1,6 +1,8 @@
 <template>
   <button
     class="tsm-button"
+    hover-class="tsm-button--active"
+    :hover-stay-time="150"
     :class="[
       customClass,
       `tsm-button--${type}`,
@@ -150,6 +152,10 @@ export default {
 .tsm-button--info.is-plain {
   color: var(--tsm-color-info, #909399);
   border-color: var(--tsm-color-info, #909399);
+}
+
+.tsm-button--active {
+  opacity: 0.7;
 }
 
 .is-disabled {

@@ -78,7 +78,7 @@ async function build() {
     if (!fs.existsSync(uvueComponentdir)) fs.mkdirSync(uvueComponentdir, { recursive: true });
     try {
       const pngPath = path.join(uvueComponentdir, `${name}.png`);
-      await sharp(Buffer.from(optimized)).resize(128, 128, { fit: 'contain' }).png().toFile(pngPath);
+      await sharp(Buffer.from(content)).resize(128, 128, { fit: 'contain' }).png().toFile(pngPath);
     } catch (e) {
       console.warn(`[icons] PNG rasterize failed for ${name}:`, e.message);
     }
