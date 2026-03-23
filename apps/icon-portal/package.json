@@ -6,19 +6,36 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"npm run server\" \"vite\"",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "tsx backend/server.ts"
   },
   "dependencies": {
+    "@koa/cors": "^5.0.0",
     "@phill-component/icons": "workspace:*",
     "@phill-component/tokens": "workspace:*",
     "formidable": "^3.5.4",
+    "koa": "^3.1.2",
+    "koa-router": "^14.0.0",
+    "koa-static": "^5.0.0",
     "simple-git": "^3.32.3",
+    "svgo": "^4.0.0",
     "vue": "^3.5.25"
   },
   "devDependencies": {
+    "@types/formidable": "^3.5.0",
+    "@types/koa": "^3.0.2",
+    "@types/koa-router": "^7.4.9",
+    "@types/koa-static": "^4.0.4",
+    "@types/koa__cors": "^5.0.1",
+    "@types/node": "^25.5.0",
     "@vitejs/plugin-vue": "^6.0.2",
+    "@vue/compiler-sfc": "^3.5.30",
+    "@vue/tsconfig": "^0.9.0",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },
   "publishConfig": {

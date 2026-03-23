@@ -15,7 +15,7 @@
           class="drop-zone"
           @dragover.prevent
           @drop.prevent="handleDrop"
-          @click="$refs.fileInput.click()"
+          @click="fileInput?.click()"
         >
           <p>Click or drag SVG here to upload / replace</p>
           <input 
@@ -49,30 +49,46 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
-const icons = ref([])
+interface Icon {
+  name: string
+  content: string
+}
+
+interface Toast {
+  message: string
+  type: 'success' | 'error'
+}
+
+const icons = ref<Icon[]>([])
 const searchQuery = ref('')
 const syncing = ref(false)
-const toast = ref(null)
-const fileInput = ref(null)
+const toast = ref<Toast | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const fetchIcons = async () => {
-  const res = await fetch('/api/icons')
-  icons.value = await res.json()
+  try {
+    const res = await fetch('/api/icons')
+    icons.value = await res.json()
+  } catch (e) {
+    showToast('Failed to fetch icons', 'error')
+  }
 }
 
 const filteredIcons = computed(() => {
   return icons.value.filter(i => i.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
 })
 
-const showToast = (message, type = 'success') => {
+const showToast = (message: string, type: 'success' | 'error' = 'success') => {
   toast.value = { message, type }
-  setTimeout(() => toast.value = null, 3000)
+  setTimeout(() => {
+    toast.value = null
+  }, 3000)
 }
 
-const uploadFile = async (file) => {
+const uploadFile = async (file: File) => {
   const name = file.name.replace('.svg', '')
   const formData = new FormData()
   formData.append('file', file)
@@ -88,16 +104,16 @@ const uploadFile = async (file) => {
       showToast(`Icon "${name}" uploaded and built!`)
       fetchIcons()
     } else {
-      showToast(data.error, 'error')
+      showToast(data.error || 'Upload failed', 'error')
     }
   } catch (e) {
     showToast('Upload failed', 'error')
   }
 }
 
-const handleDrop = (e) => {
-  const files = e.dataTransfer.files
-  if (files.length === 0) return
+const handleDrop = (e: DragEvent) => {
+  const files = e.dataTransfer?.files
+  if (!files || files.length === 0) return
   Array.from(files).forEach(file => {
     if (file && file.name.endsWith('.svg')) {
       uploadFile(file)
@@ -105,9 +121,10 @@ const handleDrop = (e) => {
   })
 }
 
-const handleFileSelect = (e) => {
-  const files = e.target.files
-  if (files.length === 0) return
+const handleFileSelect = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  const files = target.files
+  if (!files || files.length === 0) return
   Array.from(files).forEach(file => {
     if (file) {
       uploadFile(file)
@@ -123,7 +140,7 @@ const syncToGit = async () => {
     if (data.success) {
       showToast(data.message || 'Synced to remote successfully!', 'success')
     } else {
-      showToast(data.error, 'error')
+      showToast(data.error || 'Sync failed', 'error')
     }
   } catch (e) {
     showToast('Sync failed', 'error')
