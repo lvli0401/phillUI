@@ -3,15 +3,15 @@
     <view class="section">
       <text class="title">Icon 组件（UniApp X）</text>
       <view class="row">
-        <icon-calendar size="24px" />
+        <icon-calendar color="var(--tsm-color-text-secondary)" size="34px" />
         <text class="label">IconCalendar</text>
       </view>
       <view class="row">
-        <icon-file-fold size="28px" />
+        <icon-file-fold color="var(--tsm-color-success)" size="28px" />
         <text class="label">IconFileFold</text>
       </view>
       <view class="row">
-        <icon-setting size="28px" />
+        <icon-setting color="var(--tsm-color-primary)" size="28px" />
         <text class="label">IconSetting</text>
       </view>
     </view>

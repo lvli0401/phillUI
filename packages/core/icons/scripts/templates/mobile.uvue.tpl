@@ -1,9 +1,7 @@
 <template>
-  <view class="icon" @tap="onTap" :hover-class="hoverClass" :style="wrapStyle">
+  <view class="icon" @tap="onTap" :hover-class="hoverClass" :style="rootStyle">
     <!-- #ifdef H5 -->
-    <svg viewBox="0 0 24 24" :width="iconW" :height="iconH" xmlns="http://www.w3.org/2000/svg">
-      __INNER_SVG__
-    </svg>
+    __INNER_SVG__
     <!-- #endif -->
     <!-- #ifndef H5 -->
     <image :src="imgSrc" :style="iconBoxStyle" />
@@ -16,7 +14,7 @@ import { computed } from 'vue'
 import imgSrc from '__IMG_SRC__'
 const props = defineProps({
   size: { type: [String, Number], default: '1em' },
-  color: { type: String, default: '' },
+  color: { type: String, default: 'var(--tsm-color-primary)' },
   label: { type: [String, Number], default: '' },
   labelPos: { type: String, default: 'right' },
   labelSize: { type: [String, Number], default: '15px' },
@@ -36,6 +34,9 @@ function toPx(v: any): string {
 }
 const iconW = computed((): string => (props.width != '' ? toPx(props.width) : toPx(props.size)))
 const iconH = computed((): string => (props.height != '' ? toPx(props.height) : toPx(props.size)))
+const iconStyle = computed((): UTSJSONObject => {
+  return { 'color': props.color != '' ? props.color : 'inherit' } as UTSJSONObject
+})
 const iconBoxStyle = computed((): UTSJSONObject => ({ width: iconW.value, height: iconH.value } as UTSJSONObject))
 const wrapStyle = computed((): UTSJSONObject => {
   const map = { right: 'row', left: 'row-reverse', top: 'column-reverse', bottom: 'column' } as UTSJSONObject
@@ -45,6 +46,14 @@ const wrapStyle = computed((): UTSJSONObject => {
     dir = cand
   }
   return { display: 'flex', alignItems: 'center', flexDirection: dir } as UTSJSONObject
+})
+const rootStyle = computed((): UTSJSONObject => {
+  const s = wrapStyle.value
+  const i = iconStyle.value
+  for (const key in i) {
+    s[key] = i[key]
+  }
+  return s
 })
 const labelStyle = computed((): UTSJSONObject => {
   const out = {} as UTSJSONObject

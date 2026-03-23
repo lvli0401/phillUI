@@ -1,8 +1,6 @@
 <template>
-  <view class="icon" @tap="onTap" :hover-class="hoverClass" :style="wrapStyle">
-    <svg viewBox="0 0 24 24" :width="iconW" :height="iconH" xmlns="http://www.w3.org/2000/svg" v-bind="$attrs" :style="iconStyle">
-      __INNER_SVG__
-    </svg>
+  <view class="icon" @tap="onTap" :hover-class="hoverClass" :style="[wrapStyle, iconStyle]">
+    __INNER_SVG__
     <text v-if="label !== ''" class="icon__label" :style="labelStyle">{{ label }}</text>
   </view>
 </template>
@@ -10,7 +8,7 @@
 import { computed } from 'vue'
 const props = defineProps({
   size: { type: [String, Number], default: '1em' },
-  color: { type: String, default: '' },
+  color: { type: String, default: 'inherit' },
   label: { type: [String, Number], default: '' },
   labelPos: { type: String, default: 'right' },
   labelSize: { type: [String, Number], default: '15px' },
@@ -28,9 +26,7 @@ const iconW = computed(() => props.width ? toPx(props.width) : toPx(props.size))
 const iconH = computed(() => props.height ? toPx(props.height) : toPx(props.size))
 const iconBoxStyle = computed(() => ({ width: iconW.value, height: iconH.value }))
 const iconStyle = computed(() => {
-  const s = { }
-  if (props.color) s.color = props.color
-  return s
+  return { color: props.color || 'inherit' }
 })
 const wrapStyle = computed(() => {
   const dirMap = { right: 'row', left: 'row-reverse', top: 'column-reverse', bottom: 'column' }

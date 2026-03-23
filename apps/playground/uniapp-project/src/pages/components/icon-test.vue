@@ -3,15 +3,15 @@
     <view class="section">
       <text class="title">1. 使用 Icon 组件</text>
       <view class="row">
-        <icon-calendar size="24px" />
+        <icon-calendar color="var(--tsm-color-text-secondary)" size="34px" />
         <text>IconCalendar</text>
       </view>
       <view class="row">
-        <icon-file-fold size="28px" />
+        <icon-file-fold color="var(--tsm-color-success)" size="28px" />
         <text>IconFileFold</text>
       </view>
       <view class="row">
-        <icon-setting color="red" size="28px" />
+        <icon-setting color="var(--tsm-color-primary)" size="28px" />
         <text>IconSetting</text>
       </view>
     </view>

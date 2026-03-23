@@ -37,14 +37,25 @@ async function build() {
     const easycomName = `icon-${kebab}`;
     const content = fs.readFileSync(path.join(srcDir, file), 'utf-8');
     // Optimize（不区分单/多色，统一按默认优化）
-    const svgoPlugins = ['preset-default', 'removeDimensions'];
+    const svgoPlugins = [
+      'preset-default',
+      'removeDimensions',
+      {
+        name: 'convertColors',
+        params: {
+          currentColor: true,
+        },
+      },
+    ];
 
     let optimized = optimize(content, { 
       path: file,
       plugins: svgoPlugins
     }).data;
 
-    const innerSvg = optimized.replace(/<svg[^>]*>|<\/svg>/g, '');
+    // 直接在 <svg> 标签上注入 Vue 响应式属性
+    const innerSvg = optimized
+      .replace('<svg', '<svg v-bind="$attrs" :style="iconStyle" :width="iconW" :height="iconH"');
 
     // 1) web/vue：始终内联 SVG，供 PC/Web 使用（模板）
     const webTpl = fs.readFileSync(path.join(__dirname, 'templates/web.vue.tpl'), 'utf-8');
