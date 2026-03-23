@@ -1,3 +1,15 @@
+## 1.0.0
+
+### Major Changes
+
+- 1f2083e: icon & token package change
+
+### Patch Changes
+
+- Updated dependencies [1f2083e]
+  - @phill-component/icons@1.0.0
+  - @phill-component/tokens@1.0.0
+
 ## 0.2.2
 
 ### Patch Changes
