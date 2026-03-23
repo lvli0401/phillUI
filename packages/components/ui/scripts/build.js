@@ -18,7 +18,7 @@ const packageRoot = path.resolve(__dirname, '..');
 const repoRoot = path.resolve(packageRoot, '../..');
 const distPath = path.join(packageRoot, 'dist');
 const distUView = path.join(distPath, PKG_NAME);
-const utsLibsSrc = path.join(packageRoot, 'uts-libs');
+const utsLibsSrc = path.join(packageRoot, 'uniapp-x', 'uts-libs');
 
 function clean() {
   if (fs.existsSync(distPath)) {
@@ -31,7 +31,7 @@ function syncSourceToDist() {
   console.log('[Build] Sync sources to dist/@phill-component/ui...');
   fs.mkdirSync(distUView, { recursive: true });
   execSync(
-    `rsync -aq --exclude='node_modules' --exclude='dist' --exclude='scripts' --exclude='rollup.config.mjs' --exclude='uts-libs' "${packageRoot}/" "${distUView}/"`
+    `rsync -aq --exclude='node_modules' --exclude='dist' --exclude='scripts' --exclude='rollup.config.mjs' --exclude='uniapp-x/uts-libs' "${packageRoot}/" "${distUView}/"`
   );
   if (fs.existsSync(utsLibsSrc)) {
     const libs = fs.readdirSync(utsLibsSrc).filter(n => fs.statSync(path.join(utsLibsSrc, n)).isDirectory());
